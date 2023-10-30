@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package event;
+
+message Source {
+    oneof source {
+        int32 live = 1;
+        int32 historical = 2;
+        int32 save_restore = 3;
+        int32 redirection = 4;
+    }
+}

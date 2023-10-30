@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package event;
+
+import "google/protobuf/empty.proto";
+
+enum TimeFrequencyUnit {
+    SECOND = 0;
+    MILLISECONDS = 1;
+    MICROSECONDS = 2;
+    HERTZ = 3;
+    KILOHERTZ = 4;
+    S = 0;
+    M = 1;
+    U = 2;
+    H = 3;
+    K = 4;
+}
+
+message TimeFrequency {
+    int32 value = 1;
+    TimeFrequencyUnit unit = 2;
+}
+
+message Event {
+    message Clock {
+        string event_number = 1;
+        EventType event_type = 2;
+        TimeFrequency delay = 3;
+    }
+
+    enum EventType {
+        H = 0;
+        S = 1;
+        HARDWARE = 0;
+        SOFTWARE = 1;
+    }
+
+    message Periodic {
+        bool continuous = 1;
+        TimeFrequency period = 2;
+        bool immediate = 3;
+    }
+
+    message State {
+        string state_name = 1;
+        int32 value = 2;
+        TimeFrequency delay = 3;
+        StateExpression expression = 4;
+    }
+
+    enum StateExpression {
+        EQUAL = 0;
+        NOT_EQUAL = 1;
+        LESS_THAN = 2;
+        LESS_THAN_OR_EQUAL = 3;
+        GREATER_THAN = 4;
+        GREATER_THAN_OR_EQUAL = 5;
+        ANY = 6;
+    }
+
+    oneof event {
+        empty immediate = 1;
+        Periodic periodic = 2;
+        Clock clock = 3;
+        State state = 4;
+    }
+}
