@@ -20,8 +20,8 @@ service DPM {
 
 message Result {
     oneof value {
-	google.protobuf.Empty none = 1;
-	string error = 2;
+        google.protobuf.Empty none = 1;
+        string error = 2;
     }
 }
 
@@ -37,8 +37,8 @@ message AuthRequest {
 
 message AuthReply {
     oneof step {
-	bytes token = 1;
-	Result result = 2;
+        bytes token = 1;
+        Result result = 2;
     }
 }
 
@@ -88,7 +88,7 @@ message Data {
     }
 
     oneof value {
-        sint32 status = 1;	// set when a fatal error occurs
+        sint32 status = 1;        // set when a fatal error occurs
         double scalar = 2;
         ScalarArray scalarArr = 3;
         bytes raw = 4;
