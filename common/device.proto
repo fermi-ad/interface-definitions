@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package device;
 
+import "google/protobuf/timestamp.proto";
+
 message Data {
     message ScalarArray {
         repeated double value = 1;

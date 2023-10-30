@@ -6,9 +6,6 @@ option java_outer_classname = "DPMProto";
 
 package dpm;
 
-import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
-
 import "../common/device.proto";
 
 service DPM {
