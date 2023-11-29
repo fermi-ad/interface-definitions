@@ -5,6 +5,8 @@ package event;
 import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 
+import "common/periodic.proto";
+
 message Event {
     message Clock {
         uint64 event_number = 1; // Is there a better way to represent hex?
@@ -13,14 +15,14 @@ message Event {
 
     message Periodic {
         bool continuous = 1;
-        TimeFrequency period = 2;
+        periodic.Frequency period = 2;
         bool immediate = 3;
     }
 
     message State {
         string state_name = 1;
         int32 value = 2;
-        TimeFrequency delay = 3;
+        google.protobuf.Duration delay = 3;
         StateExpression expression = 4;
     }
 
@@ -35,7 +37,7 @@ message Event {
     }
 
     oneof event {
-        empty immediate = 1;
+        google.protobuf.Empty immediate = 1;
         Periodic periodic = 2;
         Clock clock = 3;
         State state = 4;
