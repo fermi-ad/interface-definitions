@@ -10,7 +10,7 @@ import "common/device.proto";
 
 service DPM {
     rpc Read(ReadingList) returns (stream ReadingReply) {}
-    rpc Set(SettingList) returns (stream StatusReply) {}
+    rpc Set(SettingList) returns (StatusReply) {}
 }
 
 message ReadingList {
@@ -35,6 +35,5 @@ message Status {
 }
 
 message StatusReply {
-    uint32 index = 1;
-    Status status = 2;
+    repeated Status status = 1;
 }
