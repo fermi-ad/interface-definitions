@@ -6,7 +6,7 @@ option java_outer_classname = "DPMProto";
 
 package dpm;
 
-import "../common/device.proto";
+import "common/device.proto";
 
 service DPM {
     rpc Read(ReadingList) returns (stream ReadingReply) {}
@@ -20,13 +20,13 @@ message ReadingList {
 message ReadingReply {
     uint32 index = 1;
     oneof value {
-        Reading reading = 2;
+        device.Reading reading = 2;
         Status status = 3;
     }
 }
 
 message SettingList {
-    repeated Setting setting = 1;
+    repeated device.Setting setting = 1;
 }
 
 message Status {
