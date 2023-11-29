@@ -57,7 +57,7 @@ message InformativeStatus {
 }
 
 message Reading {
-    uint64 timestamp = 1;
+    google.protobuf.Timestamp timestamp = 1;
     Data data = 2;
     InformativeStatus status = 3;
 }
