@@ -4,7 +4,7 @@ package drf;
 
 import "google/protobuf/empty.proto";
 
-import "./event.proto";
+import "common/event.proto";
 
 message ArrayRange {
   sint64 start_index = 1;
