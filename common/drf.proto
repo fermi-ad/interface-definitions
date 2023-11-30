@@ -27,6 +27,44 @@ message DRF {
 }
 
 message Field {
+    enum AnalogAlarm {
+        RAW = 0;
+        ALL = 1;
+        TEXT = 2;
+        MINIMUM = 3;
+        MAXIMUM = 4;
+        NOMINAL = 5;
+        TOLERANCE = 6;
+        RAW_MIN = 7;
+        RAW_MAX = 8;
+        RAW_NOM = 9;
+        RAW_TOL = 10;
+        ALARM_ENABLE = 11;
+        ALARM_STATUS = 12;
+        TRIES_NEEDED = 13;
+        TRIES_NOW = 14;
+        ALARM_FTD = 15;
+        ABORT = 16;
+        ABORT_INHIBIT = 17;
+        FLAGS = 18;
+    }
+
+    enum DigitalAlarm {
+        RAW = 0;
+        ALL = 1;
+        TEXT = 2;
+        NOMINAL = 3;
+        MASK = 4;
+        ALARM_ENABLE = 5;
+        ALARM_STATUS = 6;
+        TRIES_NEEDED = 7;
+        TRIES_NOW = 8;
+        ALARM_FTD = 9;
+        ABORT = 10;
+        ABORT_INHIBIT = 11;
+        FLAGS = 12;
+    }
+
     enum Reading {
         RAW = 0;
         PRIMARY = 1;
@@ -34,7 +72,7 @@ message Field {
         SCALED = 3;
         COMMON = 4;
     }
-    
+
     enum Setting {
         RAW = 0;
         PRIMARY = 1;
@@ -42,7 +80,7 @@ message Field {
         SCALED = 3;
         COMMON = 4;
     }
-    
+
     enum Status {
         RAW = 0;
         ALL = 1;
@@ -53,59 +91,6 @@ message Field {
         REMOTE = 6;
         POSITIVE = 7;
         RAMP = 8;
-    }
-    
-    enum AnalogAlarm {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        MIN = 3;
-        MINIMUM = 3;
-        MAX = 4;
-        MAXIMUM = 4;
-        NOM = 5;
-        NOMINAL = 5;
-        TOL = 6;
-        TOLERANCE = 6;
-        RAW_MIN = 7;
-        RAWMIN = 7;
-        RAW_MAX = 8;
-        RAWMAX = 8;
-        RAW_NOM = 9;
-        RAWNOM = 9;
-        RAW_TOL = 10;
-        RAWTOL = 10;
-        ALARM_ENABLE = 11;
-        ENABLE = 11;
-        ALARM_STATUS = 12;
-        STATUS = 12;
-        TRIES_NEEDED = 13;
-        TRIES_NOW = 14;
-        ALARM_FTD = 15;
-        FTD = 15;
-        ABORT = 16;
-        ABORT_INHIBIT = 17;
-        FLAGS = 18;
-    }
-    
-    enum DigitalAlarm {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        NOM = 3;
-        NOMINAL = 3;
-        MASK = 4;
-        ALARM_ENABLE = 5;
-        ENABLE = 5;
-        ALARM_STATUS = 6;
-        STATUS = 6;
-        TRIES_NEEDED = 7;
-        TRIES_NOW = 8;
-        ALARM_FTD = 9;
-        FTD = 9;
-        ABORT = 10;
-        ABORT_INHIBIT = 11;
-        FLAGS = 12;
     }
 
     oneof attribute {
@@ -121,37 +106,15 @@ message Field {
 
 enum Property {
     READING = 0;
-    READ = 0;
-    PRREAD = 0;
     SETTING = 1;
-    SET = 1;
-    PRSET = 1;
-    STATUS = 2;
     BASIC_STATUS = 2;
-    STS = 2;
-    PRBSTS = 2;
-    CONTROL = 3;
     BASIC_CONTROL = 3;
-    CTRL = 3;
-    PRBCTL = 3;
-    ANALOG = 4;
     ANALOG_ALARM = 4;
-    AA = 4;
-    PRANAB = 4;
-    DIGITAL = 5;
     DIGITAL_ALARM = 5;
-    DA = 5;
-    PRDABL = 5;
     DESCRIPTION = 6;
-    DESC = 6;
-    PRDESC = 6;
     INDEX = 7;
-    LONG_NAME = 7;
-    LNGNAM = 7;
-    PRLNAM = 7;
+    LONG_NAME = 8;
     ALARM_LIST_NAME = 8;
-    LSTNAM = 8;
-    PRALNM = 8;
 }
 
 message Range {
