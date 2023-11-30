@@ -5,7 +5,6 @@ package drf;
 import "google/protobuf/empty.proto";
 
 import "./event.proto";
-import "./sources.proto";
 
 message ArrayRange {
   sint64 start_index = 1;
@@ -23,7 +22,6 @@ message DRF {
   Range range = 3;
   Field field = 4;
   Event event = 5;
-  Source source = 6;
 }
 
 message Field {
