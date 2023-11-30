@@ -22,7 +22,7 @@ message ReadingReply {
   sint64 index = 1;
   oneof value {
     device.Reading reading = 2;
-    Status status = 3;
+    status.Status status = 3;
   }
 }
 
