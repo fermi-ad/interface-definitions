@@ -21,7 +21,7 @@ message DRF {
   Property property = 2;
   Range range = 3;
   Field field = 4;
-  Event event = 5;
+  event.Event event = 5;
 }
 
 message Field {
@@ -95,10 +95,10 @@ message Field {
     Reading reading = 1;
     Setting setting = 2;
     Status status = 3;
-    empty control = 4;
+    google.protobuf.Empty control = 4;
     AnalogAlarm analog_alarm = 5;
     DigitalAlarm digital_alarm = 6;
-    empty description = 7;
+    google.protobuf.Empty description = 7;
   }
 }
 
@@ -117,7 +117,7 @@ enum Property {
 
 message Range {
   oneof range {
-    empty full_range = 1;
+    google.protobuf.Empty full_range = 1;
     ArrayRange array_range = 2;
     ByteRange byte_range = 3;
   }
