@@ -20,19 +20,19 @@ message Data {
         bool alarmStatus = 4;
         bool abort = 5;
         bool abortInhibit = 6;
-        uint32 triesNeeded = 7;
-        uint32 triesNow = 8;
+        sint64 triesNeeded = 7;
+        sint64 triesNow = 8;
     }
 
     message DigitalAlarm {
-        sint32 nominal = 1;
-        uint32 mask = 2;
+        sint64 nominal = 1;
+        sint64 mask = 2;
         bool alarmEnable = 3;
         bool alarmStatus = 4;
         bool abort = 5;
         bool abortInhibit = 6;
-        uint32 triesNeeded = 7;
-        uint32 triesNow = 8;
+        sint64 triesNeeded = 7;
+        sint64 triesNow = 8;
     }
 
     message BasicStatus {
@@ -52,7 +52,7 @@ message Data {
 }
 
 message InformativeStatus {
-    sint32 code = 1;
+    sint64 code = 1;
     string message = 2;
 }
 

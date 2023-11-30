@@ -18,7 +18,7 @@ message ReadingList {
 }
 
 message ReadingReply {
-    uint32 index = 1;
+    sint64 index = 1;
     oneof value {
         device.Reading reading = 2;
         Status status = 3;
@@ -30,7 +30,7 @@ message SettingList {
 }
 
 message Status {
-    sint32 code = 1;
+    sint64 code = 1;
     string message = 2;
 }
 

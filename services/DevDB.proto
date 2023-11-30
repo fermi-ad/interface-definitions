@@ -36,10 +36,10 @@ message Property {
 // status.
 
 message DigitalStatusItem {
-    uint32 bit_no = 1;
-    uint32 color0 = 2;
+    sint64 bit_no = 1;
+    sint64 color0 = 2;
     string name0 = 3;
-    uint32 color1 = 4;
+    sint64 color1 = 4;
     string name1 = 5;
     string description =6;
 }
@@ -54,7 +54,7 @@ message DigitalStatus {
 // associated with one command.
 
 message DigitalControlItem {
-    uint32 value = 1;
+    sint64 value = 1;
     string short_name = 2;
     string long_name = 3;
 }
@@ -68,7 +68,7 @@ message DigitalControl {
 // Holds information about a device.
 
 message DeviceInfo {
-    uint32 device_index = 1;
+    sint64 device_index = 1;
     string description = 2;
     optional Property reading = 3;
     optional Property setting = 4;

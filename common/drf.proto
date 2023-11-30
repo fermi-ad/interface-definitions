@@ -8,13 +8,13 @@ import "./event.proto";
 import "./sources.proto";
 
 message ArrayRange {
-    int32 start_index = 1;
-    int32 end_index = 2;
+    sint64 start_index = 1;
+    sint64 end_index = 2;
 }
 
 message ByteRange {
-    int32 offset = 1;
-    int32 length = 2;
+    sint64 offset = 1;
+    sint64 length = 2;
 }
 
 message DRF {

@@ -9,7 +9,7 @@ import "common/periodic.proto";
 
 message Event {
     message Clock {
-        uint64 event_number = 1; // Is there a better way to represent hex?
+        sint64 event_number = 1; // Is there a better way to represent hex?
         google.protobuf.Duration delay = 2;
     }
 
@@ -21,7 +21,7 @@ message Event {
 
     message State {
         string state_name = 1;
-        int32 value = 2;
+        sint64 value = 2;
         google.protobuf.Duration delay = 3;
         StateExpression expression = 4;
     }

@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 // information as the events fire.
 
 message SubscribeReq {
-    repeated int32 events        = 1;
+    repeated sint64 events        = 1;
 }
 
 // This is the information that gets returned when an event fires. It
@@ -17,7 +17,7 @@ message SubscribeReq {
 
 message EventInfo {
     google.protobuf.Timestamp stamp	= 1;
-    int32 event				= 2;
+    sint64 event				= 2;
 }
 
 service ClockEvent {
