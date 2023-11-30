@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package devdb;
 
+import "common/status.proto";
+
 service DevDB {
   // Clients can ask for device information (obtained from the
   // device database.) The function is passed an array of device
@@ -82,7 +84,7 @@ message InfoEntry {
   string name = 1;
   oneof result {
     DeviceInfo device = 2;
-    string errMsg = 3;
+    status.Status status = 3;
   }
 }
 
