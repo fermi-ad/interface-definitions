@@ -10,26 +10,26 @@ import "common/periodic.proto";
 import "common/event.proto";
 
 service TimeSeriesArchive {
-    rpc Get(ArchiveQuery) returns (ArchiveReply) {}
+  rpc Get(ArchiveQuery) returns (ArchiveReply) {}
 }
 
 message Period {
-    google.protobuf.Timestamp start = 1;
-    google.protobuf.Timestamp end = 2;
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
 }
 
 message ArchiveQuery {
-    string name = 1;
-    oneof sample {
-        periodic.Frequency frequency = 2;
-        event.Event event = 3;
-    }
-    oneof range {
-        Period period = 4;
-        google.protobuf.Duration duration = 5;
-    }
+  string name = 1;
+  oneof sample {
+    periodic.Frequency frequency = 2;
+    event.Event event = 3;
+  }
+  oneof range {
+    Period period = 4;
+    google.protobuf.Duration duration = 5;
+  }
 }
 
 message ArchiveReply {
-    repeated device.Reading points = 1;
+  repeated device.Reading points = 1;
 }

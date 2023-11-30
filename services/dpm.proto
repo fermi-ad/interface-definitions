@@ -9,31 +9,31 @@ package dpm;
 import "common/device.proto";
 
 service DPM {
-    rpc Read(ReadingList) returns (stream ReadingReply) {}
-    rpc Set(SettingList) returns (StatusReply) {}
+  rpc Read(ReadingList) returns (stream ReadingReply) {}
+  rpc Set(SettingList) returns (StatusReply) {}
 }
 
 message ReadingList {
-    repeated string drf = 1;
+  repeated string drf = 1;
 }
 
 message ReadingReply {
-    sint64 index = 1;
-    oneof value {
-        device.Reading reading = 2;
-        Status status = 3;
-    }
+  sint64 index = 1;
+  oneof value {
+    device.Reading reading = 2;
+    Status status = 3;
+  }
 }
 
 message SettingList {
-    repeated device.Setting setting = 1;
+  repeated device.Setting setting = 1;
 }
 
 message Status {
-    sint64 code = 1;
-    string message = 2;
+  sint64 code = 1;
+  string message = 2;
 }
 
 message StatusReply {
-    repeated Status status = 1;
+  repeated Status status = 1;
 }

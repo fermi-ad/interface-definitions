@@ -3,14 +3,14 @@ syntax = "proto3";
 package periodic;
 
 enum FrequencyUnit {
-    SECOND = 0;
-    MILLISECONDS = 1;
-    MICROSECONDS = 2;
-    HERTZ = 3;
-    KILOHERTZ = 4;
+  SECOND = 0;
+  MILLISECONDS = 1;
+  MICROSECONDS = 2;
+  HERTZ = 3;
+  KILOHERTZ = 4;
 }
 
 message Frequency {
-    double value = 1;
-    FrequencyUnit unit = 2;
+  double value = 1;
+  FrequencyUnit unit = 2;
 }

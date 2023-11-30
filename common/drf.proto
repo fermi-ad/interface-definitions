@@ -8,119 +8,119 @@ import "./event.proto";
 import "./sources.proto";
 
 message ArrayRange {
-    sint64 start_index = 1;
-    sint64 end_index = 2;
+  sint64 start_index = 1;
+  sint64 end_index = 2;
 }
 
 message ByteRange {
-    sint64 offset = 1;
-    sint64 length = 2;
+  sint64 offset = 1;
+  sint64 length = 2;
 }
 
 message DRF {
-    string name = 1;
-    Property property = 2;
-    Range range = 3;
-    Field field = 4;
-    Event event = 5;
-    Source source = 6;
+  string name = 1;
+  Property property = 2;
+  Range range = 3;
+  Field field = 4;
+  Event event = 5;
+  Source source = 6;
 }
 
 message Field {
-    enum AnalogAlarm {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        MINIMUM = 3;
-        MAXIMUM = 4;
-        NOMINAL = 5;
-        TOLERANCE = 6;
-        RAW_MIN = 7;
-        RAW_MAX = 8;
-        RAW_NOM = 9;
-        RAW_TOL = 10;
-        ALARM_ENABLE = 11;
-        ALARM_STATUS = 12;
-        TRIES_NEEDED = 13;
-        TRIES_NOW = 14;
-        ALARM_FTD = 15;
-        ABORT = 16;
-        ABORT_INHIBIT = 17;
-        FLAGS = 18;
-    }
+  enum AnalogAlarm {
+    RAW = 0;
+    ALL = 1;
+    TEXT = 2;
+    MINIMUM = 3;
+    MAXIMUM = 4;
+    NOMINAL = 5;
+    TOLERANCE = 6;
+    RAW_MIN = 7;
+    RAW_MAX = 8;
+    RAW_NOM = 9;
+    RAW_TOL = 10;
+    ALARM_ENABLE = 11;
+    ALARM_STATUS = 12;
+    TRIES_NEEDED = 13;
+    TRIES_NOW = 14;
+    ALARM_FTD = 15;
+    ABORT = 16;
+    ABORT_INHIBIT = 17;
+    FLAGS = 18;
+  }
 
-    enum DigitalAlarm {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        NOMINAL = 3;
-        MASK = 4;
-        ALARM_ENABLE = 5;
-        ALARM_STATUS = 6;
-        TRIES_NEEDED = 7;
-        TRIES_NOW = 8;
-        ALARM_FTD = 9;
-        ABORT = 10;
-        ABORT_INHIBIT = 11;
-        FLAGS = 12;
-    }
+  enum DigitalAlarm {
+    RAW = 0;
+    ALL = 1;
+    TEXT = 2;
+    NOMINAL = 3;
+    MASK = 4;
+    ALARM_ENABLE = 5;
+    ALARM_STATUS = 6;
+    TRIES_NEEDED = 7;
+    TRIES_NOW = 8;
+    ALARM_FTD = 9;
+    ABORT = 10;
+    ABORT_INHIBIT = 11;
+    FLAGS = 12;
+  }
 
-    enum Reading {
-        RAW = 0;
-        PRIMARY = 1;
-        VOLTS = 2;
-        SCALED = 3;
-        COMMON = 4;
-    }
+  enum Reading {
+    RAW = 0;
+    PRIMARY = 1;
+    VOLTS = 2;
+    SCALED = 3;
+    COMMON = 4;
+  }
 
-    enum Setting {
-        RAW = 0;
-        PRIMARY = 1;
-        VOLTS = 2;
-        SCALED = 3;
-        COMMON = 4;
-    }
+  enum Setting {
+    RAW = 0;
+    PRIMARY = 1;
+    VOLTS = 2;
+    SCALED = 3;
+    COMMON = 4;
+  }
 
-    enum Status {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        EXTENDED_TEXT = 3;
-        ON = 4;
-        READY = 5;
-        REMOTE = 6;
-        POSITIVE = 7;
-        RAMP = 8;
-    }
+  enum Status {
+    RAW = 0;
+    ALL = 1;
+    TEXT = 2;
+    EXTENDED_TEXT = 3;
+    ON = 4;
+    READY = 5;
+    REMOTE = 6;
+    POSITIVE = 7;
+    RAMP = 8;
+  }
 
-    oneof attribute {
-        Reading reading = 1;
-        Setting setting = 2;
-        Status status = 3;
-        empty control = 4;
-        AnalogAlarm analog_alarm = 5;
-        DigitalAlarm digital_alarm = 6;
-        empty description = 7;
-    }
+  oneof attribute {
+    Reading reading = 1;
+    Setting setting = 2;
+    Status status = 3;
+    empty control = 4;
+    AnalogAlarm analog_alarm = 5;
+    DigitalAlarm digital_alarm = 6;
+    empty description = 7;
+  }
 }
 
 enum Property {
-    READING = 0;
-    SETTING = 1;
-    BASIC_STATUS = 2;
-    BASIC_CONTROL = 3;
-    ANALOG_ALARM = 4;
-    DIGITAL_ALARM = 5;
-    DESCRIPTION = 6;
-    INDEX = 7;
-    LONG_NAME = 8;
-    ALARM_LIST_NAME = 8;
+  READING = 0;
+  SETTING = 1;
+  BASIC_STATUS = 2;
+  BASIC_CONTROL = 3;
+  ANALOG_ALARM = 4;
+  DIGITAL_ALARM = 5;
+  DESCRIPTION = 6;
+  INDEX = 7;
+  LONG_NAME = 8;
+  ALARM_LIST_NAME = 8;
 }
 
 message Range {
-    oneof range {
-        empty full_range = 1;
-        ArrayRange array_range = 2;
-        ByteRange byte_range = 3;
-    }
+  oneof range {
+    empty full_range = 1;
+    ArrayRange array_range = 2;
+    ByteRange byte_range = 3;
+  }
 }

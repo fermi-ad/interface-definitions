@@ -14,60 +14,61 @@ import "google/protobuf/timestamp.proto";
  */
 
 message NTScalar {
-    Scalar value = 1;
-    string descriptor = 2;
-    Alarm alarm = 3;
-    google.protobuf.Timestamp timestamp = 4;
-    Display display = 5;
-    Control control = 6;
+  Scalar value = 1;
+  string descriptor = 2;
+  Alarm alarm = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  Display display = 5;
+  Control control = 6;
 }
 
 message NTTable {
-    repeated string columnNames = 1;
-    // structure allows nested values
-    // Structure value = 2;
-    string descriptor = 3;
-    Alarm alarm = 4;
-    google.protobuf.Timestamp timestamp = 5;
+  repeated string columnNames = 1;
+  // structure allows nested values
+  // Structure value = 2;
+  string descriptor = 3;
+  Alarm alarm = 4;
+  google.protobuf.Timestamp timestamp = 5;
 }
 
-message NTEnum { // This doesn't make sense, I can't genericly type an enum field
-    string value = 1;
-    repeated string choices = 2;
-    string descriptor = 3;
-    Alarm alarm = 4;
-    google.protobuf.Timestamp timestamp = 5;
+// This doesn't make sense, I can't genericly type an enum field
+message NTEnum {
+  string value = 1;
+  repeated string choices = 2;
+  string descriptor = 3;
+  Alarm alarm = 4;
+  google.protobuf.Timestamp timestamp = 5;
 }
 
 message NTMatrix {
-    repeated double value = 1;
-    repeated sint64 dim = 2;
-    string descriptor = 3;
-    Alarm alarm = 4;
-    google.protobuf.Timestamp timestamp = 5;
-    Display display = 6;
+  repeated double value = 1;
+  repeated sint64 dim = 2;
+  string descriptor = 3;
+  Alarm alarm = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  Display display = 6;
 }
 
 message NTURI {
-    string scheme = 1;
-    string authority = 2;
-    string path = 3;
-    string query = 4; // This is defined as a "structure"
+  string scheme = 1;
+  string authority = 2;
+  string path = 3;
+  string query = 4;  // This is defined as a "structure"
 }
 
 message NTNameValue {
-    repeated string name = 1;
-    repeated Scalar value = 2;
-    string descriptor = 3;
-    Alarm alarm = 4;
-    google.protobuf.Timestamp timestamp = 5;
+  repeated string name = 1;
+  repeated Scalar value = 2;
+  string descriptor = 3;
+  Alarm alarm = 4;
+  google.protobuf.Timestamp timestamp = 5;
 }
 
 message NTAttribute {
-    string name = 1;
-    string value = 2;
-    repeated string tags = 3;
-    string descriptor = 4;
-    Alarm alarm = 5;
-    google.protobuf.Timestamp timestamp = 6;
+  string name = 1;
+  string value = 2;
+  repeated string tags = 3;
+  string descriptor = 4;
+  Alarm alarm = 5;
+  google.protobuf.Timestamp timestamp = 6;
 }

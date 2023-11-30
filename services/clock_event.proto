@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 // information as the events fire.
 
 message SubscribeReq {
-    repeated sint64 events        = 1;
+  repeated sint64 events = 1;
 }
 
 // This is the information that gets returned when an event fires. It
@@ -16,15 +16,14 @@ message SubscribeReq {
 // occurred.
 
 message EventInfo {
-    google.protobuf.Timestamp stamp	= 1;
-    sint64 event				= 2;
+  google.protobuf.Timestamp stamp = 1;
+  sint64 event = 2;
 }
 
 service ClockEvent {
+  // A client uses this RPC to indicate which clock events should be
+  // returned. The function returns a stream of EventInfo messages
+  // which informs the client when events have fired.
 
-    // A client uses this RPC to indicate which clock events should be
-    // returned. The function returns a stream of EventInfo messages
-    // which informs the client when events have fired.
-
-    rpc Subscribe(SubscribeReq) returns (stream EventInfo) {}
+  rpc Subscribe(SubscribeReq) returns (stream EventInfo) {}
 }
