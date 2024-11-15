@@ -10,8 +10,12 @@ import "common/device.proto";
 import "common/status.proto";
 
 service DPM {
-  rpc Read(ReadingList) returns (stream ReadingReply) {}
-  rpc Set(SettingList) returns (StatusReply) {}
+  rpc Read(string) returns (stream ReadingReply) {}
+  rpc Set(device.Setting) returns (status.Status) {}
+  rpc ReadList(ReadingList) returns (stream ReadingListReply) {}
+  // Instead of streaming replies for each setting request, we send all statuses
+  // back in a list of replies
+  rpc SetList(SettingList) returns (StatusListReply) {}
 }
 
 message ReadingList {
@@ -19,17 +23,23 @@ message ReadingList {
 }
 
 message ReadingReply {
-  sint64 index = 1;
   oneof value {
-    device.Reading reading = 2;
-    status.Status status = 3;
+    device.Reading reading = 1;
+    status.Status status = 2;
   }
+}
+
+message ReadingListReply {
+  sint64 index = 1;
+  ReadingReply reply = 2;
 }
 
 message SettingList {
   repeated device.Setting setting = 1;
 }
 
-message StatusReply {
+// Instead of streaming replies for each setting request, we send all statuses
+// back in a list of replies
+message StatusListReply {
   repeated status.Status status = 1;
 }

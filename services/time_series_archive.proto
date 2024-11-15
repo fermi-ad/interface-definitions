@@ -11,6 +11,9 @@ import "common/event.proto";
 
 service TimeSeriesArchive {
   rpc Get(ArchiveQuery) returns (ArchiveReply) {}
+  // In this case, because we aren't streaming, we don't need an index
+  // The service guarantees that the reply is in the same order as the request.
+  rpc GetList(ArchiveListQuery) returns (ArchiveReply) {}
 }
 
 message Period {
@@ -30,6 +33,17 @@ message ArchiveQuery {
   }
 }
 
+message ArchiveListQuery {
+  repeated ArchiveQuery query = 1;
+}
+
 message ArchiveReply {
-  repeated device.Reading points = 1;
+  oneof value {
+    repeated device.Reading reading = 1;
+    status.Status status = 2;
+  }
+}
+
+message ArchiveListReply {
+  repeated ArchiveReply reply = 1;
 }
