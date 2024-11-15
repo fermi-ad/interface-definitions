@@ -5,16 +5,8 @@ package event;
 import "google/protobuf/empty.proto";
 
 enum TimeFrequencyUnit {
-    SECOND = 0;
-    MILLISECONDS = 1;
-    MICROSECONDS = 2;
-    HERTZ = 3;
-    KILOHERTZ = 4;
-    S = 0;
-    M = 1;
-    U = 2;
-    H = 3;
-    K = 4;
+    MICROSECONDS = 0;
+    HERTZ = 1;
 }
 
 message TimeFrequency {
@@ -24,16 +16,15 @@ message TimeFrequency {
 
 message Event {
     message Clock {
-        string event_number = 1;
+        int32 event_number = 1;
         EventType event_type = 2;
-        TimeFrequency delay = 3;
+        optional TimeFrequency delay = 3;
     }
 
     enum EventType {
-        H = 0;
-        S = 1;
         HARDWARE = 0;
         SOFTWARE = 1;
+        EITHER = 2;
     }
 
     message Periodic {
@@ -44,19 +35,17 @@ message Event {
 
     message State {
         string state_name = 1;
-        int32 value = 2;
-        TimeFrequency delay = 3;
-        StateExpression expression = 4;
-    }
+        optional TimeFrequency delay = 2;
 
-    enum StateExpression {
-        EQUAL = 0;
-        NOT_EQUAL = 1;
-        LESS_THAN = 2;
-        LESS_THAN_OR_EQUAL = 3;
-        GREATER_THAN = 4;
-        GREATER_THAN_OR_EQUAL = 5;
-        ANY = 6;
+        oneof expression {
+            int32 equal = 1;
+            int32 not_equal = 2;
+            int32 less_than = 3;
+            int32 less_than_or_equal = 4;
+            int32 greater_than = 5;
+            int32 greater_than_or_equal = 6;
+            empty any_value = 7;
+        }
     }
 
     oneof event {
@@ -64,5 +53,7 @@ message Event {
         Periodic periodic = 2;
         Clock clock = 3;
         State state = 4;
+        empty never = 5;
     }
 }
+
