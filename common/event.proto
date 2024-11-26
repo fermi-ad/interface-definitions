@@ -38,22 +38,22 @@ message Event {
         optional TimeFrequency delay = 2;
 
         oneof expression {
-            int32 equal = 1;
-            int32 not_equal = 2;
-            int32 less_than = 3;
-            int32 less_than_or_equal = 4;
-            int32 greater_than = 5;
-            int32 greater_than_or_equal = 6;
-            empty any_value = 7;
+            int32 equal = 3;
+            int32 not_equal = 4;
+            int32 less_than = 5;
+            int32 less_than_or_equal = 6;
+            int32 greater_than = 7;
+            int32 greater_than_or_equal = 8;
+            google.protobuf.Empty any_value = 9;
         }
     }
 
     oneof event {
-        empty immediate = 1;
+        google.protobuf.Empty immediate = 1;
         Periodic periodic = 2;
         Clock clock = 3;
         State state = 4;
-        empty never = 5;
+        google.protobuf.Empty never = 5;
     }
 }
 

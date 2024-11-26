@@ -1,13 +1,12 @@
 syntax = "proto3";
 
-package event;
+package source;
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 message TimeRange {
-    optional Timestamp start = 1;
-    optional Timestamp end = 2;
+    optional google.protobuf.Timestamp start = 1;
+    optional google.protobuf.Timestamp end = 2;
 }
 
 message Source {
