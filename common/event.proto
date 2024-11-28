@@ -2,23 +2,14 @@ syntax = "proto3";
 
 package event;
 
+import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
-
-enum TimeFrequencyUnit {
-    MICROSECONDS = 0;
-    HERTZ = 1;
-}
-
-message TimeFrequency {
-    int32 value = 1;
-    TimeFrequencyUnit unit = 2;
-}
 
 message Event {
     message Clock {
         int32 event_number = 1;
         EventType event_type = 2;
-        optional TimeFrequency delay = 3;
+        optional google.protobuf.Duration delay = 3;
     }
 
     enum EventType {
@@ -29,13 +20,13 @@ message Event {
 
     message Periodic {
         bool continuous = 1;
-        TimeFrequency period = 2;
+        google.protobuf.Duration period = 2;
         bool immediate = 3;
     }
 
     message State {
         string state_name = 1;
-        optional TimeFrequency delay = 2;
+        optional google.protobuf.Duration delay = 2;
 
         oneof expression {
             int32 equal = 3;
