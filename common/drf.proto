@@ -79,6 +79,9 @@ message Field {
         Flavor analog_alarm = 5;
         Flavor digital_alarm = 6;
         google.protobuf.Empty description = 7;
+        google.protobuf.Empty index = 8;
+        google.protobuf.Empty long_name = 9;
+        google.protobuf.Empty alarm_list_name = 10;
     }
 }
 
