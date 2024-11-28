@@ -8,6 +8,8 @@ package dpm;
 
 import "../common/device.proto";
 
+import "common/status.proto";
+
 service DPM {
     rpc Read(ReadingList) returns (stream ReadingReply) {}
     rpc Set(SettingList) returns (stream StatusReply) {}
@@ -21,7 +23,7 @@ message ReadingReply {
     uint32 index = 1;
     oneof value {
         Reading reading = 2;
-        Status status = 3;
+        status.Status status = 3;
     }
 }
 
@@ -29,12 +31,10 @@ message SettingList {
     repeated Setting setting = 1;
 }
 
-message Status {
-    sint32 code = 1;
-    string message = 2;
 }
 
 message StatusReply {
     uint32 index = 1;
-    Status status = 2;
+    status.Status status = 2;
 }
+
