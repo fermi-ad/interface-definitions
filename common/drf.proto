@@ -19,9 +19,8 @@ message ByteRange {
 
 message DataChannel {
     string name = 1;
-    Property property = 2;
-    Range range = 3;
-    Field field = 4;
+    Range range = 2;
+    Field field = 3;
 }
 
 message DRFs {
@@ -36,6 +35,9 @@ message DRF {
     optional source.Source source = 3;
 }
 
+message DRFList {
+    repeated drf.DRF drf = 1;
+}
 
 message Field {
     enum Flavor {
@@ -83,19 +85,6 @@ message Field {
         google.protobuf.Empty long_name = 9;
         google.protobuf.Empty alarm_list_name = 10;
     }
-}
-
-enum Property {
-    READING = 0;
-    SETTING = 1;
-    BASIC_STATUS = 2;
-    BASIC_CONTROL = 3;
-    ANALOG_ALARM = 4;
-    DIGITAL_ALARM = 5;
-    DESCRIPTION = 6;
-    INDEX = 7;
-    LONG_NAME = 8;
-    ALARM_LIST_NAME = 9;
 }
 
 message Range {
