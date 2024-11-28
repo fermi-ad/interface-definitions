@@ -6,7 +6,10 @@ option java_outer_classname = "DPMProto";
 
 package dpm;
 
+import "google/protobuf/timestamp.proto";
 
+import "common/device.proto";
+import "common/drf.proto";
 import "common/status.proto";
 
 service DPM {
@@ -15,21 +18,34 @@ service DPM {
 }
 
 message ReadingList {
-    repeated string drf = 1;
+    oneof reading_list {
+        drf.DRFs correlated = 1;
+        drf.DRFList independent = 2;
+    }
+}
+
+message Reading {
+    google.protobuf.Timestamp timestamp = 1;
+    device.Value data = 2;
+    status.Status status = 3;
 }
 
 message ReadingReply {
     uint32 index = 1;
+
     oneof value {
         Reading reading = 2;
         status.Status status = 3;
     }
 }
 
-message SettingList {
-    repeated Setting setting = 1;
+message Setting {
+    drf.DataChannel data_channel = 1;
+    device.Value value = 2;
 }
 
+message SettingList {
+    repeated Setting setting = 1;
 }
 
 message StatusReply {

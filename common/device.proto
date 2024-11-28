@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package device;
 
-message Data {
+message Value {
     message ScalarArray {
         repeated double value = 1;
     }
@@ -49,18 +49,3 @@ message Data {
     }
 }
 
-message InformativeStatus {
-    sint32 code = 1;
-    string message = 2;
-}
-
-message Reading {
-    google.protobuf.Timestamp timestamp = 1;
-    Data data = 2;
-    InformativeStatus status = 3;
-}
-
-message Setting {
-    string name = 1;
-    Data data = 2;
-}
