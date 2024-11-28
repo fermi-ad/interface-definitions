@@ -36,80 +36,48 @@ message DRF {
     optional source.Source source = 3;
 }
 
+
 message Field {
-    enum Reading {
+    enum Flavor {
         RAW = 0;
         PRIMARY = 1;
         VOLTS = 2;
         SCALED = 3;
         COMMON = 4;
-    }
-
-    enum Setting {
-        RAW = 0;
-        PRIMARY = 1;
-        VOLTS = 2;
-        SCALED = 3;
-        COMMON = 4;
-    }
-
-    enum Status {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        EXTENDED_TEXT = 3;
-        ON = 4;
-        READY = 5;
-        REMOTE = 6;
-        POSITIVE = 7;
-        RAMP = 8;
-    }
-
-    enum AnalogAlarm {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        MINIMUM = 3;
-        MAXIMUM = 4;
-        NOMINAL = 5;
-        TOLERANCE = 6;
-        RAW_MIN = 7;
-        RAW_MAX = 8;
-        RAW_NOM = 9;
-        RAW_TOL = 10;
-        ALARM_ENABLE = 11;
-        ALARM_STATUS = 12;
-        TRIES_NEEDED = 13;
-        TRIES_NOW = 14;
-        ALARM_FTD = 15;
-        ABORT = 16;
-        ABORT_INHIBIT = 17;
-        FLAGS = 18;
-    }
-
-    enum DigitalAlarm {
-        RAW = 0;
-        ALL = 1;
-        TEXT = 2;
-        NOMINAL = 3;
-        MASK = 4;
-        ALARM_ENABLE = 5;
-        ALARM_STATUS = 6;
-        TRIES_NEEDED = 7;
-        TRIES_NOW = 8;
-        ALARM_FTD = 9;
-        ABORT = 10;
-        ABORT_INHIBIT = 11;
-        FLAGS = 12;
+        ALL = 5;
+        TEXT = 6;
+        EXTENDED_TEXT = 7;
+        ON = 8;
+        READY = 9;
+        REMOTE = 10;
+        POSITIVE = 11;
+        RAMP = 12;
+        MINIMUM = 13;
+        MAXIMUM = 14;
+        NOMINAL = 15;
+        TOLERANCE = 16;
+        RAW_MIN = 17;
+        RAW_MAX = 18;
+        RAW_NOM = 19;
+        RAW_TOL = 20;
+        ALARM_ENABLE = 21;
+        ALARM_STATUS = 22;
+        TRIES_NEEDED = 23;
+        TRIES_NOW = 24;
+        ALARM_FTD = 25;
+        ABORT = 26;
+        ABORT_INHIBIT = 27;
+        FLAGS = 28;
+        MASK = 29;
     }
 
     oneof field {
-        Reading reading = 1;
-        Setting setting = 2;
-        Status status = 3;
+        Flavor reading = 1;
+        Flavor setting = 2;
+        Flavor status = 3;
         google.protobuf.Empty control = 4;
-        AnalogAlarm analog_alarm = 5;
-        DigitalAlarm digital_alarm = 6;
+        Flavor analog_alarm = 5;
+        Flavor digital_alarm = 6;
         google.protobuf.Empty description = 7;
     }
 }

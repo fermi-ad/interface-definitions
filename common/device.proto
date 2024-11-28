@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package device;
 
-import "google/protobuf/timestamp.proto";
-
 message Data {
     message ScalarArray {
         repeated double value = 1;
@@ -25,7 +23,7 @@ message Data {
     }
 
     message DigitalAlarm {
-        sint32 nominal = 1;
+        int32 nominal = 1;
         uint32 mask = 2;
         bool alarmEnable = 3;
         bool alarmStatus = 4;

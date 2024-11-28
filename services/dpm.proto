@@ -6,7 +6,6 @@ option java_outer_classname = "DPMProto";
 
 package dpm;
 
-import "../common/device.proto";
 
 import "common/status.proto";
 
