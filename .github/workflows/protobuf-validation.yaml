@@ -20,4 +20,4 @@ jobs:
 
       - name: Validate Protobuf Files
         run: |
-          ./protoc --syntax_level=proto3 $(find . -name "*.proto")
+          ./bin/protoc --syntax_level=proto3 $(find . -name "*.proto")
