@@ -15,7 +15,7 @@ jobs:
 
       - name: Download Precompiled Protobuf Compiler
         run: |
-          curl -L -o protoc https://github.com/protocolbuffers/protobuf/releases/download/v29.0/protoc-29.0-linux-x86_64.zip
+          curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.0/protoc-29.0-linux-x86_64.zip
           unzip protoc.zip
 
       - name: Validate Protobuf Files
