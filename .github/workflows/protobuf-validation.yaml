@@ -1,0 +1,27 @@
+name: Protobuf Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-protos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Precompiled Protobuf Compiler
+        uses: actions/download-artifact@v3
+        with:
+          path: prebuilt-protoc
+          url: https://github.com/protocolbuffers/protobuf/releases/download/v29.0/protoc-29.0-linux-x86_64.zip
+
+      - name: Extract Protobuf Compiler
+        run: unzip prebuilt-protoc.zip
+
+      - name: Validate Protobuf Files
+        run: |
+          ./protoc --syntax_level=proto3 $(find . -name "*.proto")
