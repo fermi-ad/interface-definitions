@@ -2,16 +2,11 @@ syntax = "proto3";
 
 package source;
 
-import "google/protobuf/timestamp.proto";
-
-message TimeRange {
-    optional google.protobuf.Timestamp start = 1;
-    optional google.protobuf.Timestamp end = 2;
-}
+import "google/protobuf/interval.proto";
 
 message Source {
     oneof source {
-        TimeRange range = 1;
+        google.protobuf.Interval range = 1;
         int32 save_restore = 2;
         string redirection = 3;
     }
