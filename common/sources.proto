@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package source;
 
-import "google/protobuf/interval.proto";
+import "third-party/interval.proto";
 
 message Source {
     oneof source {
-        google.protobuf.Interval range = 1;
+        google.type.Interval range = 1;
         int32 save_restore = 2;
         string redirection = 3;
     }
