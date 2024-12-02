@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package device;
+
+message Value {
+    message ScalarArray {
+        repeated double value = 1;
+    }
+
+    message TextArray {
+        repeated string value = 1;
+    }
+
+    message AnalogAlarm {
+        double minimum = 1;
+        double maximum = 2;
+        bool alarmEnable = 3;
+        bool alarmStatus = 4;
+        bool abort = 5;
+        bool abortInhibit = 6;
+        uint32 triesNeeded = 7;
+        uint32 triesNow = 8;
+    }
+
+    message DigitalAlarm {
+        int32 nominal = 1;
+        uint32 mask = 2;
+        bool alarmEnable = 3;
+        bool alarmStatus = 4;
+        bool abort = 5;
+        bool abortInhibit = 6;
+        uint32 triesNeeded = 7;
+        uint32 triesNow = 8;
+    }
+
+    message BasicStatus {
+        map<string, string> value = 1;
+    }
+
+    oneof value {
+        double scalar = 1;
+        ScalarArray scalarArr = 2;
+        bytes raw = 3;
+        string text = 4;
+        TextArray textArr = 5;
+        AnalogAlarm anaAlarm = 6;
+        DigitalAlarm digAlarm = 7;
+        BasicStatus basicStatus = 8;
+    }
+}
+
