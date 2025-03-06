@@ -27,7 +27,7 @@ message ReadingList {
 message Reading {
     google.protobuf.Timestamp timestamp = 1;
     device.Value data = 2;
-    status.Status status = 3;
+    optional status.Status status = 3;
 }
 
 message ReadingReply {
