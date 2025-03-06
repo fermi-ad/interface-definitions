@@ -14,7 +14,7 @@ import "common/status.proto";
 
 service DPM {
     rpc Read(ReadingList) returns (stream ReadingReply) {}
-    rpc Set(SettingList) returns (stream StatusReply) {}
+    rpc Set(SettingList) returns (stream SettingReply) {}
 }
 
 message ReadingList {
@@ -27,7 +27,7 @@ message ReadingList {
 message Reading {
     google.protobuf.Timestamp timestamp = 1;
     device.Value data = 2;
-    status.Status status = 3;
+    optional status.Status status = 3;
 }
 
 message ReadingReply {
@@ -48,7 +48,7 @@ message SettingList {
     repeated Setting setting = 1;
 }
 
-message StatusReply {
+message SettingReply {
     uint32 index = 1;
     status.Status status = 2;
 }
