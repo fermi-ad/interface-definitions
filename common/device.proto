@@ -11,6 +11,15 @@ message Value {
         repeated string value = 1;
     }
 
+    message TimeSeries {
+	message Entry {
+	    double stamp = 1;
+	    double value = 2;
+	}
+
+	repeated Entry entry = 1;
+    }
+
     message AnalogAlarm {
         double minimum = 1;
         double maximum = 2;
@@ -46,6 +55,6 @@ message Value {
         AnalogAlarm anaAlarm = 6;
         DigitalAlarm digAlarm = 7;
         BasicStatus basicStatus = 8;
+	TimeSeries series = 9;
     }
 }
-
