@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package device;
 
 message Value {
@@ -13,7 +15,7 @@ message Value {
 
     message TimeSeries {
 	message Entry {
-	    double stamp = 1;
+	    google.protobuf.Timestamp stamp = 1;
 	    double value = 2;
 	}
 
