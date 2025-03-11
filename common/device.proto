@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package device;
 
 message Value {
@@ -9,6 +11,15 @@ message Value {
 
     message TextArray {
         repeated string value = 1;
+    }
+
+    message TimeSeries {
+	message Entry {
+	    google.protobuf.Timestamp stamp = 1;
+	    double value = 2;
+	}
+
+	repeated Entry entry = 1;
     }
 
     message AnalogAlarm {
@@ -46,6 +57,6 @@ message Value {
         AnalogAlarm anaAlarm = 6;
         DigitalAlarm digAlarm = 7;
         BasicStatus basicStatus = 8;
+	TimeSeries series = 9;
     }
 }
-
