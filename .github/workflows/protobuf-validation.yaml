@@ -20,4 +20,4 @@ jobs:
 
       - name: Validate Protobuf Files
         run: |
-          ./bin/protoc --cpp_out=. $(find . -name "*.proto" -not -path "./include/*")
+          ./bin/protoc --cpp_out=. $(find . -name "*.proto" -not -path "./include/*" -not -path "./deprecated/*")
