@@ -35,19 +35,6 @@ It automatically generates Java classes from .proto files and bundles them into 
    `mvn clean package`
 
 
-## Folder Structure
-
-grpc-protobuf-example/
-│
-├── pom.xml                   # Maven build configuration
-├── src/
-│   ├── main/
-│   │   ├── java/             # Java source code
-│   │   └── proto/            # .proto files
-│   ├── target/               # Build output (including generated sources)
-├── README.md                 # Project documentation (this file)
-
-
 ## Troubleshooting
 
 If you encounter errors like `RuntimeVersion$RuntimeDomain`, ensure that all necessary dependencies (like protobuf and gRPC) are included in your build.
