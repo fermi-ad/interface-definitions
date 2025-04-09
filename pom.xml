@@ -74,24 +74,35 @@
                     <protoSourceRoot>src/main/proto</protoSourceRoot>
                 </configuration>
             </plugin>
-            <!-- maven-jar-plugin to package the project into a JAR -->
-            <!-- Main JAR Plugin -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!-- Optionally add a classifier for the main artifact -->
-                            <classifier>main</classifier>
+                            <artifactSet>
+                                <!-- Include dependencies in the shaded JAR -->
+                                <includes>
+                                    <include>com.google.protobuf:protobuf-java</include>
+                                    <include>io.grpc:grpc-netty-shaded</include>
+                                    <include>io.grpc:grpc-protobuf</include>
+                                    <include>io.grpc:grpc-stub</include>
+                                </includes>
+                            </artifactSet>
+                            <transformers>
+                                <!-- No Main-Class needed -->
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>
