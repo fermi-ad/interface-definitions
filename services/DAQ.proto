@@ -30,7 +30,7 @@ message Reading {
     status.Status status = 3;
 }
 
-message GroupedReading {
+message Readings {
     repeated Reading reading = 2;
 }
 
@@ -38,9 +38,8 @@ message ReadingReply {
     uint32 index = 1;
 
     oneof value {
-        Reading reading = 2;
-        GroupedReading readings = 3;
-        status.Status status = 4;
+        Readings readings = 2;
+        status.Status status = 3;
     }
 }
 
