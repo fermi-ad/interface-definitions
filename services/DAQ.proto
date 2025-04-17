@@ -2,9 +2,9 @@ syntax = "proto3";
 
 option java_multiple_files = false;
 option java_package = "gov.fnal.controls.service.proto.grpc";
-option java_outer_classname = "DPMProto";
+option java_outer_classname = "DAQProto";
 
-package dpm;
+package daq;
 
 import "google/protobuf/timestamp.proto";
 
@@ -12,7 +12,7 @@ import "common/device.proto";
 import "common/drf.proto";
 import "common/status.proto";
 
-service DPM {
+service DAQ {
     rpc Read(ReadingList) returns (stream ReadingReply) {}
     rpc Set(SettingList) returns (stream SettingReply) {}
 }
