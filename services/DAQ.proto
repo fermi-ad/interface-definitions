@@ -4,7 +4,7 @@ option java_multiple_files = false;
 option java_package = "gov.fnal.controls.service.proto.grpc";
 option java_outer_classname = "DAQProto";
 
-package daq;
+package services.daq;
 
 import "google/protobuf/timestamp.proto";
 
@@ -19,15 +19,15 @@ service DAQ {
 
 message ReadingList {
     oneof reading_list {
-        drf.DRFs correlated = 1;
-        drf.DRFList independent = 2;
+        common.drf.DRFs correlated = 1;
+        common.drf.DRFList independent = 2;
     }
 }
 
 message Reading {
     google.protobuf.Timestamp timestamp = 1;
-    device.Value data = 2;
-    status.Status status = 3;
+    common.device.Value data = 2;
+    common.status.Status status = 3;
 }
 
 message Readings {
@@ -39,13 +39,13 @@ message ReadingReply {
 
     oneof value {
         Readings readings = 2;
-        status.Status status = 3;
+        common.status.Status status = 3;
     }
 }
 
 message Setting {
-    drf.DataChannel data_channel = 1;
-    device.Value value = 2;
+    common.drf.DataChannel data_channel = 1;
+    common.device.Value value = 2;
 }
 
 message SettingList {
@@ -54,6 +54,6 @@ message SettingList {
 
 message SettingReply {
     uint32 index = 1;
-    status.Status status = 2;
+    common.status.Status status = 2;
 }
 

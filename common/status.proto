@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package status;
+package common.status;
 
 message Status {
     int32 facility_code = 1;

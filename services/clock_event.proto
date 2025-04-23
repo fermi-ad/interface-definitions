@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package clock_event;
+package services.clock_event;
 
 import "google/protobuf/timestamp.proto";
 

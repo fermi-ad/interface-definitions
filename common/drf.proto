@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package drf;
+package common.drf;
 
 import "google/protobuf/empty.proto";
 
@@ -25,18 +25,18 @@ message DataChannel {
 
 message DRFs {
     repeated DataChannel data_channel = 1;
-    optional event.Event event = 2;
-    optional source.Source source = 3;
+    optional common.event.Event event = 2;
+    optional common.sources.Source source = 3;
 }
 
 message DRF {
     DataChannel data_channel = 1;
-    optional event.Event event = 2;
-    optional source.Source source = 3;
+    optional common.event.Event event = 2;
+    optional common.sources.Source source = 3;
 }
 
 message DRFList {
-    repeated drf.DRF drf = 1;
+    repeated common.drf.DRF drf = 1;
 }
 
 message Field {
