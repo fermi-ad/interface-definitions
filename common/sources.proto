@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package source;
+package common.sources;
 
 import "third-party/interval.proto";
 
