@@ -3,9 +3,9 @@ name: Build and Deploy gRPC Modules to GitHub Packages
 on:
   push:
     branches:
-      - 'main'
+      - 'proto-deprecated-jar'
     paths:
-      - 'deprecated/*'
+      - 'deprecated/**'
 
 permissions:
   contents: read
