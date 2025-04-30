@@ -1,4 +1,4 @@
-name: Build and Deploy gRPC Modules to GitHub Packages
+name: Build and Deploy dpm gRPC Modules to GitHub Packages
 
 on:
   push:
