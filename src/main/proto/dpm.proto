@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = false;
-option java_package = "gov.fnal.controls.service.proto.grpc";
+option java_package = "gov.fnal.controls.dpm.proto.grpc";
 option java_outer_classname = "DPMProto";
 
 package dpm;
