@@ -220,7 +220,7 @@
         <profile>
             <id>server</id>
             <build>
-                <finalName>grpc-server</finalName>
+                <finalName>grpc-server</finalName> <!--optional-->
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
