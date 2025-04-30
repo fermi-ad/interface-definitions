@@ -148,7 +148,7 @@
         <profile>
             <id>client</id>
             <build>
-                <finalName>grpc-client</finalName>
+                <finalName>grpc-client</finalName> <!--optional-->
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
