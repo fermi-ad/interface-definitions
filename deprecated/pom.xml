@@ -204,7 +204,7 @@
                                 <configuration>
                                     <file>${project.build.directory}/grpc-client-shaded.jar</file>
                                     <repositoryId>github</repositoryId>
-                                    <url>https://maven.pkg.github.com/ukandula/proto-dpm-service</url>
+                                    <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
                                     <groupId>gov.fnal.controls.dpm.proto.grpc</groupId>
                                     <artifactId>client</artifactId>
                                     <version>${project.version}</version>
