@@ -3,7 +3,7 @@ name: Build and Deploy dpm gRPC Modules to GitHub Packages
 on:
   push:
     branches:
-      - 'proto-deprecated-jar'
+      - 'main'
     paths:
       - 'deprecated/**'
 
