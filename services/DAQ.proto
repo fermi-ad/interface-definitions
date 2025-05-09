@@ -9,7 +9,6 @@ package services.daq;
 import "google/protobuf/timestamp.proto";
 
 import "common/device.proto";
-import "common/drf.proto";
 import "common/status.proto";
 
 service DAQ {
@@ -18,10 +17,7 @@ service DAQ {
 }
 
 message ReadingList {
-    oneof reading_list {
-        common.drf.DRFs correlated = 1;
-        common.drf.DRFList independent = 2;
-    }
+    repeated string drf = 1;
 }
 
 message Reading {
@@ -44,7 +40,7 @@ message ReadingReply {
 }
 
 message Setting {
-    common.drf.DataChannel data_channel = 1;
+    string device = 1;
     common.device.Value value = 2;
 }
 
