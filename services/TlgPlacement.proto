@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option java_package = "tlgplacement.stubs";
+
+service tlgPlacementService {
+    rpc getVersion(EmptyRequest) returns (stream VersionResponse);
+}
+
+service tlgPlacementMutationService{
+    rpc diagnosticsInline(TlgDevices) returns (stream TlgPlacementResponse);
+    rpc placementInline(TlgDevices) returns (stream TlgPlacementResponse);
+} 
+
+message EmptyRequest {
+}
+
+message VersionResponse {
+   string version = 1;
+}
+   
+message TlgDevice {
+    string type = 1;
+    string name = 2;
+    string device = 3;
+    int32 length = 4;
+    repeated int32 data = 5;
+}
+
+message TlgDevices {
+    repeated TlgDevice devices = 1;
+}
+
+message TlgPlacementResponse {
+    int32 status = 1;
+    string message = 2;
+    repeated int32 diagnostics = 3;
+    repeated int32 placement = 4;
+    repeated int32 generated = 5;
+    repeated int32 parameters = 6;
+}
