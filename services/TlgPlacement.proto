@@ -23,8 +23,7 @@ message TlgDevice {
     string type = 1;
     string name = 2;
     string device = 3;
-    int32 length = 4;
-    repeated int32 data = 5;
+    repeated int32 data = 4;
 }
 
 message TlgDevices {
