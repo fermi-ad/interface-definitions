@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package services.tlg_placement;
+
 option java_package = "tlgplacement.stubs";
 
 service tlgPlacementService {
