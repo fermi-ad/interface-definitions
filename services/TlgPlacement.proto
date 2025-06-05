@@ -5,12 +5,12 @@ package services.tlg_placement;
 option java_package = "tlgplacement.stubs";
 
 service tlgPlacementService {
-    rpc getVersion(EmptyRequest) returns (stream VersionResponse);
+    rpc getVersion(EmptyRequest) returns (VersionResponse);
 }
 
 service tlgPlacementMutationService{
-    rpc diagnosticsInline(TlgDevices) returns (stream TlgPlacementResponse);
-    rpc placementInline(TlgDevices) returns (stream TlgPlacementResponse);
+    rpc diagnosticsInline(TlgDevices) returns (TlgPlacementResponse);
+    rpc placementInline(TlgDevices) returns (TlgPlacementResponse);
 } 
 
 message EmptyRequest {
