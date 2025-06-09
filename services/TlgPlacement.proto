@@ -1,18 +1,19 @@
 syntax = "proto3";
 
+package services.tlg_placement;
+
+import "google/protobuf/empty.proto";
+
 option java_package = "tlgplacement.stubs";
 
 service tlgPlacementService {
-    rpc getVersion(EmptyRequest) returns (stream VersionResponse);
+    rpc getVersion(google.protobuf.Empty) returns (VersionResponse);
 }
 
 service tlgPlacementMutationService{
-    rpc diagnosticsInline(TlgDevices) returns (stream TlgPlacementResponse);
-    rpc placementInline(TlgDevices) returns (stream TlgPlacementResponse);
+    rpc diagnosticsInline(TlgDevices) returns (TlgPlacementResponse);
+    rpc placementInline(TlgDevices) returns (TlgPlacementResponse);
 } 
-
-message EmptyRequest {
-}
 
 message VersionResponse {
    string version = 1;
@@ -22,8 +23,7 @@ message TlgDevice {
     string type = 1;
     string name = 2;
     string device = 3;
-    int32 length = 4;
-    repeated int32 data = 5;
+    repeated int32 data = 4;
 }
 
 message TlgDevices {
