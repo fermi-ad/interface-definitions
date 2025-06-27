@@ -10,8 +10,8 @@ package services.daq;
 
 import "google/protobuf/timestamp.proto";
 
-import "common/device.proto";
-import "common/status.proto";
+import "proto/controls/common/v1/device.proto";
+import "proto/controls/common/v1/status.proto";
 
 // The DAQ API.
 //
