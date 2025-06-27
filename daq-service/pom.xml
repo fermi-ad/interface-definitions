@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gov.fnal.controls.dpm.grpc</groupId>
-    <artifactId>grpc</artifactId>
-    <version>1.0.3</version>
+    <groupId>gov.fnal.controls.service.proto</groupId>
+    <artifactId>grpc-daq</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>proto-generated</name>
+    <name>daq</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -148,7 +148,7 @@
         <profile>
             <id>client</id>
             <build>
-                <finalName>grpc-client</finalName> <!--optional-->
+                <finalName>grpc-client</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -163,7 +163,7 @@
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <shadedArtifactAttached>false</shadedArtifactAttached>
                                     <shadedClassifierName></shadedClassifierName>
-                                    <finalName>grpc-client-shaded</finalName>
+                                    <finalName>daq-grpc-client</finalName>
                                     <filters>
                                         <filter>
                                             <artifact>${project.groupId}:${project.artifactId}</artifact>
@@ -202,10 +202,10 @@
                                     <goal>deploy-file</goal>
                                 </goals>
                                 <configuration>
-                                    <file>${project.build.directory}/grpc-client-shaded.jar</file>
+                                    <file>${project.build.directory}/daq-grpc-client.jar</file>
                                     <repositoryId>github</repositoryId>
-                                    <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
-                                    <groupId>gov.fnal.controls.dpm.proto.grpc</groupId>
+                                    <url>https://maven.pkg.github.com/ukandula/proto-daq-service</url>
+                                    <groupId>gov.fnal.controls.service.proto.grpc</groupId>
                                     <artifactId>client</artifactId>
                                     <version>${project.version}</version>
                                     <packaging>jar</packaging>
@@ -220,7 +220,7 @@
         <profile>
             <id>server</id>
             <build>
-                <finalName>grpc-server</finalName> <!--optional-->
+                <finalName>grpc-server</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -247,7 +247,7 @@
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>shaded</shadedClassifierName>
-                                    <finalName>grpc-server-shaded</finalName>
+                                    <finalName>daq-grpc-server</finalName>
                                     <filters>
                                         <filter>
                                             <artifact>${project.groupId}:${project.artifactId}</artifact>
@@ -292,10 +292,10 @@
                                     <goal>deploy-file</goal>
                                 </goals>
                                 <configuration>
-                                    <file>${project.build.directory}/grpc-server-shaded.jar</file>
+                                    <file>${project.build.directory}/daq-grpc-server.jar</file>
                                     <repositoryId>github</repositoryId>
-                                    <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
-                                    <groupId>gov.fnal.controls.dpm.proto.grpc</groupId>
+                                    <url>https://maven.pkg.github.com/ukandula/proto-daq-service</url>
+                                    <groupId>gov.fnal.controls.service.proto.grpc</groupId>
                                     <artifactId>server</artifactId>
                                     <version>${project.version}</version>
                                     <packaging>jar</packaging>

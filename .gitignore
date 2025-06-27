@@ -1,2 +1,6 @@
-target/
-.idea/
+# Ignore target directories in all submodules
+**/target/
+
+# Ignore IntelliJ files in any subdir
+**/.idea/
+*.iml

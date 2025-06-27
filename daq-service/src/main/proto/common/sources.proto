@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.sources;
+
+import "third-party/interval.proto";
+
+message Source {
+    oneof source {
+        google.type.Interval range = 1;
+        int32 save_restore = 2;
+        string redirection = 3;
+    }
+}
