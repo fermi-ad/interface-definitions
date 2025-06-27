@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.sources;
 
-import "third-party/interval.proto";
+import "proto/controls/third-party/interval.proto";
 
 message Source {
     oneof source {
