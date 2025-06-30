@@ -29,11 +29,12 @@ interface-definitions/
 │   │   │   └── v1/
 │   │   │       ├── timestamp.proto
 │   │   │       └── identifiers.proto
-│   │   ├── service_a/      # Definitions specific to Service A
-│   │   │   └── v1/
-│   │   │       ├── service_a_api.proto
-│   │   │       └── service_a_messages.proto
-│   │   └── ...             # Other services/domains
+│   │   └── services/       # Hold protocols specific to a service
+│   │       ├── service_a/
+│   │       │   └── v1/
+│   │       │       ├── service_a_api.proto
+│   │       │       └── service_a_messages.proto
+│   │       └── ...         # Other services/domains
 │   └── google/             # Standard Google well-known types
 ├── build/                  # Build scripts and configuration
 │   ├── java/
@@ -175,4 +176,3 @@ TODO: I need help with this. These are generic instructions.
 ## 9. Contact
 
 For questions or issues regarding this repository or the Protobuf workflow, please create and issue.
-
