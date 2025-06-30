@@ -4,8 +4,8 @@ package common.drf;
 
 import "google/protobuf/empty.proto";
 
-import "common/event.proto";
-import "common/sources.proto";
+import "proto/controls/common/v1/event.proto";
+import "proto/controls/common/v1/sources.proto";
 
 message ArrayRange {
     int32 start_index = 1;
