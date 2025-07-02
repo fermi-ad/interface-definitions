@@ -88,6 +88,5 @@ message Value {
         AnalogAlarm anaAlarm = 6 [deprecated = true];
         DigitalAlarm digAlarm = 7 [deprecated = true];
         BasicStatus basicStatus = 8 [deprecated = true];
-	TimeSeries series = 9;
     }
 }
