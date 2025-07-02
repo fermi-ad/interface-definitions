@@ -36,19 +36,6 @@ message Value {
         repeated string value = 1;
     }
 
-    // Represents an array of timestamp/data pairs.
-    //
-    // This message type is used for EPICS time-series PVs.
-
-    message TimeSeries {
-	message Entry {
-	    google.protobuf.Timestamp stamp = 1;
-	    double value = 2;
-	}
-
-	repeated Entry entry = 1;
-    }
-
     // DEPRECATED. A message which is opinionated towards ACNET analog
     // alarm structures. This will be replaced by a message that can
     // represent both ACNET and EPICS alarms.
