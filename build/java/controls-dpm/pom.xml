@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gov.fnal.controls.dpm.grpc</groupId>
-    <artifactId>grpc</artifactId>
-    <version>1.0.2</version>
+    <groupId>gov.fnal.controls.service.proto</groupId>
+    <artifactId>grpc-dpm</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>proto-generated</name>
+    <name>dpm</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -94,7 +94,7 @@
                     <protocArtifact>com.google.protobuf:protoc:4.30.2:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.71.0:exe:${os.detected.classifier}</pluginArtifact>
-                    <protoSourceRoot>src/main/proto</protoSourceRoot>
+                    <protoSourceRoot>${project.basedir}/../../../proto/controls/deprecated</protoSourceRoot>
                 </configuration>
                 <executions>
                     <execution>
@@ -163,7 +163,7 @@
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <shadedArtifactAttached>false</shadedArtifactAttached>
                                     <shadedClassifierName></shadedClassifierName>
-                                    <finalName>grpc-client-shaded</finalName>
+                                    <finalName>dpm-grpc-client</finalName>
                                     <filters>
                                         <filter>
                                             <artifact>${project.groupId}:${project.artifactId}</artifact>
@@ -202,11 +202,11 @@
                                     <goal>deploy-file</goal>
                                 </goals>
                                 <configuration>
-                                    <file>${project.build.directory}/grpc-client-shaded.jar</file>
+                                    <file>${project.build.directory}/dpm-grpc-client.jar</file>
                                     <repositoryId>github</repositoryId>
                                     <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
                                     <groupId>gov.fnal.controls.dpm.proto.grpc</groupId>
-                                    <artifactId>client</artifactId>
+                                    <artifactId>client-dpm</artifactId>
                                     <version>${project.version}</version>
                                     <packaging>jar</packaging>
                                 </configuration>
@@ -247,7 +247,7 @@
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>shaded</shadedClassifierName>
-                                    <finalName>grpc-server-shaded</finalName>
+                                    <finalName>dpm-grpc-server</finalName>
                                     <filters>
                                         <filter>
                                             <artifact>${project.groupId}:${project.artifactId}</artifact>
@@ -292,11 +292,11 @@
                                     <goal>deploy-file</goal>
                                 </goals>
                                 <configuration>
-                                    <file>${project.build.directory}/grpc-server-shaded.jar</file>
+                                    <file>${project.build.directory}/dpm-grpc-server.jar</file>
                                     <repositoryId>github</repositoryId>
                                     <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
-                                    <groupId>gov.fnal.controls.dpm.proto.grpc</groupId>
-                                    <artifactId>server</artifactId>
+                                    <groupId>gov.fnal.controls.service.proto.grpc</groupId>
+                                    <artifactId>server-dpm</artifactId>
                                     <version>${project.version}</version>
                                     <packaging>jar</packaging>
                                 </configuration>
