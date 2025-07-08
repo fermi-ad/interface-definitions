@@ -213,7 +213,7 @@
                                 <configuration>
                                     <file>${project.build.directory}/daq-grpc-client.jar</file>
                                     <repositoryId>github</repositoryId>
-                                    <url>https://maven.pkg.github.com/fermi-ad/test-interface</url>
+                                    <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
                                     <groupId>gov.fnal.controls.service.proto.grpc</groupId>
                                     <artifactId>client-daq</artifactId>
                                     <version>${project.version}</version>
@@ -303,7 +303,7 @@
                                 <configuration>
                                     <file>${project.build.directory}/daq-grpc-server.jar</file>
                                     <repositoryId>github</repositoryId>
-                                    <url>https://maven.pkg.github.com/fermi-ad/test-interface</url>
+                                    <url>https://maven.pkg.github.com/fermi-ad/interface-definitions</url>
                                     <groupId>gov.fnal.controls.service.proto.grpc</groupId>
                                     <artifactId>server-daq</artifactId>
                                     <version>${project.version}</version>
