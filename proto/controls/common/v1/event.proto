@@ -3,48 +3,77 @@ syntax = "proto3";
 package common.event;
 
 import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-message Event {
-    message Clock {
-        int32 event_number = 1;
-        EventType event_type = 2;
-        optional google.protobuf.Duration delay = 3;
-    }
+// Specifies a clock event with an optional delay to wait after the
+// event fires.
 
+message Clock {
     enum EventType {
         HARDWARE = 0;
         SOFTWARE = 1;
         EITHER = 2;
     }
 
-    message Periodic {
-        bool continuous = 1;
-        google.protobuf.Duration period = 2;
-        bool immediate = 3;
+    int32 event_number = 1;
+    EventType event_type = 2;
+    optional google.protobuf.Duration delay = 3;
+}
+
+message State {
+    string state_name = 1;
+    optional google.protobuf.Duration delay = 2;
+
+    oneof expression {
+	int32 equal = 3;
+	int32 not_equal = 4;
+	int32 less_than = 5;
+	int32 less_than_or_equal = 6;
+	int32 greater_than = 7;
+	int32 greater_than_or_equal = 8;
+	google.protobuf.Empty any_value = 9;
+    }
+}
+
+message ArmEvent {
+    message PreTrigger {
+	Clock clock = 1;
     }
 
-    message State {
-        string state_name = 1;
-        optional google.protobuf.Duration delay = 2;
-
-        oneof expression {
-            int32 equal = 3;
-            int32 not_equal = 4;
-            int32 less_than = 5;
-            int32 less_than_or_equal = 6;
-            int32 greater_than = 7;
-            int32 greater_than_or_equal = 8;
-            google.protobuf.Empty any_value = 9;
-        }
+    message PostTrigger {
+	Clock clock = 1;
     }
 
     oneof event {
         google.protobuf.Empty immediate = 1;
-        Periodic periodic = 2;
-        Clock clock = 3;
-        State state = 4;
-        google.protobuf.Empty never = 5;
+	PreTrigger preTrigger = 2;
+	PostTrigger postTrigger = 3;
+	State state = 4;
     }
 }
 
+message SampleEvent {
+    message Periodic {
+        google.protobuf.Duration period = 1;
+        bool immediate = 2;
+    }
+
+    oneof event {
+        google.protobuf.Empty never = 1;
+        google.protobuf.Empty immediate = 2;
+        Periodic periodic = 3;
+        Clock clock = 4;
+        State state = 5;
+    }
+}
+
+message StopEvent {
+    oneof event {
+        google.protobuf.Empty never = 1;
+	int32 count = 2;
+	google.protobuf.Duration delay = 3;
+        Clock clock = 4;
+        State state = 5;
+    }
+}

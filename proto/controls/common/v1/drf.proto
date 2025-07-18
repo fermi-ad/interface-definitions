@@ -31,14 +31,18 @@ message DataChannel {
 
 message DRFs {
     repeated DataChannel data_channel = 1;
-    optional common.event.Event event = 2;
-    optional common.sources.Source source = 3;
+    common.event.ArmEvent event = 2;
+    common.event.SampleEvent event = 3;
+    common.event.StopEvent event = 4;
+    optional common.sources.Source source = 5;
 }
 
 message DRF {
     DataChannel data_channel = 1;
-    optional common.event.Event event = 2;
-    optional common.sources.Source source = 3;
+    common.event.ArmEvent event = 2;
+    common.event.SampleEvent event = 3;
+    common.event.StopEvent event = 4;
+    optional common.sources.Source source = 5;
 }
 
 message DRFList {
