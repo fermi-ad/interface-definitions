@@ -50,6 +50,7 @@ message ArmEvent {
 	PreTrigger preTrigger = 2;
 	PostTrigger postTrigger = 3;
 	State state = 4;
+	google.protobuf.Timestamp time = 5;
     }
 }
 
@@ -75,5 +76,6 @@ message StopEvent {
 	google.protobuf.Duration delay = 3;
         Clock clock = 4;
         State state = 5;
+	google.protobuf.Timestamp time = 6;
     }
 }
