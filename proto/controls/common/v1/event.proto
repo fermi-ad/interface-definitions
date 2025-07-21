@@ -38,10 +38,11 @@ message State {
 
 message ArmEvent {
     oneof event {
-        google.protobuf.Empty immediate = 1;
-	Clock clock = 2;
-	State state = 3;
-	google.protobuf.Timestamp time = 4;
+        google.protobuf.Empty never = 1;
+        google.protobuf.Empty immediate = 2;
+	Clock clock = 3;
+	State state = 4;
+	google.protobuf.Timestamp time = 5;
     }
 }
 
@@ -52,13 +53,12 @@ message SampleEvent {
     }
 
     oneof event {
-        google.protobuf.Empty never = 1;
-        google.protobuf.Empty immediate = 2;
-        Periodic periodic = 3;
-        Clock clock = 4;
-        State state = 5;
+        google.protobuf.Empty immediate = 1;
+        Periodic periodic = 2;
+        Clock clock = 3;
+        State state = 4;
     }
-    int32 count = 6;
+    int32 count = 5;
 }
 
 message StopEvent {
