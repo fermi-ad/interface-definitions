@@ -37,20 +37,11 @@ message State {
 }
 
 message ArmEvent {
-    message PreTrigger {
-	Clock clock = 1;
-    }
-
-    message PostTrigger {
-	Clock clock = 1;
-    }
-
     oneof event {
         google.protobuf.Empty immediate = 1;
-	PreTrigger preTrigger = 2;
-	PostTrigger postTrigger = 3;
-	State state = 4;
-	google.protobuf.Timestamp time = 5;
+	Clock clock = 2;
+	State state = 3;
+	google.protobuf.Timestamp time = 4;
     }
 }
 
@@ -67,15 +58,15 @@ message SampleEvent {
         Clock clock = 4;
         State state = 5;
     }
+    int32 count = 6;
 }
 
 message StopEvent {
     oneof event {
         google.protobuf.Empty never = 1;
-	int32 count = 2;
-	google.protobuf.Duration delay = 3;
-        Clock clock = 4;
-        State state = 5;
-	google.protobuf.Timestamp time = 6;
+	google.protobuf.Duration delay = 2;
+        Clock clock = 3;
+        State state = 4;
+	google.protobuf.Timestamp time = 5;
     }
 }
