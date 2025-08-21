@@ -25,22 +25,22 @@ option java_outer_classname = "IntervalProto";
 option java_package = "com.google.type";
 option objc_class_prefix = "GTP";
 
-// Represents a time interval, encoded as a Timestamp start (inclusive) and a
-// Timestamp end (exclusive).
+// Represents a time interval, encoded as a Timestamp start
+// (inclusive) and a Timestamp end (exclusive).
 //
-// The start must be less than or equal to the end.
-// When the start equals the end, the interval is empty (matches no time).
-// When both start and end are unspecified, the interval matches any time.
+// The start must be less than or equal to the end. When the start
+// equals the end, the interval is empty (matches no time). When both
+// start and end are unspecified, the interval matches any time.
 message Interval {
   // Optional. Inclusive start of the interval.
   //
-  // If specified, a Timestamp matching this interval will have to be the same
-  // or after the start.
+  // If specified, a Timestamp matching this interval will have to be
+  // the same or after the start.
   google.protobuf.Timestamp start_time = 1;
 
   // Optional. Exclusive end of the interval.
   //
-  // If specified, a Timestamp matching this interval will have to be before the
-  // end.
+  // If specified, a Timestamp matching this interval will have to be
+  // before the end.
   google.protobuf.Timestamp end_time = 2;
 }
