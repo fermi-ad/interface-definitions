@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package google.type;
+package third_party.type;
 
 import "google/protobuf/timestamp.proto";
 
