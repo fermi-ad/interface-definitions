@@ -42,7 +42,6 @@ message Value {
     // represent both ACNET and EPICS alarms.
 
     message AnalogAlarm {
-	option deprecated = true;
         double minimum = 1;
         double maximum = 2;
         bool alarmEnable = 3;
@@ -58,7 +57,6 @@ message Value {
     // that can represent both ACNET and EPICS alarms.
 
     message DigitalAlarm {
-	option deprecated = true;
         int32 nominal = 1;
         uint32 mask = 2;
         bool alarmEnable = 3;
@@ -74,7 +72,6 @@ message Value {
     // that can be used by ACNET and EPICS devices.
 
     message BasicStatus {
-	option deprecated = true;
         map<string, string> value = 1;
     }
 
@@ -86,8 +83,8 @@ message Value {
         bytes raw = 3;
         string text = 4;
         TextArray textArr = 5;
-        AnalogAlarm anaAlarm = 6 [deprecated = true];
-        DigitalAlarm digAlarm = 7 [deprecated = true];
-        BasicStatus basicStatus = 8 [deprecated = true];
+        AnalogAlarm anaAlarm = 6;
+        DigitalAlarm digAlarm = 7;
+        BasicStatus basicStatus = 8;
     }
 }
