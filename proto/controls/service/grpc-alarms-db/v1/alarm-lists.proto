@@ -1,14 +1,13 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
-package alarmlists;
+package services.alarmLists;
 
 service AlarmListService {
-    rpc getAlarmLists(EmptyRequest) returns (AlarmLists);
+    rpc getAlarmLists(google.protobuf.Empty) returns (AlarmLists);
 }
-
-message EmptyRequest {}
 
 message AlarmList {
     int32 list_number = 1;
