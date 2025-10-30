@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+package services.devdb;
 package devdb;
 
 service DevDB {
