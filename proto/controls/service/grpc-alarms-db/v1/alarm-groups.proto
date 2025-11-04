@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package services.alarm_groups;
+
+service AlarmGroupService {
+    rpc getAllGroups(google.protobuf.Empty) returns (AlarmGroups);
+    rpc getSpecifiedGroups(GroupsRequest) returns (AlarmGroups);
+}
+
+message GroupsRequest {
+    repeated string groups = 1;
+}
+
+message AlarmGroup {
+    string name = 1;
+    string description = 2;
+    google.protobuf.Timestamp modified_date = 3;
+    string modified_user = 4;
+    repeated string devices = 5;
+    repeated string groups = 6;
+}
+
+message AlarmGroups {
+    repeated AlarmGroup alarm_groups = 1;
+}
