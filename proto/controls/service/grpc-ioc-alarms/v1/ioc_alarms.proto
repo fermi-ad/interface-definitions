@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package services.ioc_alarms;
+
+service IocAlarms {
+    rpc getIocAlarms(IocAlarmsRequest) returns (IocAlarmsResponse) {}
+}
+
+message IocAlarmsRequest {
+    string pvName = 1;
+}
+
+message IocAlarmsResponse {
+    int32 value = 1;
+    AlarmSeverity alarm = 2;
+    TimeStamp timeStamp = 3;
+    DisplayDescription display = 4;
+    ValueAlarm valueAlarm = 5;
+}
+
+message AlarmSeverity {
+    int32 severity = 1;
+    int32 status = 2;
+}
+
+message TimeStamp {
+    int64 secondsPastEpoch = 1;
+    int32 nanoseconds = 2;
+}
+
+message DisplayDescription {
+    string description = 1;
+}
+
+message ValueAlarm {
+    int32 lowAlarmLimit = 1;
+    int32 lowWarningLimit = 2;
+    int32 highWarningLimit = 3;
+    int32 highAlarmLimit = 4;
+}
