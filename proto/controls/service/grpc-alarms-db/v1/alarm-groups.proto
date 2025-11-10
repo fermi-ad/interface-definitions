@@ -6,8 +6,20 @@ import "google/protobuf/empty.proto";
 package services.alarm_groups;
 
 service AlarmGroupService {
-    rpc getAllGroups(google.protobuf.Empty) returns (AlarmGroups);
-    rpc getSpecifiedGroups(GroupsRequest) returns (AlarmGroups);
+    rpc getGroupMetadata(google.protobuf.Empty) returns (AlarmGroupMetadata);
+    rpc getGroups(GroupsRequest) returns (AlarmGroups);
+}
+
+message AlarmGroupMetadatum {
+    string name = 1;
+    string description = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    string updated_by = 4;
+    bool is_user_category = 5;
+}
+
+message AlarmGroupMetadata {
+    repeated AlarmGroupMetadatum metadata = 1;
 }
 
 message GroupsRequest {
@@ -15,12 +27,9 @@ message GroupsRequest {
 }
 
 message AlarmGroup {
-    string name = 1;
-    string description = 2;
-    google.protobuf.Timestamp modified_date = 3;
-    string modified_user = 4;
-    repeated string devices = 5;
-    repeated string groups = 6;
+    AlarmGroupMetadatum metadata = 1;
+    repeated string devices = 2;
+    repeated string groups = 3;
 }
 
 message AlarmGroups {
