@@ -75,6 +75,29 @@ message Value {
         map<string, string> value = 1;
     }
 
+    //  Represents the occurence of one of several types of alarms
+    //      1) ACNET Analog Alarm
+    //      1) ACNET Digital Alarm - one bit or set of bits
+    //      1) EPICS PV Alarm
+
+    message Alarm {
+        uint32 status = 1;          //  non-zero if alarm criteria are met (see EPICS severity)
+        bool enabled = 2;           //  true: this alarm should be indicated and/or annunciated if criteria are met
+        bool bypassed = 3;          //  true: this alarm should be indicated but not annunciated if criteria are met
+        bool acknowledged = 4;      //  true: this alarm has been acknowledged by a client
+        uint32 snoozeMillis = 5;    //  set by client and decremented by front-end
+        string text = 6;
+        string url = 7;
+        //  priority
+        //  sound
+        //  speech
+        //  handler code
+    }
+
+    message AlarmArray {
+        repeated Alarm alarm = 1;
+    }
+
     // A device value can only be one of these types.
 
     oneof value {
@@ -86,5 +109,7 @@ message Value {
         AnalogAlarm anaAlarm = 6;
         DigitalAlarm digAlarm = 7;
         BasicStatus basicStatus = 8;
+        Alarm alarm = 9;
+        AlarmArray alarmArr = 10;
     }
 }
