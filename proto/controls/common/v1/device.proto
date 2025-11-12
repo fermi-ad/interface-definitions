@@ -9,8 +9,6 @@
 //adding comment for testing purpose
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
-
 package common.device;
 
 // Holds a value that can be sent to a device to be received by
