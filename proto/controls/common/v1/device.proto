@@ -9,9 +9,6 @@
 //adding comment for testing purpose
 syntax = "proto3";
 
-//  quiet warnings for the time being
-// import "google/protobuf/timestamp.proto";
-
 package common.device;
 
 // Holds a value that can be sent to a device to be received by
@@ -83,7 +80,7 @@ message Value {
 
     message Alarm {
         enum Status {
-            STAT_NONE = 0;      //  No alarm (should never be seen)
+            STAT_NONE = 0;      //  No alarm
             STAT_HIHI = 1;      //  High-high limit exceeded
             STAT_HIGH = 2;      //  High limit exceeded
             STAT_LOW  = 3;      //  Lower than low limit
@@ -91,7 +88,7 @@ message Value {
             STAT_BOOL = 5;      //  Boolean alarm
         }
         enum Severity {
-            SEV_NONE  = 0;      //  No alarm (should never be seen)
+            SEV_NONE  = 0;      //  No alarm
             SEV_EVENT = 1;      //  An informational alarm
             SEV_MINOR = 2;      //  An alarm of minor importance
             SEV_MAJOR = 3;      //  An alarm of major importance
