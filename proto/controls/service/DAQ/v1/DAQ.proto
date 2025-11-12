@@ -152,7 +152,8 @@ message AlarmsReply {
 }
 
 message AlarmList {
-    repeated Alarm alarm = 1;
+    string device = 1;          //  device name for all alarms in list
+    repeated Alarm alarm = 2;
 }
 
 //  Represents the occurence of one of several types of alarms
@@ -163,8 +164,8 @@ message AlarmList {
 message Alarm {
     enum Status {
         STAT_NONE = 0;      //  No alarm
-        STAT_HIHI = 1;      //  High-high limit exceeded
-        STAT_HIGH = 2;      //  High limit exceeded
+        STAT_HIHI = 1;      //  Higher than high-high limit
+        STAT_HIGH = 2;      //  Higher than high limit
         STAT_LOW  = 3;      //  Lower than low limit
         STAT_LOLO = 4;      //  Lower than low-low limit
         STAT_BOOL = 5;      //  Boolean alarm
@@ -184,7 +185,6 @@ message Alarm {
     string text = 7;
     string url = 8;
     string name = 9;            //  name for this alarm (unique on device)
-    string device = 10;         //  device name (aka PV name)
     //  priority        //  arbitrary integer for comparing ACNET alarms
     //  sound
     //  speech
