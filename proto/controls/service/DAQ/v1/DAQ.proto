@@ -180,13 +180,12 @@ message Alarm {
     Severity severity = 2;
     bool enabled = 3;           //  true: this alarm should be indicated and annunciated if criteria are met
     bool bypassed = 4;          //  true: this alarm should be indicated but not annunciated if criteria are met
-    bool acknowledged = 5;      //  true: this alarm has been acknowledged by a client
-    uint32 snoozeMillis = 6;    //  set by client and decremented by front-end
-    string text = 7;
-    string url = 8;
-    string name = 9;            //  name for this alarm (unique on device)
+    string text = 5;
+    string url = 6;
+    string name = 7;            //  name for this alarm (unique on device)
     //  priority        //  arbitrary integer for comparing ACNET alarms
     //  sound
     //  speech
     //  handler code    //  ACNET concept ?
+    //  acknowledged and snoozed are not front end concepts
 }
