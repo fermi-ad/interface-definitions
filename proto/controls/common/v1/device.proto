@@ -82,17 +82,32 @@ message Value {
     //      1) EPICS PV Alarm
 
     message Alarm {
-        uint32 status = 1;          //  non-zero if alarm criteria are met (see EPICS severity)
-        bool enabled = 2;           //  true: this alarm should be indicated and/or annunciated if criteria are met
-        bool bypassed = 3;          //  true: this alarm should be indicated but not annunciated if criteria are met
-        bool acknowledged = 4;      //  true: this alarm has been acknowledged by a client
-        uint32 snoozeMillis = 5;    //  set by client and decremented by front-end
-        string text = 6;
-        string url = 7;
-        //  priority
+        enum Status {
+            STAT_NONE = 0;      //  No alarm (should never be seen)
+            STAT_HIHI = 1;      //  High-high limit exceeded
+            STAT_HIGH = 2;      //  High limit exceeded
+            STAT_LOW  = 3;      //  Lower than low limit
+            STAT_LOLO = 4;      //  Lower than low-low limit
+            STAT_BOOL = 5;      //  Boolean alarm
+        }
+        enum Severity {
+            SEV_NONE  = 0;      //  No alarm (should never be seen)
+            SEV_EVENT = 1;      //  An informational alarm
+            SEV_MINOR = 2;      //  An alarm of minor importance
+            SEV_MAJOR = 3;      //  An alarm of major importance
+        }
+        Status status = 1;
+        Severity severity = 2;
+        bool enabled = 3;           //  true: this alarm should be indicated and/or annunciated if criteria are met
+        bool bypassed = 4;          //  true: this alarm should be indicated but not annunciated if criteria are met
+        bool acknowledged = 5;      //  true: this alarm has been acknowledged by a client
+        uint32 snoozeMillis = 6;    //  set by client and decremented by front-end
+        string text = 7;
+        string url = 8;
+        //  priority        //  arbitrary integer for comparing ACNET alarms
         //  sound
         //  speech
-        //  handler code
+        //  handler code    //  ACNET concept ?
     }
 
     message AlarmArray {
