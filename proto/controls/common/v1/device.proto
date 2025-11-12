@@ -73,44 +73,6 @@ message Value {
         map<string, string> value = 1;
     }
 
-    //  Represents the occurence of one of several types of alarms
-    //      1) ACNET Analog Alarm
-    //      1) ACNET Digital Alarm - one bit or set of bits
-    //      1) EPICS PV Alarm
-
-    message Alarm {
-        enum Status {
-            STAT_NONE = 0;      //  No alarm
-            STAT_HIHI = 1;      //  High-high limit exceeded
-            STAT_HIGH = 2;      //  High limit exceeded
-            STAT_LOW  = 3;      //  Lower than low limit
-            STAT_LOLO = 4;      //  Lower than low-low limit
-            STAT_BOOL = 5;      //  Boolean alarm
-        }
-        enum Severity {
-            SEV_NONE  = 0;      //  No alarm
-            SEV_EVENT = 1;      //  An informational alarm
-            SEV_MINOR = 2;      //  An alarm of minor importance
-            SEV_MAJOR = 3;      //  An alarm of major importance
-        }
-        Status status = 1;
-        Severity severity = 2;
-        bool enabled = 3;           //  true: this alarm should be indicated and/or annunciated if criteria are met
-        bool bypassed = 4;          //  true: this alarm should be indicated but not annunciated if criteria are met
-        bool acknowledged = 5;      //  true: this alarm has been acknowledged by a client
-        uint32 snoozeMillis = 6;    //  set by client and decremented by front-end
-        string text = 7;
-        string url = 8;
-        //  priority        //  arbitrary integer for comparing ACNET alarms
-        //  sound
-        //  speech
-        //  handler code    //  ACNET concept ?
-    }
-
-    message AlarmArray {
-        repeated Alarm alarm = 1;
-    }
-
     // A device value can only be one of these types.
 
     oneof value {
@@ -122,7 +84,5 @@ message Value {
         AnalogAlarm anaAlarm = 6;
         DigitalAlarm digAlarm = 7;
         BasicStatus basicStatus = 8;
-        Alarm alarm = 9;
-        AlarmArray alarmArr = 10;
     }
 }

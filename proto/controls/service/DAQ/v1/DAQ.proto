@@ -38,6 +38,10 @@ service DAQ {
     // authorized to set the device.
 
     rpc Set(SettingList) returns (SettingReply) {}
+
+    // The parameter contains an array of device names.
+
+    rpc Alarms(DeviceList) returns (AlarmsReply) {}
 }
 
 // Used as the parameter to the `Read()` request.
@@ -124,4 +128,65 @@ message SettingList {
 
 message SettingReply {
     repeated common.status.Status status = 2;
+}
+
+message DeviceList {
+    repeated string device = 1;
+}
+
+message AlarmsReply {
+
+    // Indicates to which entry in the request list this reply
+    // corresponds.
+
+    uint32 index = 1;
+
+    // The reply can contain either a reading or a fatal ACNET status
+    // code. If a status code is returned, there will never be another
+    // reply for this index in the stream.
+
+    oneof value {
+        AlarmList alarms = 2;
+        common.status.Status status = 3;
+    }
+}
+
+message AlarmList {
+    repeated Alarm alarm = 1;
+}
+
+//  Represents the occurence of one of several types of alarms
+//      1) ACNET Analog Alarm
+//      2) ACNET Digital Alarm
+//      3) EPICS PV Alarm
+
+message Alarm {
+    enum Status {
+        STAT_NONE = 0;      //  No alarm
+        STAT_HIHI = 1;      //  High-high limit exceeded
+        STAT_HIGH = 2;      //  High limit exceeded
+        STAT_LOW  = 3;      //  Lower than low limit
+        STAT_LOLO = 4;      //  Lower than low-low limit
+        STAT_BOOL = 5;      //  Boolean alarm
+    }
+    enum Severity {
+        SEV_NONE  = 0;      //  No alarm
+        SEV_EVENT = 1;      //  An informational alarm
+        SEV_MINOR = 2;      //  An alarm of minor importance
+        SEV_MAJOR = 3;      //  An alarm of major importance
+    }
+    Status status = 1;
+    Severity severity = 2;
+    bool enabled = 3;           //  true: this alarm should be indicated and annunciated if criteria are met
+    bool bypassed = 4;          //  true: this alarm should be indicated but not annunciated if criteria are met
+    bool acknowledged = 5;      //  true: this alarm has been acknowledged by a client
+    uint32 snoozeMillis = 6;    //  set by client and decremented by front-end
+    string text = 7;
+    string url = 8;
+    string name = 9;            //  name for this alarm (unique on device)
+    string device = 10;         //  device name (aka PV name)
+    //  priority        //  arbitrary integer for comparing ACNET alarms
+    //  sound
+    //  speech
+    //  handler code    //  ACNET concept ?
 }
