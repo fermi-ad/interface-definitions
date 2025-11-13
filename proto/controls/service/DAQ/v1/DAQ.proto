@@ -165,24 +165,22 @@ message Alarm {
     enum Status {
         STAT_NONE = 0;      //  No alarm
         STAT_HIHI = 1;      //  Higher than high-high limit
-        STAT_HIGH = 2;      //  Higher than high limit
-        STAT_LOW  = 3;      //  Lower than low limit
+        STAT_HIGH = 2;      //  Higher than high limit (ACNET does not use)
+        STAT_LOW  = 3;      //  Lower than low limit (ACNET does not use)
         STAT_LOLO = 4;      //  Lower than low-low limit
-        STAT_BOOL = 5;      //  Boolean alarm
+        STAT_BOOL = 5;      //  Boolean alarm (ACNET Digital / EPICS STATE)
     }
     enum Severity {
         SEV_NONE  = 0;      //  No alarm
-        SEV_EVENT = 1;      //  An informational alarm
-        SEV_MINOR = 2;      //  An alarm of minor importance
-        SEV_MAJOR = 3;      //  An alarm of major importance
+        SEV_MINOR = 1;      //  Minor alarm (ACNET event)
+        SEV_MAJOR = 2;      //  Major alarm (ACNET exception)
     }
-    Status status = 1;
-    Severity severity = 2;
-    bool enabled = 3;           //  true: this alarm should be indicated and annunciated if criteria are met
-    bool bypassed = 4;          //  true: this alarm should be indicated but not annunciated if criteria are met
-    string text = 5;
-    string url = 6;
-    string name = 7;            //  name for this alarm (unique on device)
+    Status status = 1;      //  How alarm criteria are being met (or not)
+    Severity severity = 2;  //  How severe is the alarm
+    bool enabled = 3;       //  Can this alarm happen? (ACNET bypass=false, EPICS active=true)
+    string text = 5;        //  Description of this alarm
+    string url = 6;         //  Where to get help for this alarm
+    string name = 7;        //  Name for this alarm (unique on device)
     //  priority        //  arbitrary integer for comparing ACNET alarms
     //  sound
     //  speech
