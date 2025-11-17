@@ -179,11 +179,4 @@ message Alarm {
     Severity severity = 2;  //  How severe is the alarm
     bool enabled = 3;       //  Can this alarm happen? (ACNET bypass=false, EPICS active=true)
     string text = 4;        //  Description of this alarm
-    string url = 5;         //  Where to get help for this alarm
-    string name = 6;        //  Name for this alarm (unique on device)
-    //  priority        //  arbitrary integer for comparing ACNET alarms
-    //  sound
-    //  speech
-    //  handler code    //  ACNET concept ?
-    //  acknowledged and snoozed are not front end concepts
 }
