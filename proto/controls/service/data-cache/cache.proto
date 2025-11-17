@@ -16,7 +16,7 @@ service KafkaService {
 message CreateTopicRequest {
   string topic = 1;
   int32 partitions = 2;
-  int16 replication_factor = 3;
+  int32 replication_factor = 3;
 }
 
 message CreateTopicResponse {
