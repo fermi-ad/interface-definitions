@@ -6,46 +6,73 @@ service KafkaService {
   // Create a topic with partitions and replication factor
   rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse);
 
-  // Send a single message to a topic
-  rpc Produce(ProduceRequest) returns (ProduceResponse);
+  // Create many topics with identical partitions and replication factor
+  rpc CreateNtopics(CreateNtopicsRequest) returns (CreateTopicResponse);
 
-  // Stream messages from a topic (server streaming)
-  rpc Consume(ConsumeRequest) returns (stream ConsumeResponse);
+  // Send a single message to a topic
+  rpc ProduceTopic(ProduceTopicRequest) returns (ProduceResponse);
+
+  // Send a single message to many topic
+  rpc ProduceNtopics(ProduceNtopicsRequest) returns (ProduceResponse);
+
+  // Get message from a topic 
+  rpc ConsumeTopic(ConsumeTopicRequest) returns (ConsumeResponse);
+
+  // Get messages from many topics 
+  rpc ConsumeNtopics(ConsumeNtopicsRequest) returns (ConsumeResponse);
 }
 
 message CreateTopicRequest {
-  string topic = 1;
-  int32 partitions = 2;
-  int32 replication_factor = 3;
+  string topic = 1;			// topic name 
+  int32 partitions = 2;			// Each topic can be devided into multiple partitions 	
+  int32 replication_factor = 3;		// replication for high availibility 
+}
+
+message CreateNtopicsRequest {
+  string topics = 1;                    // topic names separed with ',' e.g. topic1, topic2, topic3
+  int32 partitions = 2;                 // Each topic can be devided into multiple partitions
+  int32 replication_factor = 3;         // replication for high availibility
 }
 
 message CreateTopicResponse {
-  bool success = 1;
-  string message = 2;
+  bool success = 1;			// success or failure 
+  string message = 2;			// response (error message if failure) 
 }
 
-message ProduceRequest {
-  string topic = 1;
-  string key = 2;    // optional
-  bytes value = 3;
+message ProduceTopicRequest {
+  string topic = 1;			// topic name
+  string key = 2;    			// optional
+  bytes value = 3;			// message
+}
+
+message ProduceNtopicsRequest {
+  string topics = 1;                     // list of topics 
+  string key = 2;                       // optional
+  bytes value = 3;                      // message
 }
 
 message ProduceResponse {
-  bool success = 1;
-  string message = 2;
-  int64 offset = 3;
+  bool success = 1;			// success or failure
+  string message = 2;			// response offset / error message if failure
+  //int64 offset = 3;			// offset --> return the offset for that topic 
 }
 
-message ConsumeRequest {
-  string topic = 1;
-  string group_id = 2;
-  int32 timeout_seconds = 3; // optional, stop after secs (0 = no timeout)
+message ConsumeTopicRequest {
+  string topic = 1;			// topic name 
+  //string group_id = 2;
+  int32 timeout_seconds = 2; 		// optional, stop after secs (0 = no timeout)
+}
+
+message ConsumeNtopicsRequest {
+  string topics = 1;                     // list of topics
+  //string group_id = 2;
+  int32 timeout_seconds = 2;            // optional, stop after secs (0 = no timeout)
 }
 
 message ConsumeResponse {
-  string key = 1;
-  bytes value = 2;
-  int64 offset = 3;
-  int32 partition = 4;
+  string keys = 1;			// associated key or keys 
+  bytes values = 2;			// response 
+  string offsets = 3;			// offset or many offsets 
+  string partitions = 4;		// partition or many partitions 
 }
 
