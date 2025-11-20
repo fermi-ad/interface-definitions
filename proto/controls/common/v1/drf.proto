@@ -1,3 +1,9 @@
+// These messages are used to encode data acquisition requests. The
+// original organization of these messages was inspired by the Data
+// Request Format document, which encoded this information in strings
+// of text. These messages have been expanded upon and now can express
+// more forms of acquisition than DRF was able.
+
 syntax = "proto3";
 
 package common.drf;
@@ -25,14 +31,18 @@ message DataChannel {
 
 message DRFs {
     repeated DataChannel data_channel = 1;
-    optional common.event.Event event = 2;
-    optional common.sources.Source source = 3;
+    common.event.ArmEvent arm = 2;
+    common.event.SampleEvent sample = 3;
+    common.event.StopEvent stop = 4;
+    optional common.sources.Source source = 5;
 }
 
 message DRF {
     DataChannel data_channel = 1;
-    optional common.event.Event event = 2;
-    optional common.sources.Source source = 3;
+    common.event.ArmEvent arm = 2;
+    common.event.SampleEvent sample = 3;
+    common.event.StopEvent stop = 4;
+    optional common.sources.Source source = 5;
 }
 
 message DRFList {
@@ -86,6 +96,12 @@ message Field {
         google.protobuf.Empty alarm_list_name = 10;
     }
 }
+
+// Specifies how much of a device's data should be returned. For
+// simple devices that only return primitive types, the `full_range`
+// should be used. The control system also supports "array devices"
+// (a.k.a. waveform devices). For those devices, the `ArrayRange` can
+// be used to return a portion of the device's full value.
 
 message Range {
     oneof range {
