@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package devdb;
+package services.devdb;
 
 service DevDB {
     // Clients can ask for device information (obtained from the
