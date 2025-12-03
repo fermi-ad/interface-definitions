@@ -10,6 +10,7 @@ service DevDB {
 
     rpc getDeviceInfo(DeviceList) returns (DeviceInfoReply) {}
     rpc getAllAlarmInfo(DeviceList) returns (AlarmInfoReply) {}
+    rpc getAlarmText(AlarmTextIdList) returns (DeviceAlarmTextList) {}
 
     // This function allows clients to monitor device info changes.
     // The client passes an array of device names. The function
@@ -144,16 +145,24 @@ message DeviceAnalogAlarm {
     int32 alarm_text_id = 2;        
 }
 
+message AlarmTextIdList {
+    repeated int32 alarm_text_id = 1;
+}
+
 message DeviceAlarmText {
     uint32 alarm_text_id = 1;   // (1-99999)
     uint32 length = 2;
-    uint32 priority = 3;            // (0-10, 10 represents the highest priority)
+    uint32 priority = 3;        // (0-10, 10 represents the highest priority)
     uint32 hand_code = 4;
     uint32 sound_id = 5;
     uint32 speech_id = 6;
-    int32 spare = 7;
+    uint32 spare = 7;
     bytes text = 8;             // 80 byte alphanumeric (not null nor blanks)
     bytes url = 9;              // 128 byte alphanumeric (may be blank if no URL)
+}
+
+message DeviceAlarmTextList {
+    repeated DeviceAlarmText deviceAlarmText = 1;
 }
 
 message AlarmInfo {
