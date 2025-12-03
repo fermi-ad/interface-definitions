@@ -158,8 +158,8 @@ message DeviceAlarmText {
 
 message AlarmInfo {
     AlarmBlock alarm_block = 1;
-    DeviceAnalogAlarm device_analog_alarm = 2;
-    DeviceDigitalAlarm device_digital_alarm = 3;
+    optional DeviceAnalogAlarm device_analog_alarm = 2;
+    optional DeviceDigitalAlarm device_digital_alarm = 3;
 }
 
 message AlarmInfoReply {
