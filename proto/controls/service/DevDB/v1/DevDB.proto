@@ -162,7 +162,7 @@ message DeviceAlarmText {
 }
 
 message DeviceAlarmTextList {
-    repeated DeviceAlarmText deviceAlarmText = 1;
+    repeated DeviceAlarmText device_alarm_text = 1;
 }
 
 message AlarmInfo {
