@@ -122,7 +122,7 @@ message DeviceInfoReply {
 message AlarmBlock {
     int32 di = 1;                          // Device Identifier (4 byte integer)
     uint32 pi = 2;                         // Property type (1 byte integer)
-    uint32 status = 3;                     // Status word (2 byte binary, hexified)
+    int32 status = 3;                      // Status word (2 byte binary, hexified)
     int32 min_or_nom = 4;                  // Min/Nominal value (4 byte integer)
     int32 max_or_tol = 5;                  // Max/Tolerance/Mask (4 byte integer)
     uint32 tries_needed = 6;               // Number of out-of-tolerance samples (1 byte integer)
