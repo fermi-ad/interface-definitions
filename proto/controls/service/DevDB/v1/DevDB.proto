@@ -129,7 +129,7 @@ message AlarmBlock {
     uint32 tries_now = 7;                  // Current tries from front end (1 byte integer)
     uint32 clock_event_no = 8;             // Clock event number (1 byte binary)
     uint32 subfunction_code = 9;           // Subfunction code (1 byte integer)
-    bytes specific_data = 10;              // Front-end specific data (6 byte binary, hexified)
+    string specific_data = 10;              // Front-end specific data (6 byte binary, hexified)
     uint32 segment = 11;                    // Alarm block number (4 byte integer)
 }
 
@@ -146,7 +146,7 @@ message DeviceAnalogAlarm {
 }
 
 message AlarmTextIdList {
-    repeated int32 alarm_text_id = 1;
+    repeated uint32 alarm_text_id = 1;
 }
 
 message DeviceAlarmText {
