@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.ioc_alarms;
 
+import "google/protobuf/timestamp.proto";
+
 service IocAlarms {
     rpc getIocAlarms(IocAlarmsRequest) returns (IocAlarmsResponse);
 }
@@ -15,30 +17,25 @@ message IocAlarmsResponse {
 }
 
 message AlarmInfo {
-    int32 value = 1;
-    AlarmSeverity alarm = 2;
-    TimeStamp time_stamp = 3;
-    DisplayDescription display = 4;
-    ValueAlarm value_alarm = 5;
-}
-
-message AlarmSeverity {
-    int32 severity = 1;
-    int32 status = 2;
-}
-
-message TimeStamp {
-    int64 seconds_past_epoch = 1;
-    int32 nanoseconds = 2;
-}
-
-message DisplayDescription {
-    string description = 1;
-}
-
-message ValueAlarm {
-    int32 low_alarm_limit = 1;
-    int32 low_warning_limit = 2;
-    int32 high_warning_limit = 3;
-    int32 high_alarm_limit = 4;
+    string system = 1;
+    string state = 2;
+    string pv_name = 3;
+    string type = 4;
+    double hihi = 5;
+    double hi = 6;
+    double lo = 7;
+    double lolo = 8;
+    string hhsv = 9;
+    string hsv = 10;
+    string lsv = 11;
+    string llsv = 12;
+    string units = 13;
+    bool autosms = 14;
+    string mode = 15;
+    double frequency = 16;
+    double deadband = 17;
+    string operator_ = 18;  // Changed from "operator" to "operator_"
+    double transition = 19;
+    google.protobuf.Timestamp creationtime = 20; // Corrected reference
+    google.protobuf.Timestamp validuntiltime = 21; // Corrected reference
 }
