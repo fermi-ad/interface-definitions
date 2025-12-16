@@ -34,6 +34,6 @@ message AlarmInfo {
     double deadband = 17;
     string operator = 18;
     double transition = 19;
-    timestamp creationtime = 20;
-    timestamp validuntiltime = 21;
+    Timestamp creationtime = 20;
+    Timestamp validuntiltime = 21;
 }
