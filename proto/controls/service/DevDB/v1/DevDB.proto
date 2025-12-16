@@ -166,9 +166,10 @@ message DeviceAlarmTextList {
 }
 
 message AlarmInfo {
-    AlarmBlock alarm_block = 1;
-    optional DeviceAnalogAlarm device_analog_alarm = 2;
-    optional DeviceDigitalAlarm device_digital_alarm = 3;
+    string device_name = 1;
+    AlarmBlock alarm_block = 2;
+    optional DeviceAnalogAlarm device_analog_alarm = 3;
+    optional DeviceDigitalAlarm device_digital_alarm = 4;
 }
 
 message AlarmInfoReply {
