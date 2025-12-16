@@ -34,8 +34,8 @@ message AlarmInfo {
     string mode = 15;
     double frequency = 16;
     double deadband = 17;
-    string operator = 18;
+    string operator_ = 18;  // Changed from "operator" to "operator_"
     double transition = 19;
-    Timestamp creationtime = 20;
-    Timestamp validuntiltime = 21;
+    google.protobuf.Timestamp creationtime = 20; // Corrected reference
+    google.protobuf.Timestamp validuntiltime = 21; // Corrected reference
 }
