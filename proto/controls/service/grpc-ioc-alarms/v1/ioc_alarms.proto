@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.ioc_alarms;
 
+import "google/protobuf/timestamp.proto";
+
 service IocAlarms {
     rpc getIocAlarms(IocAlarmsRequest) returns (IocAlarmsResponse);
 }
