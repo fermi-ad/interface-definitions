@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package services.ioc_alarms;
 
-import "google/protobuf/timestamp.proto";
-
 service IocAlarms {
     rpc getIocAlarms(IocAlarmsRequest) returns (IocAlarmsResponse);
 }
@@ -36,6 +34,6 @@ message AlarmInfo {
     double deadband = 17;
     string oprtr = 18;
     double transition = 19;
-    google.protobuf.Timestamp creationtime = 20;
-    google.protobuf.Timestamp validuntiltime = 21;
+    string creationtime = 20;
+    string validuntiltime = 21;
 }
