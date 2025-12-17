@@ -20,7 +20,7 @@ message AlarmInfo {
     string system = 1;
     string state = 2;
     string pv_name = 3;
-    string type_ = 4;
+    string alarm_type = 4;
     double hihi = 5;
     double hi = 6;
     double lo = 7;
