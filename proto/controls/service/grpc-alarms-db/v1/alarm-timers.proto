@@ -7,6 +7,7 @@ package services.alarm_timers;
 
 service AlarmTimerService {
     rpc getTimers(google.protobuf.Empty) returns (AlarmTimers);
+    rpc setTimer(AlarmTimer) returns (google.protobuf.Empty);
 }
 
 enum TimerType {
