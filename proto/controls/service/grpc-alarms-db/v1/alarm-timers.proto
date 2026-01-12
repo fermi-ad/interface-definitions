@@ -6,21 +6,10 @@ import "google/protobuf/empty.proto";
 package services.alarm_timers;
 
 service AlarmTimerService {
-    rpc deleteTimer(DeleteRequest) returns (google.protobuf.Empty);
-    rpc getAllTimers(google.protobuf.Empty) returns (AlarmTimers);
-    rpc setTimer(AlarmTimer) returns (google.protobuf.Empty);
-    rpc updateTimer(AlarmTimer) returns (google.protobuf.Empty);
-}
-
-enum TimerType {
-    TimerType_UNKNOWN = 0;
-    TimerType_SNOOZE = 1;
-    TimerType_BYPASS_REMINDER = 2;
-}
-
-message DeleteRequest {
-    string device = 1;
-    TimerType timer_type = 2;
+    rpc create(AlarmTimer) returns (google.protobuf.Empty);
+    rpc delete(DeleteRequest) returns (google.protobuf.Empty);
+    rpc read(ReadRequest) returns (AlarmTimers);
+    rpc update(AlarmTimer) returns (google.protobuf.Empty);
 }
 
 message AlarmTimer {
@@ -33,4 +22,20 @@ message AlarmTimer {
 
 message AlarmTimers {
     repeated AlarmTimer alarm_timers = 1;
+}
+
+message DeleteRequest {
+    string device = 1;
+    TimerType timer_type = 2;
+}
+
+message ReadRequest {
+    TimerType timer_type = 1;
+    string user = 2;
+}
+
+enum TimerType {
+    TimerType_UNKNOWN = 0;
+    TimerType_SNOOZE = 1;
+    TimerType_BYPASS_REMINDER = 2;
 }
