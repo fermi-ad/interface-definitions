@@ -25,6 +25,11 @@ service FissionManager {
   rpc CreateMessageQueueTrigger(CreateMQTriggerRequest) returns (GenericResponse);
   rpc UpdateMessageQueueTrigger(UpdateMQTriggerRequest) returns (GenericResponse);
   rpc DeleteMessageQueueTrigger(DeleteMQTriggerRequest) returns (GenericResponse);
+
+  // Lust of functions and triggers
+  rpc ListFunctions(ListFunctionsRequest) returns (GenericResponse);
+  rpc ListTriggers(ListTriggersRequest) returns (GenericResponse);
+
 }
 
 message GenericResponse {
@@ -35,40 +40,45 @@ message GenericResponse {
 }
 
 
-// CreateFunction (inline code)
+// CreateFunction 
 message CreateFunctionRequest {
-  string name = 1;
-  string environment = 2;
-  string source_type = 3; 	// "python"|"binary"|"archive" etc.
+  string name = 1;		// function name 
+  string environment = 2;	// environment name
+  bytes zip_file = 3; 		// zip file which has code 
+  //string source_type = 3; 	  // "python"|"binary"|"archive" etc.
   string entrypoint = 4;  	// e.g., "handler" or executable
-  string code = 5;        	// inline code or base64 if binary (we use plain text for small examples)
+  //string code = 5;        	  // inline code or base64 if binary (we use plain text for small examples)
   string url_path = 6;    	// http path (for http trigger)
   string method = 7;   		// GET, POST etc.
+  string namespace = 8;
 }
 
-// UpdateFunction (inline code)
+// UpdateFunction 
 message UpdateFunctionRequest {
   string name = 1;
   string environment = 2;
-  string source_type = 3;       // "python"|"binary"|"archive" etc.
+  bytes zip_file = 3;           // zip file which has code
+  //string source_type = 3;       // "python"|"binary"|"archive" etc.
   string entrypoint = 4;        // e.g., "handler" or executable
-  string code = 5;              // inline code or base64 if binary (we use plain text for small examples)
+  //string code = 5;              // inline code or base64 if binary (we use plain text for small examples)
   string url_path = 6;          // http path (for http trigger)
   string method = 7;            // GET, POST etc.
+  string namespace = 8;
 }
 
-// DeleteFunction (inline code)
+// DeleteFunction
 message DeleteFunctionRequest {
   string name = 1;
-  string url_path = 2;    // optional http path (for http trigger)
+  string url_path = 2;    	// optional http path (for http trigger)
+  string namespace = 3;
 }
 
 // CreateHTTPTrigger
 //message CreateHTTPTriggerRequest {
 //  string name = 1;
 //  string function_name = 2;
-//  string route = 3;    // e.g. "/myfunc"
-//  string method = 4;   // GET, POST etc.
+//  string route = 3;    	// e.g. "/myfunc"
+//  string method = 4;   	// GET, POST etc.
 //}
 
 // DeleteHTTPTrigger
@@ -80,7 +90,8 @@ message DeleteFunctionRequest {
 message CreateTimerTriggerRequest {
   string name = 1;
   string function_name = 2;
-  string cron = 3;     // cron spec, e.g. "*/5 * * * *"
+  string cron = 3;     		// cron spec, e.g. "*/5 * * * *"
+  string namespace = 4;
 }
 
 // UpdateTimerTrigger
@@ -88,23 +99,26 @@ message UpdateTimerTriggerRequest {
   string name = 1;
   string function_name = 2;
   string cron = 3;
+  string namespace = 4;
 }
 
 // DeleteTimerTrigger
 message DeleteTimerTriggerRequest {
   string name = 1;
+  string namespace = 2;
 }
 
 // Create Message Queue (Kafka) Trigger
 message CreateMQTriggerRequest {
-  string name = 1;
-  string function_name = 2;
-  string request_topic = 3;
-  string response_topic = 4;
-  string error_topic = 5;
-  string table_name = 6;	// optional if function want to push to longterm storage
-  string column_name = 7; 	// optional 
-  //string broker = 4;  // e.g. "kafka:9092"
+  string name = 1;		// trigger name 
+  string function_name = 2;	
+  string request_mq = 3;
+  string response_mq = 4;
+  string error_mq = 5;
+  //string table_name = 6;	// optional if function want to push to longterm storage
+  //string column_name = 7; 	// optional
+  string namespace = 8; 
+  //string broker = 4;          // e.g. "kafka:9092"
   //int32 partition = 5;
 }
 
@@ -112,17 +126,30 @@ message CreateMQTriggerRequest {
 message UpdateMQTriggerRequest {
   string name = 1;
   string function_name = 2;
-  string request_topic = 3;
-  string response_topic = 4;
-  string error_topic = 5;
-  string table_name = 6;        // optional if function want to push to longterm storage
-  string column_name = 7;       // optional
-  //string broker = 4;  // e.g. "kafka:9092"
+  string request_mq = 3;
+  string response_mq = 4;
+  string error_mq = 5;
+  //string table_name = 6;        // optional if function want to push to longterm storage
+  //string column_name = 7;       // optional
+  string namespace = 8;
+  //string broker = 4;          // e.g. "kafka:9092"
   //int32 partition = 5;
 }
 
 // Delete Message Queue (Kafka) Trigger
 message DeleteMQTriggerRequest {
   string name = 1;
+  string namespace = 2;
+}
+
+// List of messages 
+message ListFunctionsRequest {
+  string namespace = 1;
+}
+
+// List of triggers 
+message ListTriggersRequest {
+  string namespace = 1;
+  string type = 2; // http | timer | mq
 }
 
