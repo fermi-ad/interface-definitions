@@ -1,0 +1,28 @@
+name: Notify of Proto Updates
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'proto/**' # Only trigger if files in the proto folder change
+
+jobs:
+  notify:
+    strategy:
+      matrix:
+        repo: ['fermi-ad/grpc-reflection-catalog'] # Other repos can simply be added to get notifications of proto updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.ACTION_SETTINGS_APP_ID }}
+          private-key: ${{ secrets.ACTION_SETTINGS_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          repository: ${{ matrix.repo }}
+          event-type: protos-updated # This is the key used to subscribe to these notifications
