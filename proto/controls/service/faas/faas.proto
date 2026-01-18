@@ -36,10 +36,10 @@ service FissionManager {
 }
 
 message GenericResponse {
-  bool success = 1;
-  string message = 2;
-  int32 exit_code = 3;
-  string details = 4;
+  bool success = 1;		// Success or fail 
+  string message = 2;		// SUCCESS/FAIL message 
+  int32 exit_code = 3;		// exit code (for future implementation)
+  string details = 4;		// Detail response 
 }
 
 
