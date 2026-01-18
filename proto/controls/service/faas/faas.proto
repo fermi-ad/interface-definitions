@@ -29,7 +29,7 @@ service FissionManager {
   rpc UpdateMessageQueueTrigger(UpdateMQTriggerRequest) returns (GenericResponse);
   rpc DeleteMessageQueueTrigger(DeleteMQTriggerRequest) returns (GenericResponse);
 
-  // Lust of functions and triggers
+  // List of functions and triggers
   rpc ListFunctions(ListFunctionsRequest) returns (GenericResponse);
   rpc ListTriggers(ListTriggersRequest) returns (GenericResponse);
 
