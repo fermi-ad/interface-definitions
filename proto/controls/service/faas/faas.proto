@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package services.faas;
+
+// high-level RPC to manage Fission resources
+
+service FissionManager {
+  // Function operation using inline code (python/handler) and environment name.
+  rpc CreateFunction(CreateFunctionRequest) returns (GenericResponse);
+  rpc UpdateFunction(UpdateFunctionRequest) returns (GenericResponse);
+  rpc DeleteFunction(DeleteFunctionRequest) returns (GenericResponse);
+  rpc TestFunction(TestFunctionRequest) returns (GenericResponse);
+  rpc LogFunction(LogFunctionRequest) returns (GenericResponse);
+  rpc ShowFunction(ShowFunctionRequest) returns (GenericResponse);
+  rpc MetadataFunction(MetadataFunctionRequest) returns (GenericResponse);
+
+  // HTTP trigger operation to expose function via Fission router
+  rpc CreateHTTPTrigger(CreateHTTPTriggerRequest) returns (GenericResponse);
+  rpc UpdateHTTPTrigger(UpdateHTTPTriggerRequest) returns (GenericResponse);
+  rpc DeleteHTTPTrigger(DeleteHTTPTriggerRequest) returns (GenericResponse);
+
+  // Create timer trigger (cron-like spec)
+  rpc CreateTimerTrigger(CreateTimerTriggerRequest) returns (GenericResponse);
+  rpc UpdateTimerTrigger(UpdateTimerTriggerRequest) returns (GenericResponse);
+  rpc DeleteTimerTrigger(DeleteTimerTriggerRequest) returns (GenericResponse);
+
+  // Create message queue trigger for kafka
+  rpc CreateMessageQueueTrigger(CreateMQTriggerRequest) returns (GenericResponse);
+  rpc UpdateMessageQueueTrigger(UpdateMQTriggerRequest) returns (GenericResponse);
+  rpc DeleteMessageQueueTrigger(DeleteMQTriggerRequest) returns (GenericResponse);
+
+  // Lust of functions and triggers
+  rpc ListFunctions(ListFunctionsRequest) returns (GenericResponse);
+  rpc ListTriggers(ListTriggersRequest) returns (GenericResponse);
+
+}
+
+message GenericResponse {
+  bool success = 1;
+  string message = 2;
+  int32 exit_code = 3;
+  string details = 4;
+}
+
+
+// CreateFunction 
+message CreateFunctionRequest {
+  string name = 1;		// function name 
+  string environment = 2;	// environment name
+  bytes zip_file = 3; 		// zip file which has code 
+  string entrypoint = 4;  	// e.g., "handler" or executable
+  string url_path = 6;    	// http path (for http trigger)
+  string method = 7;   		// GET, POST etc.
+  string namespace = 8;
+}
+
+// UpdateFunction 
+message UpdateFunctionRequest {
+  string name = 1;
+  string environment = 2;
+  bytes zip_file = 3;           // zip file which has code
+  string entrypoint = 4;        // e.g., "handler" or executable
+  string url_path = 6;          // http path (for http trigger)
+  string method = 7;            // GET, POST etc.
+  string namespace = 8;
+}
+
+// DeleteFunction
+message DeleteFunctionRequest {
+  string name = 1;
+  string url_path = 2;    	// optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// TestFunction
+message TestFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// LogFunction
+message LogFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// ShowFunction
+message ShowFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// MetadataFunction
+message MetadataFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// CreateHTTPTrigger
+message CreateHTTPTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string url_path = 3;    		// e.g. "/myfunc"
+  string method = 4;   		// GET, POST etc.
+  string namespace = 5;
+}
+
+// UpdateHTTPTrigger
+message UpdateHTTPTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string url_path = 3;             // e.g. "/myfunc"
+  string method = 4;            // GET, POST etc.
+  string namespace = 5;
+}
+
+// DeleteHTTPTrigger
+message DeleteHTTPTriggerRequest {
+  string name = 1;
+  string namespace = 2;
+}
+
+// CreateTimerTrigger
+message CreateTimerTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string cron = 3;     		// cron spec, e.g. "*/5 * * * *"
+  string namespace = 4;
+}
+
+// UpdateTimerTrigger
+message UpdateTimerTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string cron = 3;
+  string namespace = 4;
+}
+
+// DeleteTimerTrigger
+message DeleteTimerTriggerRequest {
+  string name = 1;
+  string namespace = 2;
+}
+
+// Create Message Queue (Kafka) Trigger
+message CreateMQTriggerRequest {
+  string name = 1;		// trigger name 
+  string function = 2;	
+  string request_mq = 3;
+  string response_mq = 4;
+  string error_mq = 5;
+  string maxtries = 6;
+  string cooldowntime = 7;
+  string poolingtime = 8;
+  string secret = 9;
+  string metdata = 10;
+  string namespace = 11; 
+}
+
+// Create Message Queue (Kafka) Trigger
+message UpdateMQTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string request_mq = 3;
+  string response_mq = 4;
+  string error_mq = 5;
+  string maxtries = 6;
+  string cooldowntime = 7;
+  string poolingtime = 8;
+  string secret = 9;
+  string metdata = 10;
+  string namespace = 11;
+}
+
+// Delete Message Queue (Kafka) Trigger
+message DeleteMQTriggerRequest {
+  string name = 1;
+  string namespace = 2;
+}
+
+// List of functions
+message ListFunctionsRequest {
+  string namespace = 1;
+}
+
+// List of triggers 
+message ListTriggersRequest {
+  string namespace = 1;
+  string type = 2; 		// http | timer | mq
+}
+
