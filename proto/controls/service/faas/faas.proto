@@ -9,12 +9,15 @@ service FissionManager {
   rpc CreateFunction(CreateFunctionRequest) returns (GenericResponse);
   rpc UpdateFunction(UpdateFunctionRequest) returns (GenericResponse);
   rpc DeleteFunction(DeleteFunctionRequest) returns (GenericResponse);
+  rpc TestFunction(TestFunctionRequest) returns (GenericResponse);
+  rpc LogFunction(LogFunctionRequest) returns (GenericResponse);
+  rpc ShowFunction(ShowFunctionRequest) returns (GenericResponse);
+  rpc MetadataFunction(MetadataFunctionRequest) returns (GenericResponse);
 
-  // By default all functions will have HTTP trigger 
   // HTTP trigger operation to expose function via Fission router
-  //rpc CreateHTTPTrigger(CreateHTTPTriggerRequest) returns (GenericResponse);
-  //rpc UpdateHTTPTrigger(UpdateHTTPTriggerRequest) returns (GenericResponse);
-  //rpc DeleteHTTPTrigger(DeleteHTTPTriggerRequest) returns (GenericResponse);
+  rpc CreateHTTPTrigger(CreateHTTPTriggerRequest) returns (GenericResponse);
+  rpc UpdateHTTPTrigger(UpdateHTTPTriggerRequest) returns (GenericResponse);
+  rpc DeleteHTTPTrigger(DeleteHTTPTriggerRequest) returns (GenericResponse);
 
   // Create timer trigger (cron-like spec)
   rpc CreateTimerTrigger(CreateTimerTriggerRequest) returns (GenericResponse);
@@ -45,9 +48,7 @@ message CreateFunctionRequest {
   string name = 1;		// function name 
   string environment = 2;	// environment name
   bytes zip_file = 3; 		// zip file which has code 
-  //string source_type = 3; 	  // "python"|"binary"|"archive" etc.
   string entrypoint = 4;  	// e.g., "handler" or executable
-  //string code = 5;        	  // inline code or base64 if binary (we use plain text for small examples)
   string url_path = 6;    	// http path (for http trigger)
   string method = 7;   		// GET, POST etc.
   string namespace = 8;
@@ -58,9 +59,7 @@ message UpdateFunctionRequest {
   string name = 1;
   string environment = 2;
   bytes zip_file = 3;           // zip file which has code
-  //string source_type = 3;       // "python"|"binary"|"archive" etc.
   string entrypoint = 4;        // e.g., "handler" or executable
-  //string code = 5;              // inline code or base64 if binary (we use plain text for small examples)
   string url_path = 6;          // http path (for http trigger)
   string method = 7;            // GET, POST etc.
   string namespace = 8;
@@ -73,23 +72,62 @@ message DeleteFunctionRequest {
   string namespace = 3;
 }
 
+// TestFunction
+message TestFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// LogFunction
+message LogFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// ShowFunction
+message ShowFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
+// MetadataFunction
+message MetadataFunctionRequest {
+  string name = 1;
+  string url_path = 2;          // optional http path (for http trigger)
+  string namespace = 3;
+}
+
 // CreateHTTPTrigger
-//message CreateHTTPTriggerRequest {
-//  string name = 1;
-//  string function_name = 2;
-//  string route = 3;    	// e.g. "/myfunc"
-//  string method = 4;   	// GET, POST etc.
-//}
+message CreateHTTPTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string url_path = 3;    		// e.g. "/myfunc"
+  string method = 4;   		// GET, POST etc.
+  string namespace = 5;
+}
+
+// UpdateHTTPTrigger
+message UpdateHTTPTriggerRequest {
+  string name = 1;
+  string function = 2;
+  string url_path = 3;             // e.g. "/myfunc"
+  string method = 4;            // GET, POST etc.
+  string namespace = 5;
+}
 
 // DeleteHTTPTrigger
-//message DeleteHTTPTriggerRequest {
-//  string name = 1;
-//}
+message DeleteHTTPTriggerRequest {
+  string name = 1;
+  string namespace = 2;
+}
 
 // CreateTimerTrigger
 message CreateTimerTriggerRequest {
   string name = 1;
-  string function_name = 2;
+  string function = 2;
   string cron = 3;     		// cron spec, e.g. "*/5 * * * *"
   string namespace = 4;
 }
@@ -97,7 +135,7 @@ message CreateTimerTriggerRequest {
 // UpdateTimerTrigger
 message UpdateTimerTriggerRequest {
   string name = 1;
-  string function_name = 2;
+  string function = 2;
   string cron = 3;
   string namespace = 4;
 }
@@ -111,29 +149,31 @@ message DeleteTimerTriggerRequest {
 // Create Message Queue (Kafka) Trigger
 message CreateMQTriggerRequest {
   string name = 1;		// trigger name 
-  string function_name = 2;	
+  string function = 2;	
   string request_mq = 3;
   string response_mq = 4;
   string error_mq = 5;
-  //string table_name = 6;	// optional if function want to push to longterm storage
-  //string column_name = 7; 	// optional
-  string namespace = 8; 
-  //string broker = 4;          // e.g. "kafka:9092"
-  //int32 partition = 5;
+  string maxtries = 6;
+  string cooldowntime = 7;
+  string poolingtime = 8;
+  string secret = 9;
+  string metdata = 10;
+  string namespace = 11; 
 }
 
 // Create Message Queue (Kafka) Trigger
 message UpdateMQTriggerRequest {
   string name = 1;
-  string function_name = 2;
+  string function = 2;
   string request_mq = 3;
   string response_mq = 4;
   string error_mq = 5;
-  //string table_name = 6;        // optional if function want to push to longterm storage
-  //string column_name = 7;       // optional
-  string namespace = 8;
-  //string broker = 4;          // e.g. "kafka:9092"
-  //int32 partition = 5;
+  string maxtries = 6;
+  string cooldowntime = 7;
+  string poolingtime = 8;
+  string secret = 9;
+  string metdata = 10;
+  string namespace = 11;
 }
 
 // Delete Message Queue (Kafka) Trigger
@@ -142,7 +182,7 @@ message DeleteMQTriggerRequest {
   string namespace = 2;
 }
 
-// List of messages 
+// List of functions
 message ListFunctionsRequest {
   string namespace = 1;
 }
@@ -150,6 +190,6 @@ message ListFunctionsRequest {
 // List of triggers 
 message ListTriggersRequest {
   string namespace = 1;
-  string type = 2; // http | timer | mq
+  string type = 2; 		// http | timer | mq
 }
 
