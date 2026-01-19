@@ -1,75 +1,72 @@
 syntax = "proto3";
 
-package services.cache;
+package services.data_cache;
 
-service KafkaService {
+service DataCacheService {
   // Create a topic with partitions and replication factor
-  rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse);
+  rpc CreateMQ(CreateMQRequest) returns (CreateMQResponse);
 
   // Create many topics with identical partitions and replication factor
-  rpc CreateNtopics(CreateNtopicsRequest) returns (CreateTopicResponse);
+  rpc CreateNMQs(CreateMQsRequest) returns (CreateMQResponse);
 
   // Send a single message to a topic
-  rpc ProduceTopic(ProduceTopicRequest) returns (ProduceResponse);
+  rpc PushMQ(PushMQRequest) returns (ProducersResponse);
 
   // Send a single message to many topic
-  rpc ProduceNtopics(ProduceNtopicsRequest) returns (ProduceResponse);
+  rpc PushMQs(PushMQsRequest) returns (ProducersResponse);
 
   // Get message from a topic 
-  rpc ConsumeTopic(ConsumeTopicRequest) returns (ConsumeResponse);
+  rpc PullMQ(PullMQRequest) returns (ConsumersResponse);
 
   // Get messages from many topics 
-  rpc ConsumeNtopics(ConsumeNtopicsRequest) returns (ConsumeResponse);
+  rpc PullMQs(PullMQsRequest) returns (ConsumersResponse);
 }
 
-message CreateTopicRequest {
-  string topic = 1;			// topic name 
+message CreateMQRequest {
+  string mq_name = 1;			// topic name 
   int32 partitions = 2;			// Each topic can be devided into multiple partitions 	
   int32 replication_factor = 3;		// replication for high availibility 
 }
 
-message CreateNtopicsRequest {
-  string topics = 1;                    // topic names separed with ',' e.g. topic1, topic2, topic3
+message CreateMQsRequest {
+  string mq_names = 1;                  // topic names separed with ',' e.g. topic1, topic2, topic3
   int32 partitions = 2;                 // Each topic can be devided into multiple partitions
   int32 replication_factor = 3;         // replication for high availibility
 }
 
-message CreateTopicResponse {
+message CreateMQResponse {
   bool success = 1;			// success or failure 
   string message = 2;			// response (error message if failure) 
 }
 
-message ProduceTopicRequest {
-  string topic = 1;			// topic name
+message PushMQRequest {
+  string mq_name = 1;			// topic name
   string key = 2;    			// optional
   bytes value = 3;			// message
 }
 
-message ProduceNtopicsRequest {
-  string topics = 1;                     // list of topics 
+message PushMQsRequest {
+  string mq_names = 1;                  // list of topics 
   string key = 2;                       // optional
   bytes value = 3;                      // message
 }
 
-message ProduceResponse {
+message ProducersResponse {
   bool success = 1;			// success or failure
-  string message = 2;			// response offset / error message if failure
-  //int64 offset = 3;			// offset --> return the offset for that topic 
+  string messages_with_offsets = 2;	// response offset / error message if failure
 }
 
-message ConsumeTopicRequest {
-  string topic = 1;			// topic name 
-  //string group_id = 2;
+message PullMQRequest {
+  string mq_name = 1;			// topic name
   int32 timeout_seconds = 2; 		// optional, stop after secs (0 = no timeout)
 }
 
-message ConsumeNtopicsRequest {
-  string topics = 1;                     // list of topics
-  //string group_id = 2;
+message PullMQsRequest {
+  string mq_names = 1;                  // list of topics
   int32 timeout_seconds = 2;            // optional, stop after secs (0 = no timeout)
 }
 
-message ConsumeResponse {
+message ConsumersResponse {
   string keys = 1;			// associated key or keys 
   bytes values = 2;			// response 
   string offsets = 3;			// offset or many offsets 
