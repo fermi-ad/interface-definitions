@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package services.ioc_alarms;
 
 service IocAlarms {
@@ -34,6 +36,6 @@ message AlarmInfo {
     double deadband = 17;
     string oprtr = 18;
     double transition = 19;
-    optional string creationtime = 20;
-    optional string validuntiltime = 21;
+    google.protobuf.Timestamp creationtime = 20;
+    optional google.protobuf.Timestamp validuntiltime = 21;
 }
