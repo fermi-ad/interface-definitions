@@ -1,0 +1,37 @@
+// Defines the structure for accelerator alarms
+
+syntax = "proto3";
+
+package common.alarms;
+
+message Status {
+    enum State {
+        "UNKNOWN" = 0;
+        "OK" = 1;
+        "ALARMED" = 2;
+        "BYPASSED" = 3;
+        "LATCHED" = 4;
+        "ACKNOWLEDGED" = 5;
+    }
+    
+    State state = 1;
+
+    // The time the current state was set.
+    // Number of nanoseconds since 1970-01-01T00:00:00.000Z.
+    uint64 time = 2;
+
+    // --- The following fields are optional. ---
+
+    // Used when the current status state was set by a user. Contains the ID
+    // of the user who made the change.
+    string user = 3;
+
+    // Indicates when an alarm is scheduled to come back into active status from bypass.
+    // Number of nanoseconds since 1970-01-01T00:00:00.000Z.
+    uint64 wake = 4;
+}
+
+message Alarm {
+    string device = 1;
+    Status status = 2;
+}
