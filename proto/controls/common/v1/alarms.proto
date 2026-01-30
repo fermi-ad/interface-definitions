@@ -5,33 +5,56 @@ syntax = "proto3";
 package common.alarms;
 
 message Status {
+    enum Priority {
+        "Priority_UNKNOWN" = 0;
+        "Priority_LOW" = 1;
+        "Priority_MED" = 2;
+        "Priority_HIGH" = 3;
+    }
     enum State {
-        "UNKNOWN" = 0;
-        "OK" = 1;
-        "ALARMED" = 2;
-        "BYPASSED" = 3;
-        "LATCHED" = 4;
-        "ACKNOWLEDGED" = 5;
+        "State_UNKNOWN" = 0;
+        "State_OK" = 1;
+        "State_ALARMED" = 2;
+        "State_BYPASSED" = 3;
+        "State_LATCHED" = 4;
+        "State_ACKNOWLEDGED" = 5;
     }
     
     State state = 1;
 
+    Priority priority = 2;
+
+    // Details about the state, including any alarm description if in alarm.
+    string message = 3;
+
+    bool acknowledgeable = 4;
+
     // The time the current state was set.
     // Number of nanoseconds since 1970-01-01T00:00:00.000Z.
-    uint64 time = 2;
+    uint64 time = 5;
 
     // --- The following fields are optional. ---
 
     // Used when the current status state was set by a user. Contains the ID
     // of the user who made the change.
-    string user = 3;
+    string user = 6;
 
     // Indicates when an alarm is scheduled to come back into active status from bypass.
     // Number of nanoseconds since 1970-01-01T00:00:00.000Z.
-    uint64 wake = 4;
+    uint64 wake = 7;
 }
 
 message Alarm {
     string device = 1;
-    Status status = 2;
+
+    // --- The following fields should be set according to need. ---
+
+    // An ACNET analog alarm.
+    Status analog = 2;
+
+    // An ACNET digital alarm.
+    Status digital = 3;
+
+    // An EPICS alarm.
+    Status epics = 4;
 }
