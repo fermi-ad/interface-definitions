@@ -6,18 +6,18 @@ package common.alarms;
 
 message Status {
     enum Priority {
-        "Priority_UNKNOWN" = 0;
-        "Priority_LOW" = 1;
-        "Priority_MED" = 2;
-        "Priority_HIGH" = 3;
+        Priority_UNKNOWN = 0;
+        Priority_LOW = 1;
+        Priority_MED = 2;
+        Priority_HIGH = 3;
     }
     enum State {
-        "State_UNKNOWN" = 0;
-        "State_OK" = 1;
-        "State_ALARMED" = 2;
-        "State_BYPASSED" = 3;
-        "State_LATCHED" = 4;
-        "State_ACKNOWLEDGED" = 5;
+        State_UNKNOWN = 0;
+        State_OK = 1;
+        State_ALARMED = 2;
+        State_BYPASSED = 3;
+        State_LATCHED = 4;
+        State_ACKNOWLEDGED = 5;
     }
     
     State state = 1;
