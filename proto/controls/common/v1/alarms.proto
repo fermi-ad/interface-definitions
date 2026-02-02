@@ -1,0 +1,58 @@
+// Defines the structure for accelerator alarms
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package common.alarms;
+
+message Status {
+    enum Priority {
+        Priority_UNKNOWN = 0;
+        Priority_LOW = 1;
+        Priority_MED = 2;
+        Priority_HIGH = 3;
+    }
+    enum State {
+        State_UNKNOWN = 0;
+        State_OK = 1;
+        State_ALARMED = 2;
+        State_BYPASSED = 3;
+        State_LATCHED = 4;
+        State_ACKNOWLEDGED = 5;
+    }
+    
+    State state = 1;
+
+    Priority priority = 2;
+
+    bool acknowledgeable = 3;
+
+    // The time the current state was set.
+    google.protobuf.Timestamp time = 4;
+
+    // --- The following fields are optional. ---
+
+    // Indicates which sort of EPICS alarm this is (out of range, lost connection, etc.)
+    string epicsAlarmType = 5;
+
+    // Filled when the current status state was set by a user. Contains the username
+    // of the user who made the change.
+    string user = 6;
+
+    // Indicates when an alarm is scheduled to come back into active status from bypass.
+    google.protobuf.Timestamp wake = 7;
+}
+
+message Alarm {
+    enum Source {
+        Source_UNKNOWN = 0;
+        Source_ANALOG = 1;
+        Source_DIGITAL = 2;
+        Source_EPICS = 3;
+    }
+
+    string device = 1;
+    Status status = 2;
+    Source source = 3;
+}
