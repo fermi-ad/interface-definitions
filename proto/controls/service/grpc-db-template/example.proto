@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-package services.example;
+package services.grpc-db-alarms;
 
 service ExampleDB {
     rpc getEndPointOne(IdList) returns (ReplyOne) {}
@@ -32,7 +32,7 @@ message SectionOne {
 
 message SectionTwo {
     uint32 id = 1;
-    PartThree = 3;
+    PartThree = 2;
 }
 
 message PartOne {
