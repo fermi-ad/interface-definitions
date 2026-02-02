@@ -2,6 +2,8 @@
 
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package common.alarms;
 
 message Status {
@@ -24,24 +26,25 @@ message Status {
 
     Priority priority = 2;
 
-    // Details about the state, including any alarm description if in alarm.
-    string message = 3;
-
-    bool acknowledgeable = 4;
+    bool acknowledgeable = 3;
 
     // The time the current state was set.
-    // Number of nanoseconds since 1970-01-01T00:00:00.000Z.
-    uint64 time = 5;
+    google.protobuf.Timestamp time = 4;
 
     // --- The following fields are optional. ---
 
-    // Used when the current status state was set by a user. Contains the ID
+    // Indicates which sort of EPICS alarm this is (out of range, lost connection, etc.)
+    string epicsAlarmType = 5;
+
+    // Details about the state, including any alarm description if in alarm.
+    string message = 6;
+
+    // Filled when the current status state was set by a user. Contains the username
     // of the user who made the change.
-    string user = 6;
+    string user = 7;
 
     // Indicates when an alarm is scheduled to come back into active status from bypass.
-    // Number of nanoseconds since 1970-01-01T00:00:00.000Z.
-    uint64 wake = 7;
+    google.protobuf.Timestamp wake = 8;
 }
 
 message Alarm {
