@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-package services.grpc-db-template;
+package services.example;
 
 service ExampleDB {
     rpc getEndPointOne(IdList) returns (ReplyOne) {}
