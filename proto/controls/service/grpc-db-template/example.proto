@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-package services.grpc-db-alarms;
+package services.grpc-db-template;
 
 service ExampleDB {
     rpc getEndPointOne(IdList) returns (ReplyOne) {}
@@ -14,25 +14,25 @@ message IdList {
 }
 
 message ReplyOne {
-    repeated SectionOne = 1;
+    repeated SectionOne section_one = 1;
 }
 
 message ReplyTwo {
-    repeated SectionTwo = 1;
+    repeated SectionTwo section_two = 1;
 }
 
 // Supporting messages.
 
 message SectionOne {
     uint32 id = 1;
-    PartOne = 2;
-    PartTwo = 3;
-    optional PartThree = 4;
+    PartOne part_one = 2;
+    PartTwo part_two = 3;
+    optional PartThree part_three = 4;
 }
 
 message SectionTwo {
     uint32 id = 1;
-    PartThree = 2;
+    PartThree part_three = 2;
 }
 
 message PartOne {
