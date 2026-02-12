@@ -33,7 +33,7 @@ message Status {
     // --- The following fields are optional ---
 
     // Indicates which sort of EPICS alarm this is (out of range, lost connection, etc.)
-    string epics_alarm_type = 5;
+    string epics_type = 5;
 
     // Filled when the current status state was set by a user. Contains the username
     // of the user who made the change
