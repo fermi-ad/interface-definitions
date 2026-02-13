@@ -125,7 +125,3 @@ message SettingList {
 message SettingReply {
     repeated common.status.Status status = 2;
 }
-
-message DeviceList {
-    repeated string device = 1;
-}
