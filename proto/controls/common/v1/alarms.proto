@@ -7,10 +7,10 @@ import "google/protobuf/timestamp.proto";
 package common.alarms;
 
 message Status {
-    enum Priority {
-        Priority_UNKNOWN    = 0;
-        Priority_LOW        = 1;
-        Priority_HIGH       = 2;
+    enum Severity {
+        Severity_UNKNOWN    = 0;
+        Severity_LOW        = 1;
+        Severity_HIGH       = 2;
     }
     enum State {
         State_UNKNOWN       = 0;
@@ -23,7 +23,7 @@ message Status {
 
     State state = 1;
 
-    Priority priority = 2;
+    Severity severity = 2;
 
     bool acknowledgeable = 3;
 
