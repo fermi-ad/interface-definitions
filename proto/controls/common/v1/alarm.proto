@@ -1,4 +1,4 @@
-// Defines the structure for the status of an ACORN abstract alarm
+// Defines the structure for the status of an ACORN generic alarm
 
 syntax = "proto3";
 
