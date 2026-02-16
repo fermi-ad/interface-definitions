@@ -54,3 +54,7 @@ message Alarm {
     Status status   = 2;
     Source source   = 3;
 }
+
+message AlarmList {
+    repeated Alarm alarm = 1;
+}
