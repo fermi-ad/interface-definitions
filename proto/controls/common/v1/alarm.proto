@@ -10,27 +10,27 @@ message Status {
     string device = 1;
 
     enum Source {
-        Source_UNKNOWN      = 0;
-        Source_ANALOG       = 1;
-        Source_DIGITAL      = 2;
-        Source_EPICS        = 3;
+        SOURCE_UNKNOWN      = 0;
+        SOURCE_ANALOG       = 1;
+        SOURCE_DIGITAL      = 2;
+        SOURCE_EPICS        = 3;
     }
     Source source = 2;
 
     enum State {
-        State_UNKNOWN       = 0;
-        State_OK            = 1;
-        State_ALARMED       = 2;
-        State_BYPASSED      = 3;
-        State_LATCHED       = 4;
-        State_ACKNOWLEDGED  = 5;
+        STATE_UNKNOWN       = 0;
+        STATE_OK            = 1;
+        STATE_ALARMED       = 2;
+        STATE_BYPASSED      = 3;
+        STATE_LATCHED       = 4;
+        STATE_ACKNOWLEDGED  = 5;
     }
     State state = 3;
 
     enum Severity {
-        Severity_UNKNOWN    = 0;
-        Severity_LOW        = 1;
-        Severity_HIGH       = 2;
+        SEVERITY_UNKNOWN    = 0;
+        SEVERITY_LOW        = 1;
+        SEVERITY_HIGH       = 2;
     }
     Severity severity = 4;
 
