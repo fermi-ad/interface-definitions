@@ -6,12 +6,17 @@ import "google/protobuf/timestamp.proto";
 
 package common.alarms;
 
-message Status {
-    enum Severity {
-        Severity_UNKNOWN    = 0;
-        Severity_LOW        = 1;
-        Severity_HIGH       = 2;
+message Alarm {
+    string device = 1;
+
+    enum Source {
+        Source_UNKNOWN      = 0;
+        Source_ANALOG       = 1;
+        Source_DIGITAL      = 2;
+        Source_EPICS        = 3;
     }
+    Source source = 2;
+
     enum State {
         State_UNKNOWN       = 0;
         State_OK            = 1;
@@ -20,37 +25,29 @@ message Status {
         State_LATCHED       = 4;
         State_ACKNOWLEDGED  = 5;
     }
+    State state = 3;
 
-    State state = 1;
+    enum Severity {
+        Severity_UNKNOWN    = 0;
+        Severity_LOW        = 1;
+        Severity_HIGH       = 2;
+    }
+    Severity severity = 4;
 
-    Severity severity = 2;
-
-    bool acknowledgeable = 3;
+    bool acknowledgeable = 5;
 
     // The time the current state was set.
-    google.protobuf.Timestamp time = 4;
+    google.protobuf.Timestamp time = 6;
 
     // --- The following fields are optional ---
 
     // Indicates which sort of EPICS alarm this is (out of range, lost connection, etc.)
-    string epics_type = 5;
+    string epics_type = 7;
 
     // Filled when the current status state was set by a user. Contains the username
     // of the user who made the change
-    string user = 6;
+    string user = 8;
 
     // Indicates when an alarm is scheduled to come back into active status from bypass
-    google.protobuf.Timestamp wake = 7;
-}
-
-message Alarm {
-    enum Source {
-        Source_UNKNOWN  = 0;
-        Source_ANALOG   = 1;
-        Source_DIGITAL  = 2;
-        Source_EPICS    = 3;
-    }
-    string device   = 1;
-    Status status   = 2;
-    Source source   = 3;
+    google.protobuf.Timestamp wake = 9;
 }
