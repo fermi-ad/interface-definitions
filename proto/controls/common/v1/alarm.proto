@@ -1,12 +1,12 @@
-// Defines the structure for accelerator alarms
+// Defines the structure for the status of an ACORN abstract alarm
 
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-package common.alarms;
+package common.alarm;
 
-message Alarm {
+message Status {
     string device = 1;
 
     enum Source {
