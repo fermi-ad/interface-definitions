@@ -29,11 +29,10 @@ message Status {
 
     enum Severity {
         SEVERITY_UNKNOWN    = 0;
-        SEVERITY_OK         = 1
-        SEVERITY_LOW        = 2;
-        SEVERITY_HIGH       = 3;
+        SEVERITY_LOW        = 1;
+        SEVERITY_HIGH       = 2;
     }
-    Severity severity = 4;                  //  required
+    Severity severity = 4;                  //  optional
 
     bool acknowledgeable = 5;               //  optional
 
