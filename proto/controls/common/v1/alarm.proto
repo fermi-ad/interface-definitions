@@ -35,7 +35,7 @@ message Status {
     }
     Severity severity = 4;                  //  required
 
-    bool acknowledgeable = 5;               //  required
+    bool acknowledgeable = 5;               //  optional
 
     // The time the current state was set.
     google.protobuf.Timestamp time = 6;     //  required
@@ -48,12 +48,13 @@ message Status {
     //                     literally: detail = (value XOR nominal) AND mask
     //    SOURCE_EPICS   - detail is one of the EPICS alarm status enumeration values per
     //                     https://docs.epics-controls.org/projects/base/en/r7.0.9/menuAlarmStat.html
-    uint32 detail = 7;
+
+    uint32 detail = 7;                      //   optional
 
     // Filled when the current status state was set by a user. Contains the username
     // of the user who made the change
-    string user = 8;
+    string user = 8;                        //  optional
 
     // Indicates when an alarm is scheduled to come back into active status from bypass
-    google.protobuf.Timestamp wake = 9;
+    google.protobuf.Timestamp wake = 9;     //  optional
 }
