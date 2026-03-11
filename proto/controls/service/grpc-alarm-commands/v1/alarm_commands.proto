@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package services.alarm_commands;
+package services.alarm_commands.v1;
 
-import "controls/common/v1/alarm.proto";
+import "proto/controls/common/v1/alarm.proto";
 
 service AlarmCommands {
   rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
