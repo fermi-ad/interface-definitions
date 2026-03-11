@@ -11,7 +11,7 @@ service AlarmCommands {
 
 message AcknowledgeAlarmRequest {
   string device = 1;
-  common.alarm.Source source = 2;
+  controls.common.v1.Source source = 2;
 }
 
 message AcknowledgeAlarmResponse {
