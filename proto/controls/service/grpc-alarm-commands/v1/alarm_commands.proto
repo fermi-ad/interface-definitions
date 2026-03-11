@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package services.alarm_commands;
+
+import "controls/common/v1/alarm.proto";
+
+service AlarmCommands {
+  rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
+      returns (AcknowledgeAlarmResponse);
+}
+
+message AcknowledgeAlarmRequest {
+  string device = 1;
+  common.alarm.Source source = 2;
+}
+
+message AcknowledgeAlarmResponse {
+  bool success = 1;
+}
