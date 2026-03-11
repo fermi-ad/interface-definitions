@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package services.alarm_commands.v1;
 
-import "proto/controls/common/v1/alarm.proto";
+import "proto/controls/common/v1/sources.proto";
 
 service AlarmCommands {
   rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
@@ -11,7 +11,7 @@ service AlarmCommands {
 
 message AcknowledgeAlarmRequest {
   string device = 1;
-  controls.common.v1.Source source = 2;
+  controls.common.Source source = 2;
 }
 
 message AcknowledgeAlarmResponse {
