@@ -2,18 +2,14 @@ syntax = "proto3";
 
 package services.alarm_commands.v1;
 
-import "proto/controls/common/v1/sources.proto";
+import "google/protobuf/empty.proto";
 
 service AlarmCommands {
   rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
-      returns (AcknowledgeAlarmResponse);
+      returns (google.protobuf.Empty);
 }
 
 message AcknowledgeAlarmRequest {
-  string device = 1;
-  common.sources.Source source = 2;
-}
-
-message AcknowledgeAlarmResponse {
-  bool success = 1;
+  repeated string devices = 1;
+  string user = 2;
 }
