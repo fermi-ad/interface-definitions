@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package services.alarm_commands.v1;
+
+import "google/protobuf/empty.proto";
+
+service AlarmCommands {
+  rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
+      returns (google.protobuf.Empty);
+}
+
+message AcknowledgeAlarmRequest {
+  repeated string devices = 1;
+  string user = 2;
+}
