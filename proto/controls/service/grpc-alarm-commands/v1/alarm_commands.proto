@@ -7,9 +7,26 @@ import "google/protobuf/empty.proto";
 service AlarmCommands {
   rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
       returns (google.protobuf.Empty);
+
+  rpc BypassAlarm(BypassAlarmRequest)
+      returns (google.protobuf.Empty);
+
+  rpc SnoozeAlarm(SnoozeAlarmRequest)
+      returns (google.protobuf.Empty);
 }
 
 message AcknowledgeAlarmRequest {
   repeated string devices = 1;
   string user = 2;
+}
+
+message BypassAlarmRequest {
+  repeated string devices = 1;
+  string user = 2;
+}
+
+message SnoozeAlarmRequest {
+  repeated string devices = 1;
+  string user = 2;
+  int64 duration_seconds = 3;
 }
