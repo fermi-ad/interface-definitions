@@ -3,6 +3,7 @@ syntax = "proto3";
 package services.alarm_commands.v1;
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 service AlarmCommands {
   rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
@@ -28,5 +29,5 @@ message BypassAlarmRequest {
 message SnoozeAlarmRequest {
   repeated string devices = 1;
   string user = 2;
-  int64 duration_seconds = 3;
+  google.protobuf.Timestamp wake = 3;
 }
