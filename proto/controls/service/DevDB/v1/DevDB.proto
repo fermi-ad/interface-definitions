@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.devdb;
 
+import "google/protobuf/empty.proto";
+
 service DevDB {
     // Clients can ask for device information (obtained from the
     // device database.) The function is passed an array of device
@@ -11,6 +13,18 @@ service DevDB {
     rpc getDeviceInfo(DeviceList) returns (DeviceInfoReply) {}
     rpc getAllAlarmInfo(DeviceList) returns (AlarmInfoReply) {}
     rpc getAlarmText(AlarmTextIdList) returns (DeviceAlarmTextList) {}
+
+    // These functions implement the plotting app API to manage plot
+    // configurations.
+
+    rpc getPlotConfiguration(PlotSelector)
+	returns (PlotConfigResult) {}
+    rpc getUserPlotConfiguration(google.protobuf.Empty)
+	returns (PlotConfigResult) {}
+    rpc savePlotConfiguration(PlotConfigSpecification)
+	returns (PlotConfigResult) {}
+    rpc saveUserPlotConfiguration(PlotConfig)
+	returns (PlotConfigResult) {}
 
     // This function allows clients to monitor device info changes.
     // The client passes an array of device names. The function
@@ -23,6 +37,25 @@ service DevDB {
     // rpc monitorDeviceInfo(DeviceList) returns (stream InfoEntry) {}
 }
 
+message PlotSelector {
+    string name = 1;
+}
+
+message PlotConfigSpecification {
+    string name = 1;
+    string config = 2;
+}
+
+message PlotConfig {
+    string config = 1;
+}
+
+message PlotConfigResult {
+    oneof result {
+	string config = 1;
+	string errMsg = 2;
+    }
+}
 
 // Holds an array of device names (strings).
 message DeviceList {
@@ -142,7 +175,7 @@ message DeviceDigitalAlarm{
 
 message DeviceAnalogAlarm {
     uint32 di = 1;
-    uint32 alarm_text_id = 2;        
+    uint32 alarm_text_id = 2;
 }
 
 message AlarmTextIdList {
