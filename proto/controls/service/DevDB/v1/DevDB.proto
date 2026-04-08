@@ -21,6 +21,8 @@ service DevDB {
 	returns (PlotConfigResult) {}
     rpc getUserPlotConfiguration(google.protobuf.Empty)
 	returns (PlotConfigResult) {}
+    rpc deletePlotConfiguration(PlotSelector)
+	returns (PlotConfigResult) {}
     rpc savePlotConfiguration(PlotConfigSpecification)
 	returns (PlotConfigResult) {}
     rpc saveUserPlotConfiguration(PlotConfig)
@@ -28,12 +30,17 @@ service DevDB {
 }
 
 message PlotSelector {
-    string name = 1;
+    optional uint32 id = 1;
 }
 
 message PlotConfigSpecification {
-    string name = 1;
-    string config = 2;
+    uint32 id = 1;
+    string name = 2;
+    string config = 3;
+}
+
+message PlotConfigResults {
+    repeated PlotConfigSpecification data = 1;
 }
 
 message PlotConfig {
@@ -42,8 +49,9 @@ message PlotConfig {
 
 message PlotConfigResult {
     oneof result {
-	string config = 1;
-	string errMsg = 2;
+	PlotConfigResults config = 1;
+        PlotConfig user_config = 2;
+	string errMsg = 3;
     }
 }
 
