@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package services.devdb;
 
+import "google/protobuf/empty.proto";
+
 service DevDB {
     // Clients can ask for device information (obtained from the
     // device database.) The function is passed an array of device
@@ -12,17 +14,46 @@ service DevDB {
     rpc getAllAlarmInfo(DeviceList) returns (AlarmInfoReply) {}
     rpc getAlarmText(AlarmTextIdList) returns (DeviceAlarmTextList) {}
 
-    // This function allows clients to monitor device info changes.
-    // The client passes an array of device names. The function
-    // returns a stream which will report all changes to the device's
-    // information until the stream is canceled. The client will
-    // receive a complete set of device information before monitoring
-    // changes so there's no need to do an initial call to
-    // `getDeviceInfo()`.
+    // These functions implement the plotting app API to manage plot
+    // configurations.
 
-    // rpc monitorDeviceInfo(DeviceList) returns (stream InfoEntry) {}
+    rpc getPlotConfiguration(PlotSelector)
+	returns (PlotConfigResult) {}
+    rpc getUserPlotConfiguration(google.protobuf.Empty)
+	returns (PlotConfigResult) {}
+    rpc deletePlotConfiguration(PlotSelector)
+	returns (PlotConfigResult) {}
+    rpc savePlotConfiguration(PlotConfigSpecification)
+	returns (PlotConfigResult) {}
+    rpc saveUserPlotConfiguration(PlotConfig)
+	returns (PlotConfigResult) {}
 }
 
+message PlotSelector {
+    optional uint32 id = 1;
+}
+
+message PlotConfigSpecification {
+    uint32 id = 1;
+    string name = 2;
+    string config = 3;
+}
+
+message PlotConfigResults {
+    repeated PlotConfigSpecification data = 1;
+}
+
+message PlotConfig {
+    string config = 1;
+}
+
+message PlotConfigResult {
+    oneof result {
+	PlotConfigResults config = 1;
+        PlotConfig user_config = 2;
+	string errMsg = 3;
+    }
+}
 
 // Holds an array of device names (strings).
 message DeviceList {
@@ -142,7 +173,7 @@ message DeviceDigitalAlarm{
 
 message DeviceAnalogAlarm {
     uint32 di = 1;
-    uint32 alarm_text_id = 2;        
+    uint32 alarm_text_id = 2;
 }
 
 message AlarmTextIdList {
