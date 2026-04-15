@@ -18,7 +18,7 @@ service AlarmCommands {
       returns (google.protobuf.Empty);
 
   rpc TakeActiveAlarmSnapshot(google.protobuf.Empty) 
-      returns ActiveAlarmSnapshotResponse;
+      returns (ActiveAlarmSnapshotResponse);
 }
 
 message AcknowledgeAlarmRequest {
@@ -27,7 +27,7 @@ message AcknowledgeAlarmRequest {
 }
 
 message ActiveAlarmSnapshotResponse {
-  repeated common.alarm.Status active_alarms;
+  repeated common.alarm.Status active_alarms = 1;
 }
 
 message BypassAlarmRequest {
