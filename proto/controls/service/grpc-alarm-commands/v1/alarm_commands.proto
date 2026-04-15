@@ -5,6 +5,8 @@ package services.alarm_commands.v1;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
+import "proto/controls/common/v1/alarm.proto";
+
 service AlarmCommands {
   rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
       returns (google.protobuf.Empty);
@@ -14,11 +16,18 @@ service AlarmCommands {
 
   rpc SnoozeAlarm(SnoozeAlarmRequest)
       returns (google.protobuf.Empty);
+
+  rpc TakeActiveAlarmSnapshot(google.protobuf.Empty) 
+      returns ActiveAlarmSnapshotResponse;
 }
 
 message AcknowledgeAlarmRequest {
   repeated string devices = 1;
   string user = 2;
+}
+
+message ActiveAlarmSnapshotResponse {
+  repeated common.alarm.Status active_alarms;
 }
 
 message BypassAlarmRequest {
