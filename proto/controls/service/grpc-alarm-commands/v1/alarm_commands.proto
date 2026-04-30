@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package services.alarm_commands.v1;
+package services.alarm_commands;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
@@ -8,34 +8,42 @@ import "google/protobuf/timestamp.proto";
 import "proto/controls/common/v1/alarm.proto";
 
 service AlarmCommands {
-  rpc AcknowledgeAlarm(AcknowledgeAlarmRequest)
+  rpc Acknowledge(AcknowledgeRequest)
+      returns (google.protobuf.Empty);
+      
+  rpc Activate(ActivateRequest)
       returns (google.protobuf.Empty);
 
-  rpc BypassAlarm(BypassAlarmRequest)
+  rpc Bypass(BypassRequest)
       returns (google.protobuf.Empty);
 
-  rpc SnoozeAlarm(SnoozeAlarmRequest)
-      returns (google.protobuf.Empty);
+  rpc GetSnapshot(google.protobuf.Empty) 
+      returns (SnapshotResponse);
 
-  rpc TakeActiveAlarmSnapshot(google.protobuf.Empty) 
-      returns (ActiveAlarmSnapshotResponse);
+  rpc Snooze(SnoozeRequest)
+      returns (google.protobuf.Empty);
 }
 
-message AcknowledgeAlarmRequest {
+message AcknowledgeRequest {
   repeated string devices = 1;
   string user = 2;
 }
 
-message ActiveAlarmSnapshotResponse {
-  repeated common.alarm.Status active_alarms = 1;
-}
-
-message BypassAlarmRequest {
+message ActivateRequest {
   repeated string devices = 1;
   string user = 2;
 }
 
-message SnoozeAlarmRequest {
+message BypassRequest {
+  repeated string devices = 1;
+  string user = 2;
+}
+
+message SnapshotResponse {
+  repeated common.alarm.Status snapshot = 1;
+}
+
+message SnoozeRequest {
   repeated string devices = 1;
   string user = 2;
   google.protobuf.Timestamp wake = 3;
