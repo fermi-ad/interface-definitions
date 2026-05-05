@@ -24,6 +24,7 @@ message Status {
         STATE_BYPASSED      = 3;
         STATE_LATCHED       = 4;
         STATE_ACKNOWLEDGED  = 5;
+        STATE_UNBYPASSED    = 6;
     }
     State state = 3;                        //  required
 
