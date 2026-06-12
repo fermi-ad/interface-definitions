@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package services.aeolus_snapshot_proxy;
+
+import "google/protobuf/empty.proto";
+
+import "proto/controls/common/v1/alarm.proto";
+
+service AeolusProxy {
+  rpc GetAlarmsSnapshot(google.protobuf.Empty) 
+      returns (SnapshotResponse);
+}
+
+message SnapshotResponse {
+  repeated common.alarm.Status snapshot = 1;
+}
