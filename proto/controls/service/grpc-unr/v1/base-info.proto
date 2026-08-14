@@ -19,10 +19,6 @@ message BaseResponse {
     repeated BaseInfo base_info = 1;
 }
 
-message BaseUpdateResponse {
-    BaseInfo base_info = 1;
-}
-
 message BaseInfo {
     string id = 1;
     string address = 2;
