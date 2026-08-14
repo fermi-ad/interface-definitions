@@ -19,11 +19,11 @@ message unrRequest {
 }
 
 message unrBaseResponse {
-    repeated BaseInfo = 1;
+    repeated BaseInfo baseInfo = 1;
 }
 
 message unrRelatioshipResponse {
-    repeated RelationshipInfo = 1;
+    repeated RelationshipInfo relationshipInfo = 1;
 }
 
 message BaseInfo {
