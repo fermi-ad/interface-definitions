@@ -5,21 +5,14 @@ import "google/protobuf/empty.proto";
 package services.base_info;
 
 service BaseInfoService {
-    rpc create(BaseCreateUpdateRequest) returns (google.protobuf.Empty);
+    rpc create(BaseInfo) returns (google.protobuf.Empty);
     rpc read(BaseRequest) returns (BaseResponse);
-    rpc update(BaseCreateUpdateRequest) returns (google.protobuf.Empty);
+    rpc update(BaseInfo) returns (google.protobuf.Empty);
     rpc delete(BaseRequest) returns (google.protobuf.Empty);    
 }
 
 message BaseRequest {
     repeated string id = 1;
-}
-
-message BaseCreateUpdateRequest {
-    string id = 1;
-    string address = 2;
-    string type = 3;
-    string protocol = 4;
 }
 
 message BaseResponse {
