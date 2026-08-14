@@ -1,16 +1,23 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 package services.relationship_info;
 
 service RelationshipInfoService {
-    rpc create(RelationshipRequest) returns (RelationshipResponse);
+    rpc create(RelationshipCreateUpdateRequest) returns (google.protobuf.Empty);
     rpc read(RelationshipRequest) returns (RelationshipResponse);
-    rpc update(RelationshipRequest) returns (RelationshipResponse);
-    rpc delete(RelationshipRequest) returns (RelationshipResponse);
+    rpc update(RelationshipCreateUpdateRequest) returns (google.protobuf.Empty);
+    rpc delete(RelationshipRequest) returns (google.protobuf.Empty);
 }
 
 message RelationshipRequest {
     string id = 1;
+}
+
+message RelationshipCreateUpdateRequest {
+    string parent_id = 1;
+    repeated string child_ids = 2;
 }
 
 message RelationshipResponse {

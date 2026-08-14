@@ -1,20 +1,37 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 package services.base_info;
 
 service BaseInfoService {
-    rpc create(BaseRequest) returns (BaseResponse);
+    rpc create(BaseCreateUpdateRequest) returns (google.protobuf.Empty);
     rpc read(BaseRequest) returns (BaseResponse);
-    rpc update(BaseRequest) returns (BaseResponse);
-    rpc delete(BaseRequest) returns (BaseResponse);    
+    rpc update(BaseCreateUpdateRequest) returns (google.protobuf.Empty);
+    rpc delete(BaseRequest) returns (google.protobuf.Empty);    
 }
 
 message BaseRequest {
     repeated string id = 1;
 }
 
+message BaseCreateUpdateRequest {
+    string id = 1;
+    string address = 2;
+    string type = 3;
+    string protocol = 4;
+}
+
 message BaseResponse {
     repeated BaseInfo base_info = 1;
+}
+
+message BaseCreateResponse {
+    BaseInfo base_info = 1;
+}
+
+message BaseUpdateResponse {
+    BaseInfo base_info = 1;
 }
 
 message BaseInfo {
