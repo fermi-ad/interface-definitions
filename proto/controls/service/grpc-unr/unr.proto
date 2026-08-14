@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package services.unr;
 
-service  {
+service UnrService {
     rpc unrBaseCreate(UnrRequest) returns (UnrBaseResponse);
     rpc unrBaseRead(UnrRequest) returns (UnrBaseResponse);
     rpc unrBaseUpdate(UnrRequest) returns (UnrBaseResponse);
@@ -22,7 +22,7 @@ message UnrBaseResponse {
     repeated BaseInfo base_info = 1;
 }
 
-message UnrRelatioshipResponse {
+message UnrRelationshipResponse {
     repeated RelationshipInfo relationship_info = 1;
 }
 
