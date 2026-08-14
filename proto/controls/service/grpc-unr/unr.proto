@@ -3,26 +3,26 @@ syntax = "proto3";
 package services.unr;
 
 service  {
-    rpc unrBaseCreate(unrRequest) returns (unrBaseResponse);
-    rpc unrBaseRead(unrRequest) returns (unrBaseResponse);
-    rpc unrBaseUpdate(unrRequest) returns (unrBaseResponse);
-    rpc unrBaseDelete(unrRequest) returns (unrBaseResponse);
+    rpc unrBaseCreate(UnrRequest) returns (UnrBaseResponse);
+    rpc unrBaseRead(UnrRequest) returns (UnrBaseResponse);
+    rpc unrBaseUpdate(UnrRequest) returns (UnrBaseResponse);
+    rpc unrBaseDelete(UnrRequest) returns (UnrBaseResponse);
 
-    rpc unrRelationshipCreate(unrRequest) returns (unrRelationshipResponse);
-    rpc unrRelationshipRead(unrRequest) returns (unrRelationshipResponse);
-    rpc unrRelationshipUpdate(unrRequest) returns (unrRelationshipResponse);
-    rpc unrRelationshipDelete(unrRequest) returns (unrRelationshipResponse);
+    rpc unrRelationshipCreate(UnrRequest) returns (UnrRelationshipResponse);
+    rpc unrRelationshipRead(UnrRequest) returns (UnrRelationshipResponse);
+    rpc unrRelationshipUpdate(UnrRequest) returns (UnrRelationshipResponse);
+    rpc unrRelationshipDelete(UnrRequest) returns (UnrRelationshipResponse);
 }
 
-message unrRequest {
+message UnrRequest {
     repeated string device_name = 1;
 }
 
-message unrBaseResponse {
+message UnrBaseResponse {
     repeated BaseInfo baseInfo = 1;
 }
 
-message unrRelatioshipResponse {
+message UnrRelatioshipResponse {
     repeated RelationshipInfo relationshipInfo = 1;
 }
 
