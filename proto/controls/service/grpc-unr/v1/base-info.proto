@@ -19,10 +19,6 @@ message BaseResponse {
     repeated BaseInfo base_info = 1;
 }
 
-message BaseCreateResponse {
-    BaseInfo base_info = 1;
-}
-
 message BaseUpdateResponse {
     BaseInfo base_info = 1;
 }
