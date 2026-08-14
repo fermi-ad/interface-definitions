@@ -9,7 +9,7 @@ service BaseInfoService {
     rpc delete(BaseRequest) returns (BaseResponse);    
 }
 
-message request {
+message BaseRequest {
     repeated string id = 1;
 }
 
