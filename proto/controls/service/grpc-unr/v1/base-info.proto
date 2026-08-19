@@ -12,7 +12,7 @@ service BaseInfoService {
 }
 
 message BaseRequest {
-    repeated string id = 1;
+    repeated string device_names = 1;
 }
 
 message BaseResponse {
