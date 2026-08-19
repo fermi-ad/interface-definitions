@@ -24,4 +24,5 @@ message BaseInfo {
     string address = 2;
     string type = 3;
     string protocol = 4;
+    uint32 parent_id = 5;
 }
