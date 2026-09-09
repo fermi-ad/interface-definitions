@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package services.unr.entity;
+
+service EntityService {
+    // Creates a record in the DB for the given Entity.
+    rpc create(CreateEntityRequest) returns (google.protobuf.Empty);
+
+    // Returns the collection of Entity objects associated with the provided IDs.
+    rpc read(ReadEntityRequest) returns (ReadEntityResponse);
+
+    // Modifies the Entity record with the associated ID to match the provided values.
+    rpc update(UpdateEntityRequest) returns (google.protobuf.Empty);
+
+    // Removes the Entity records from the DB with the associated IDs.
+    // This should also clean up any tables with references to the deleted Entity/Entities.
+    rpc delete(DeleteEntityRequest) returns (google.protobuf.Empty);
+}
+
+message CreateEntityRequest {
+    repeated Entity entities = 1;
+}
+
+message DeleteEntityRequest {
+    repeated string ids = 1;
+}
+
+message ReadEntityRequest {
+    repeated string ids = 1;
+}
+
+message ReadEntityResponse {
+    repeated Entity entities = 1;
+}
+
+message UpdateEntityRequest {
+    repeated Entity entities = 1;
+}
+
+message Entity {
+    string id = 1;
+    string address = 2;
+    string type = 3;
+    string protocol = 4;
+}
