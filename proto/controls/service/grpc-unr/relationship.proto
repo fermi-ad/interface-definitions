@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package services.unr.relationship;
+
+service RelationshipService {
+    // Establishes the requested relationships in the relationship DB table.
+    rpc create(CreateRelationshipRequest) returns (google.protobuf.Empty);
+
+    // Removes the requested relationships from the relationship DB table.
+    rpc delete(DeleteRelationshipRequest) returns (google.protobuf.Empty);
+
+    // Returns the relevant relationship metadata for the requested IDs.
+    rpc read(ReadRelationshipRequest) returns (ReadRelationshipResponse);
+
+    // No update rpc is provided, as these records are not really fungible. Either a relationship exists or it doesn't.
+}
+
+message CreateRelationshipRequest {
+    repeated Relationship relationships = 1;
+}
+
+message DeleteRelationshipRequest {
+    repeated Relationship relationships = 1;
+}
+
+message ReadRelationshipRequest {
+    repeated string id = 1;
+}
+
+message ReadRelationshipResponse {
+    repeated RelationshipDetails entries = 1;
+}
+
+message Relationship {
+    string parent_id = 1;
+    string child_id = 2;
+}
+
+// Encapsulates bi-directional relationship information for the given ID.
+//
+// Provides the ID of the requested Entity's parent and a collection of IDs
+// of the requested Entity's children.
+message RelationshipDetails {
+    string id = 1;
+    string child_of = 2;
+    repeated string children = 3;
+}
