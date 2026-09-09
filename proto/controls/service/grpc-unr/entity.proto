@@ -11,7 +11,7 @@ service EntityService {
     // Returns the collection of Entity objects associated with the provided IDs.
     rpc read(ReadEntityRequest) returns (ReadEntityResponse);
 
-    // Modifies the Entity record with the associated ID to match the provided values.
+    // Modifies the Entity records with the associated IDs to match the provided values.
     rpc update(UpdateEntityRequest) returns (google.protobuf.Empty);
 
     // Removes the Entity records from the DB with the associated IDs.
