@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 package services.unr.entity;
 
 service EntityService {
-    // Creates a record in the DB for the given Entity.
+    // Creates records in the DB for the given Entities.
     rpc create(CreateEntityRequest) returns (google.protobuf.Empty);
 
     // Returns the collection of Entity objects associated with the provided IDs.
