@@ -35,6 +35,24 @@ message Value {
         repeated string value = 1;
     }
 
+    // Represents an array of signed 64-bit integer values.
+    //
+    // This needs to be a message because `oneof` fields don't allow
+    // the `repeated` keyword to be specified.
+
+    message Int64Array {
+        repeated int64 value = 1;
+    }
+
+    // Represents an array of unsigned 64-bit integer values.
+    //
+    // This needs to be a message because `oneof` fields don't allow
+    // the `repeated` keyword to be specified.
+
+    message Uint64Array {
+        repeated uint64 value = 1;
+    }
+
     // DEPRECATED. A message which is opinionated towards ACNET analog
     // alarm structures. This will be replaced by a message that can
     // represent both ACNET and EPICS alarms.
@@ -84,5 +102,9 @@ message Value {
         AnalogAlarm anaAlarm = 6;
         DigitalAlarm digAlarm = 7;
         BasicStatus basicStatus = 8;
+        int64 int = 9;
+        uint64 uint = 10;
+        Int64Array intArr = 11;
+        Uint64Array uintArr = 12;
     }
 }
