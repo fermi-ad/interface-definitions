@@ -11,6 +11,9 @@ service RelationshipService {
     // Removes the requested relationships from the relationship DB table.
     rpc delete(DeleteRelationshipRequest) returns (google.protobuf.Empty);
 
+    // Replaces all children for the requested parent in the relationship DB table.
+    rpc set(SetRelationshipRequest) returns (google.protobuf.Empty);
+
     // Returns the relevant relationship metadata for the requested IDs.
     rpc read(ReadRelationshipRequest) returns (ReadRelationshipResponse);
 
@@ -23,6 +26,11 @@ message CreateRelationshipRequest {
 
 message DeleteRelationshipRequest {
     repeated Relationship relationships = 1;
+}
+
+message SetRelationshipRequest {
+    string parent_id = 1;
+    repeated string child_ids = 2;
 }
 
 message ReadRelationshipRequest {
