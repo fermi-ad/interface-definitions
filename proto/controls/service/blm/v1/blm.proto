@@ -10,18 +10,19 @@ service BlmService {
   // Returns the BLM devices associated with a beam line and event.
   rpc ListIntegratedLossDevices(ListIntegratedLossRequest) returns (ListIntegratedLossResponse);
 
-  // Returns a continuous stream of loss ratio (integrated loss / max limit) and 
+  // Returns a continuous stream of loss ratio (integrated loss / max limit) and
   // its corresponding device.
   rpc SubscribeLossRatio(SubscribeLossRatioRequest) returns (stream SubscribeLossRatioResponse);
 
-  // Returns a continuous stream of stream of loss ratio (integrated loss / max limit), loss ratio
+  // Returns a continuous stream of loss ratio (integrated loss / max limit), loss ratio
   // with respect to the referenced data set (referenced integrated loss / max limit), and 
-  // it's corresponding device. 
+  // its corresponding device. 
   rpc SubscribeLossRatioReference(SubscribeLossRatioReferenceRequest) returns 
   (stream SubscribeLossRatioReferenceResponse);
 
-  // Returns a stream of beam throughout and efficiencies (per event) for a given beamline. 
-  rpc SubscribeBeamThroughput(BeamLine) returns (stream SubscribeBeamThroughputResponse);
+  // Returns a stream of beam throughput and efficiencies (per event) for a given beamline. 
+  rpc SubscribeBeamThroughput(SubscribeBeamThroughputRequest) returns
+  (stream SubscribeBeamThroughputResponse);
 }
 
 enum BeamLine {
@@ -40,7 +41,10 @@ message ListIntegratedLossRequest {
   BeamLine beam_line = 1;
 
   // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
-  uint32 tclk_event = 2; 
+  uint32 tclk_event = 2;
+
+  // Sample rate in milliseconds
+  uint32 sample_rate = 3;
 }
 
 message DeviceMetadata {
@@ -60,7 +64,10 @@ message SubscribeLossRatioRequest {
   BeamLine beam_line = 1;
 
   // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
-  uint32 tclk_event = 2; 
+  uint32 tclk_event = 2;
+
+  // Sample rate in milliseconds
+  uint32 sample_rate = 3;
 }
 
 // Message that holds a ratio of 
@@ -76,8 +83,16 @@ message SubscribeLossRatioResponse {
   repeated DeviceLossRatio ratios = 1;
 }
 
+message DeviceReferenceRatio {
+  string device = 1;
+  double reference_ratio = 2;
+}
+
 message SubscribeLossRatioReferenceRequest {
-  repeated DeviceLossRatio reference_ratio = 1;
+  repeated DeviceReferenceRatio reference_ratios = 1;
+  BeamLine beam_line = 2;
+  uint32 tclk_event = 3;
+  uint32 sample_rate = 4;
 }
 
 message SubscribeLossRatioReferenceResponse {
@@ -87,12 +102,18 @@ message SubscribeLossRatioReferenceResponse {
 
 message BeamEfficiencies {
   uint32 tclk_event = 1;
+  // Efficiency percentage for a tclk event
   uint32 efficiency = 2;
   uint32 protons_per_hour = 3;
 }
+message SubscribeBeamThroughputRequest {
+  BeamLine beam_line = 1;
+}
+
 message SubscribeBeamThroughputResponse {
-  uint32 protons_per_pulse = 1;
-  uint32 protons_per_hour = 2;
-  uint32 protons_per_hour_limit = 3;
-  repeated BeamEfficiencies efficiencies = 4;
+  BeamLine beam_line = 1;
+  uint32 protons_per_pulse = 2;
+  uint32 protons_per_hour = 3;
+  uint32 protons_per_hour_limit = 4;
+  repeated BeamEfficiencies efficiencies = 5;
 }
