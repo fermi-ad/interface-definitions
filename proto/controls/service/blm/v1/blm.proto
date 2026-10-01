@@ -42,9 +42,6 @@ message ListIntegratedLossRequest {
 
   // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
   uint32 tclk_event = 2;
-
-  // Sample rate in milliseconds
-  uint32 sample_rate = 3;
 }
 
 message DeviceMetadata {
@@ -108,6 +105,8 @@ message BeamEfficiencies {
 }
 message SubscribeBeamThroughputRequest {
   BeamLine beam_line = 1;
+  // Sample rate in milliseconds
+  uint32 sample_rate = 2;
 }
 
 message SubscribeBeamThroughputResponse {
