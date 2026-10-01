@@ -14,12 +14,6 @@ service BlmService {
   // its corresponding device.
   rpc SubscribeLossRatio(SubscribeLossRatioRequest) returns (stream SubscribeLossRatioResponse);
 
-  // Returns a continuous stream of loss ratio (integrated loss / max limit), loss ratio
-  // with respect to the referenced data set (referenced integrated loss / max limit), and 
-  // its corresponding device. 
-  rpc SubscribeLossRatioReference(SubscribeLossRatioReferenceRequest) returns 
-  (stream SubscribeLossRatioReferenceResponse);
-
   // Returns a stream of beam throughput and efficiencies (per event) for a given beamline. 
   rpc SubscribeBeamThroughput(SubscribeBeamThroughputRequest) returns
   (stream SubscribeBeamThroughputResponse);
@@ -78,23 +72,6 @@ message DeviceLossRatio {
 
 message SubscribeLossRatioResponse {
   repeated DeviceLossRatio ratios = 1;
-}
-
-message DeviceReferenceRatio {
-  DeviceData device_data = 1;
-  double reference_ratio = 2;
-}
-
-message SubscribeLossRatioReferenceRequest {
-  repeated DeviceReferenceRatio reference_ratios = 1;
-  BeamLine beam_line = 2;
-  uint32 tclk_event = 3;
-  uint32 sample_rate = 4;
-}
-
-message SubscribeLossRatioReferenceResponse {
-  repeated DeviceLossRatio reference_ratios = 1;
-  repeated DeviceLossRatio ratios = 2;
 }
 
 message BeamEfficiencies {
