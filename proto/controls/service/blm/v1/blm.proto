@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package services.blm.v1;
+
+import "google/protobuf/timestamp.proto";
+
+import "proto/controls/common/v1/status.proto";
+
+service BlmService {
+  // Returns the BLM devices associated with a beam line and event.
+  rpc ListIntegratedLossDevices(ListIntegratedLossRequest) returns (ListIntegratedLossResponse);
+
+  // Returns a continuous stream of loss ratio (integrated loss / max limit) and 
+  // its corresponding device.
+  rpc SubscribeLossRatio(SubscribeLossRatioRequest) returns (stream SubscribeLossRatioResponse);
+}
+
+enum BeamLine {
+  BEAM_LINE_UNSPECIFIED = 0;
+  BEAM_LINE_LINAC = 1;
+  BEAM_LINE_LINAC2 = 2;
+  BEAM_LINE_400MEV = 3;
+  BEAM_LINE_BTL = 4;
+  BEAM_LINE_BOOSTER = 5;
+  BEAM_LINE_8GEV = 6;
+  BEAM_LINE_MAIN_INJECTOR = 7;
+  BEAM_LINE_RECYCLER = 8;
+}
+
+message ListIntegratedLossRequest {
+  BeamLine beam_line = 1;
+
+  // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
+  uint32 tclk_event = 2; 
+}
+
+message DeviceMetadata {
+  string device_plot_label = 1;
+}
+
+message IntegratedLossData {
+  string devices = 1;
+  DeviceMetadata metadata = 2;
+}
+
+message ListIntegratedLossResponse {
+  repeated IntegratedLossData data = 1;
+}
+
+message SubscribeLossRatioRequest {
+  BeamLine beam_line = 1;
+
+  // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
+  uint32 tclk_event = 2; 
+}
+
+// Message that holds a ratio of 
+message DeviceLossRatio {
+  string device = 1;
+  double ratio = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  common.status.Status status = 4;
+}
+
+message SubscribeLossRatioResponse {
+  repeated DeviceLossRatio ratios = 1;
+}
