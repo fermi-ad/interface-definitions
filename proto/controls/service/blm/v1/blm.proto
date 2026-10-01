@@ -13,6 +13,15 @@ service BlmService {
   // Returns a continuous stream of loss ratio (integrated loss / max limit) and 
   // its corresponding device.
   rpc SubscribeLossRatio(SubscribeLossRatioRequest) returns (stream SubscribeLossRatioResponse);
+
+  // Returns a continuous stream of stream of loss ratio (integrated loss / max limit), loss ratio
+  // with respect to the referenced data set (referenced integrated loss / max limit), and 
+  // it's corresponding device. 
+  rpc SubscribeLossRatioReference(SubscribeLossRatioReferenceRequest) returns 
+  (stream SubscribeLossRatioReferenceResponse);
+
+  // Returns a stream of beam throughout and efficiencies (per event) for a given beamline. 
+  rpc SubscribeBeamThroughput(BeamLine) returns (stream SubscribeBeamThroughputResponse);
 }
 
 enum BeamLine {
@@ -39,7 +48,7 @@ message DeviceMetadata {
 }
 
 message IntegratedLossData {
-  string devices = 1;
+  string device = 1;
   DeviceMetadata metadata = 2;
 }
 
@@ -57,11 +66,33 @@ message SubscribeLossRatioRequest {
 // Message that holds a ratio of 
 message DeviceLossRatio {
   string device = 1;
-  double ratio = 2;
-  google.protobuf.Timestamp timestamp = 3;
-  common.status.Status status = 4;
+  int32 integrated_loss = 2;
+  double ratio = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  common.status.Status status = 5;
 }
 
 message SubscribeLossRatioResponse {
   repeated DeviceLossRatio ratios = 1;
+}
+
+message SubscribeLossRatioReferenceRequest {
+  repeated DeviceLossRatio reference_ratio = 1;
+}
+
+message SubscribeLossRatioReferenceResponse {
+  repeated DeviceLossRatio reference_ratios = 1;
+  repeated DeviceLossRatio ratios = 2;
+}
+
+message BeamEfficiencies {
+  uint32 tclk_event = 1;
+  uint32 efficiency = 2;
+  uint32 protons_per_hour = 3;
+}
+message SubscribeBeamThroughputResponse {
+  uint32 protons_per_pulse = 1;
+  uint32 protons_per_hour = 2;
+  uint32 protons_per_hour_limit = 3;
+  repeated BeamEfficiencies efficiencies = 4;
 }
