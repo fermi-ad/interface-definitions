@@ -29,6 +29,15 @@ enum BeamLine {
   BEAM_LINE_8GEV = 6;
   BEAM_LINE_MAIN_INJECTOR = 7;
   BEAM_LINE_RECYCLER = 8;
+  BEAM_LINE_P1 = 9;
+  BEAM_LINE_P2 = 10;
+  BEAM_LINE_P3 = 11;
+  BEAM_LINE_M1 = 12;
+  BEAM_LINE_M2 = 13;
+  BEAM_LINE_M3 = 14;
+  BEAM_LINE_M4 = 15;
+  BEAM_LINE_M5 = 16;
+  BEAM_LINE_DELIVERY_RING = 17;
 }
 
 message ListIntegratedLossRequest {
@@ -65,9 +74,10 @@ message SubscribeLossRatioRequest {
 message DeviceLossRatio {
   DeviceData device_data = 1;
   int32 integrated_loss = 2;
-  double ratio = 3;
-  google.protobuf.Timestamp timestamp = 4;
-  common.status.Status status = 5;
+  int32 loss_limit = 3;
+  double ratio = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  common.status.Status status = 6;
 }
 
 message SubscribeLossRatioResponse {
