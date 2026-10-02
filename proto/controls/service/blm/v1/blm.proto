@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package services.blm.v1;
+
+import "google/protobuf/timestamp.proto";
+
+import "proto/controls/common/v1/status.proto";
+
+service BlmService {
+  // Returns the BLM devices associated with a beam line and event.
+  rpc ListIntegratedLossDevices(ListIntegratedLossRequest) returns (ListIntegratedLossResponse);
+
+  // Returns a continuous stream of loss ratio (integrated loss / max limit) and
+  // its corresponding device.
+  rpc SubscribeLossRatio(SubscribeLossRatioRequest) returns (stream SubscribeLossRatioResponse);
+
+  // Returns a stream of beam throughput and efficiencies (per event) for a given beamline. 
+  rpc SubscribeBeamThroughput(SubscribeBeamThroughputRequest) returns
+  (stream SubscribeBeamThroughputResponse);
+}
+
+enum BeamLine {
+  BEAM_LINE_UNSPECIFIED = 0;
+  BEAM_LINE_LINAC = 1;
+  BEAM_LINE_LINAC2 = 2;
+  BEAM_LINE_400MEV = 3;
+  BEAM_LINE_BTL = 4;
+  BEAM_LINE_BOOSTER = 5;
+  BEAM_LINE_8GEV = 6;
+  BEAM_LINE_MAIN_INJECTOR = 7;
+  BEAM_LINE_RECYCLER = 8;
+  BEAM_LINE_P1 = 9;
+  BEAM_LINE_P2 = 10;
+  BEAM_LINE_P3 = 11;
+  BEAM_LINE_M1 = 12;
+  BEAM_LINE_M2 = 13;
+  BEAM_LINE_M3 = 14;
+  BEAM_LINE_M4 = 15;
+  BEAM_LINE_M5 = 16;
+  BEAM_LINE_DELIVERY_RING = 17;
+}
+
+message ListIntegratedLossRequest {
+  BeamLine beam_line = 1;
+
+  // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
+  uint32 tclk_event = 2;
+}
+
+message DeviceMetadata {
+  string device_plot_label = 1;
+}
+
+message DeviceData {
+  string device = 1;
+  DeviceMetadata metadata = 2;
+}
+
+message ListIntegratedLossResponse {
+  repeated DeviceData data = 1;
+}
+
+message SubscribeLossRatioRequest {
+  BeamLine beam_line = 1;
+
+  // Represents a TCLK event (0x00 - 0xFF) in a uint32. Valid values are 0-255
+  uint32 tclk_event = 2;
+
+  // Sample rate in milliseconds
+  uint32 sample_rate = 3;
+}
+
+// Message that holds a ratio of 
+message DeviceLossRatio {
+  DeviceData device_data = 1;
+  int32 integrated_loss = 2;
+  int32 loss_limit = 3;
+  double ratio = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  common.status.Status status = 6;
+}
+
+message SubscribeLossRatioResponse {
+  repeated DeviceLossRatio ratios = 1;
+}
+
+message BeamEfficiencies {
+  uint32 tclk_event = 1;
+  // Efficiency percentage for a tclk event
+  uint32 efficiency = 2;
+  uint32 protons_per_hour = 3;
+}
+message SubscribeBeamThroughputRequest {
+  BeamLine beam_line = 1;
+  // Sample rate in milliseconds
+  uint32 sample_rate = 2;
+}
+
+message SubscribeBeamThroughputResponse {
+  BeamLine beam_line = 1;
+  uint32 protons_per_pulse = 2;
+  uint32 protons_per_hour = 3;
+  uint32 protons_per_hour_limit = 4;
+  repeated BeamEfficiencies efficiencies = 5;
+}
