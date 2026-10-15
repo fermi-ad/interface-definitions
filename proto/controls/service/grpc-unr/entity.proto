@@ -44,4 +44,5 @@ message Entity {
     string address = 2;
     string type = 3;
     string protocol = 4;
+    uint32 order = 5;
 }
