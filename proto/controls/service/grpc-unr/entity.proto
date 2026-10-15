@@ -44,5 +44,6 @@ message Entity {
     string address = 2;
     string type = 3;
     string protocol = 4;
+    // Unitless, representing relative chronological order along the beamline.
     uint32 order = 5;
 }
