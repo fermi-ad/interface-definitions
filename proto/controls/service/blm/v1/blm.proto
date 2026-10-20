@@ -7,6 +7,12 @@ import "google/protobuf/timestamp.proto";
 import "proto/controls/common/v1/status.proto";
 
 service BlmService {
+  // Returns the beam lines that are available for BLM queries.
+  //
+  // This version reports values from the static BeamLine enum. The
+  // BEAM_LINE_UNSPECIFIED sentinel is not an available beam line.
+  rpc ListAvailableBeamLines(ListAvailableBeamLinesRequest) returns (ListAvailableBeamLinesResponse);
+
   // Returns the BLM devices associated with a beam line and event.
   rpc ListIntegratedLossDevices(ListIntegratedLossRequest) returns (ListIntegratedLossResponse);
 
@@ -38,6 +44,15 @@ enum BeamLine {
   BEAM_LINE_M4 = 15;
   BEAM_LINE_M5 = 16;
   BEAM_LINE_DELIVERY_RING = 17;
+}
+
+// Requests the beam lines that are available for BLM queries.
+message ListAvailableBeamLinesRequest {}
+
+// Contains the static beam lines that are available for BLM queries.
+message ListAvailableBeamLinesResponse {
+  // Available BeamLine values, excluding BEAM_LINE_UNSPECIFIED.
+  repeated BeamLine beam_lines = 1;
 }
 
 message ListIntegratedLossRequest {
