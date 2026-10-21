@@ -5,8 +5,8 @@ package services.mi8_autotune.v1;
 import "google/protobuf/empty.proto";
 
 service AutotuneService {
-  // Returns the device names that the autotuner is configured to read.
-  rpc ListDevices(google.protobuf.Empty) returns (ListDevicesResponse);
+  // Returns the BPM names that the autotuner is configured to read.
+  rpc ListBpms(google.protobuf.Empty) returns (ListBpmsResponse);
 
   // Updates the Arm/Disarm state of the autotuner.
   rpc SetArmDisarm(SetArmDisarmRequest) returns (google.protobuf.Empty);
@@ -32,8 +32,8 @@ message SubscribeArmDisarmResponse {
     ArmDisarm arm_disarm = 1;
 }
 
-message ListDevicesResponse {
-    repeated string devices = 1;
+message ListBpmsResponse {
+    repeated string bpms = 1;
 }
 
 message SubscribeAlarmsResponse {
