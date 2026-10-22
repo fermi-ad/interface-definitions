@@ -79,7 +79,7 @@ Two types of versioning are critical:
 5.  CI Checks:
     - Required: `.proto` validation (linting via `buf lint`, breaking change detection via `buf breaking`, basic compilation check) must pass to allow the merge to main.
     - Informational: Full language builds (Java, Rust) may run (TODO: we can also just run this on main, but could be good to know on PR). Failures here do not block merge but indicate potential issues for the release process (triggered on merge to main).
-6.  Review: Not required, but a good idea to get validation. Code review focuses on correctness, conventions, and backward compatibility.
+6.  Review: Every PR changing interface definitions requires at least two approvals before it can be merged. Reviews should carefully assess the API design, correctness, conventions, backward compatibility, and impact on downstream consumers.
 7.  Merge: Merge approved PRs with passing _proto validation_ checks into `main`.
 8.  Tag for Release: Create a versioned Git tag (e.g., `v1.2.0`) on the `main` branch commit you want to release. This tag triggers the release pipeline.
     - TODO: Should we bundle a release? Maybe just the standard GitHub zip file?
