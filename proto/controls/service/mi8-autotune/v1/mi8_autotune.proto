@@ -16,18 +16,18 @@ service AutotuneService {
   // state or associated details change.
   rpc SubscribeArmedState(google.protobuf.Empty) returns (stream SubscribeArmedStateResponse);
 
-  // Updates the Setting state of the autotuner.
-  rpc SetSettingState(SetSettingStateRequest) returns (google.protobuf.Empty);
+  // Updates the operating mode of the autotuner.
+  rpc SetOperatingMode(SetOperatingModeRequest) returns (google.protobuf.Empty);
 
-  // Returns a stream of the latest Setting state.
+  // Returns a stream of the latest operating mode.
   // Immediately sends the current state, then sends updates whenever the reported
   // state or associated details change.
-  rpc SubscribeSettingState(google.protobuf.Empty) returns (stream SubscribeSettingStateResponse);
+  rpc SubscribeOperatingMode(google.protobuf.Empty) returns (stream SubscribeOperatingModeResponse);
 
   // Returns a stream of service states and associated message.
   // Immediately sends the current state, then sends updates whenever the reported
   // state or associated details change.
-  rpc SubscribeServiceState(google.protobuf.Empty) returns (stream SubscribeServiceStateResponse);
+  rpc SubscribeEvents(google.protobuf.Empty) returns (stream SubscribeAutotuneEventResponse);
 }
 
 // Defines whether the service will make data acquisition.
@@ -38,40 +38,42 @@ enum ArmedState {
 }
 
 // Defines whether the service will make setting requests.
-// Note: If the armed state is DISARMED, settings will not be made.
-enum SettingState {
-    SETTING_STATE_UNKNOWN = 0;
-    SETTING_STATE_ENABLED = 1;
-    SETTING_STATE_DISABLED = 2;
+// LIVE: Calculations will be made and settings will be requested
+// SHADOW: Calculations will be made but settings will not requested.
+// Note: If the armed state is DISARMED, calculations will not be made. 
+enum OperatingMode {
+    OPERATING_MODE_UNKNOWN = 0;
+    OPERATING_MODE_LIVE = 1;
+    OPERATING_MODE_SHADOW = 2;
 }
 
-enum ServiceState {
-    SERVICE_STATE_UNKNOWN = 0;
+enum AutotuneEvent {
+    AUTOTUNE_EVENT_UNKNOWN = 0;
     // Automatic tuning is disabled.
-    // This is dependent on the Armed and Setting states
-    SERVICE_STATE_NO_AUTO = 1;
+    // This is dependent on the Armed state and operating mode
+    AUTOTUNE_EVENT_NO_AUTO = 1;
     // This is the first pass after loading the control file.
-    SERVICE_STATE_FIRST_PASS = 2;
+    AUTOTUNE_EVENT_FIRST_PASS = 2;
     // A full tune move was proposed or recorded.
-    SERVICE_STATE_MOVE = 3;
+    AUTOTUNE_EVENT_MOVE = 3;
     // A tune attempt is pending a gate condition.
-    SERVICE_STATE_MOVE_PENDING = 4;
+    AUTOTUNE_EVENT_MOVE_PENDING = 4;
     // DAQ data is missing or invalid.
-    SERVICE_STATE_DAQ_ERROR = 5;
+    AUTOTUNE_EVENT_DAQ_ERROR = 5;
     // A BPM displacement exceeds the large-move threshold.
-    SERVICE_STATE_BIG_MOVE = 6;
+    AUTOTUNE_EVENT_BIG_MOVE = 6;
     // A vernier-only move was proposed or recorded.
-    SERVICE_STATE_VERNIER_MOVE = 7;
+    AUTOTUNE_EVENT_VERNIER_MOVE = 7;
     // No BPM is outside its applicable tolerance.
-    SERVICE_STATE_BEAM_OK = 8;
+    AUTOTUNE_EVENT_BEAM_OK = 8;
     // A proposed absolute trim setting exceeds its configured limit.
-    SERVICE_STATE_BIG_SETTING = 9;
+    AUTOTUNE_EVENT_BIG_SETTING = 9;
     // Beam intensity is below its configured threshold.
-    SERVICE_STATE_INTENSITY_LOW = 10;
+    AUTOTUNE_EVENT_INTENSITY_LOW = 10;
     // An auxiliary reading is outside its configured range.
-    SERVICE_STATE_AUXILIARY_BAD = 11;
+    AUTOTUNE_EVENT_AUXILIARY_BAD = 11;
     // A setting attempt failed.
-    SERVICE_STATE_SETTING_ERROR = 12;
+    AUTOTUNE_EVENT_SETTING_ERROR = 12;
 }
 
 message SetArmedStateRequest {
@@ -82,19 +84,19 @@ message SubscribeArmedStateResponse {
     ArmedState armed_state = 1;
 }
 
-message SetSettingStateRequest {
-    SettingState setting_state = 1;
+message SetOperatingModeRequest {
+    OperatingMode operating_mode = 1;
 }
 
-message SubscribeSettingStateResponse {
-    SettingState setting_state = 1;
+message SubscribeOperatingModeResponse {
+    OperatingMode operating_mode = 1;
 }
 
 message ListBpmsResponse {
     repeated string bpms = 1;
 }
 
-message SubscribeServiceStateResponse {
-    ServiceState service_state = 1;
+message SubscribeAutotuneEventResponse {
+    AutotuneEvent autotune_event = 1;
     string error_message = 2;
 }
