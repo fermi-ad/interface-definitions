@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package services.ioc_center.pvinfo;
+
+import "google/protobuf/empty.proto";
+
+service PvInfoService{
+
+    rpc getSystemStates(google.protobuf.Empty) returns (SystemStateList);
+    rpc getLimitsPvNames(google.protobuf.Empty) returns (PvNameList);
+    rpc getPvLimits(SystemState) returns (PvLimitsList);
+    rpc getPvLimitsByName(PvName) returns (PvLimitsList);
+    rpc getPvRecord(PvName) returns (PvRecord);
+    rpc getExceptionPvRecords(NamePattern) returns (PvRecordList);
+    rpc getPvRecordsByPattern(NamePattern) returns (PvRecordList);
+    rpc getCentralPvNames(NamePattern) returns (stream PvName);
+    rpc getImportStates(google.protobuf.Empty) returns (ImportStateList);
+    rpc getPvStatsList(google.protobuf.Empty) returns (PvStatsList);
+    rpc getFileImportLog(NamePattern) returns (ObjectId);
+
+    rpc updatePvLimits(PvLimits) returns (TransResponse);
+    rpc savePvLimits(PvLimitsList) returns (TransResponse);
+    rpc saveFileImportLog(FileImportLog) returns (ObjectId);
+    rpc updateFileImportLog(ObjectId) returns (TransResponse);
+} 
+
+message TransResponse{
+    int32 returncode = 1;
+    string message = 2;
+}
+
+message NamePattern{
+    string patternstr = 1;
+}
+
+message PvName {
+    optional int32 pvid = 1;
+    string pvname = 2;
+}
+
+message PvRecord {
+    string pvname = 1;
+    string pvtype = 2;
+    string description = 3;
+    string iocfile = 4;
+    string ipaddress = 5;
+    string iocname = 6;
+    string iocstatus = 7;
+}
+
+message PvStats {
+    string iocname = 1;
+    int32 count = 2;
+}
+
+message PvStatsList {
+    repeated PvStats pvstats_list = 1;
+}
+
+message SystemState {
+    string system = 1;
+    string state = 2;
+}
+
+message SystemStateList {
+    repeated SystemState systemstate_list = 1;
+}
+
+
+message PvNameList {
+    repeated PvName pvname_list = 1;
+}
+
+message PvRecordList {
+    repeated PvRecord pvrecord_list = 1;
+}
+
+message PvLimits {
+    string system = 1;
+    string state = 2;
+    string pvname = 3;   
+    string pvtype = 4;
+    double hihi = 5;         
+    double hi = 6;               
+    double lo = 7;             
+    double lolo = 8;            
+    string hhsv = 9;     
+    string hsv = 10;         
+    string lsv = 11;             
+    string llsv = 12;             
+    string units = 13;              
+    bool autosms = 14;                         
+    string mode = 15;            
+    double frequency = 16;                 
+    double deadband = 17;              
+    string operator = 18;             
+    double transition = 19;              
+    optional string creationtime = 20;   
+    optional string validuntiltime = 21;
+}
+
+message PvLimitsList {
+    repeated PvLimits pvlimits_list = 1;
+} 
+
+message ImportState {
+    string stateid = 1;
+    string statename = 2;
+}
+
+message ImportStateList {
+    repeated ImportState importstate_list = 1;
+}
+
+message ObjectId {
+    int32 objectid = 1;
+}
+
+message FileImportLog {
+    string filename = 2;
+    string status = 3;
+    string userid = 4;
+}

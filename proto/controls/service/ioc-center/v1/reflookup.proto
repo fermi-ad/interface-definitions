@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package services.ioc_center.reflookup;
+
+import "google/protobuf/empty.proto";
+
+service RefLookupService{
+    rpc getSystemData(google.protobuf.Empty) returns (SystemList);
+    rpc getAreaData(google.protobuf.Empty) returns (AreaList);
+    rpc getStatusData(google.protobuf.Empty) returns (StatusList);
+    rpc getUserData(google.protobuf.Empty) returns (stream User); 
+    rpc getHostData(google.protobuf.Empty) returns (HostList);
+} 
+
+message System {
+    int32 systemId = 1;
+    string description = 2;
+}
+
+message Area {
+    int32 areaId = 1;
+    string description = 2;
+}
+
+message ServiceStatus {
+    int32 statusId = 1;
+    string description = 2;
+}
+
+message User {
+    int32 userId = 1;
+    string fullname = 2;
+    string email = 3;
+}
+
+message Host {
+    int32 hostId = 1;
+    string hostname = 2;
+}
+
+message SystemList {
+    repeated System system_list = 1;
+}
+
+message AreaList {
+    repeated Area area_list = 1;
+}
+
+message StatusList {
+    repeated ServiceStatus status_list = 1;
+}
+
+message HostList {
+    repeated Host host_list = 1;
+}

@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package services.ioc_center.refdata;
+
+import "google/protobuf/empty.proto";
+
+service RefDataService{
+    rpc getControlSystems(google.protobuf.Empty) returns (ControlSystemList);
+    rpc getLocations(google.protobuf.Empty) returns (LocationList);
+    rpc getDeviceCategories(google.protobuf.Empty) returns (DeviceCategoryList); 
+    rpc getDeviceTypes(google.protobuf.Empty) returns (DeviceTypeList);
+    rpc getDevices(google.protobuf.Empty) returns (DeviceList);
+    rpc getSupportGroups(google.protobuf.Empty) returns (SupportGroupList);
+    rpc getComplexes(google.protobuf.Empty) returns (ComplexList);
+    rpc getPvNameBuiltList(NamePattern) returns (PvNameBuiltList);
+    rpc checkExistingPv(NamePattern) returns (TransResponse);
+
+    rpc saveControlSystem(ControlSystemList) returns (TransResponse);
+    rpc saveLocation(LocationList) returns (TransResponse);
+    rpc saveDeviceCategory(DeviceCategoryList) returns (TransResponse);
+    rpc saveDeviceType(DeviceTypeList) returns (TransResponse);
+    rpc saveDevice(DeviceList) returns (TransResponse);
+    rpc saveSupportGroup(SupportGroupList) returns (TransResponse);
+    rpc saveComplex(ComplexList) returns (TransResponse);
+    rpc savePvName(PvNameBuilt) returns (TransResponse);
+} 
+
+message TransResponse{
+    int32 returncode = 1;
+    string message = 2;
+}
+
+message ControlSystem {
+    string systemid = 1;
+    string name = 2;
+}
+
+message Location {
+    string locationid = 1;
+    string name = 2;
+}
+
+message DeviceCategory {
+    string devicecategoryid = 1;
+    string name = 2;
+}
+
+message DeviceType {
+    string devicetypeid = 1;
+    string name = 2;
+    string categoryid = 3;
+}
+
+message Device {
+    string deviceid = 1;
+    string name = 2;
+    string systemid = 3;
+}
+
+message SupportGroup {
+    string supportgroupid = 1;
+    string name = 2;
+}
+
+message Complex {
+    string complexid = 1;
+    string name = 2;
+}
+
+message ControlSystemList {
+    repeated ControlSystem system_list = 1;
+}
+
+message LocationList {
+    repeated Location location_list = 1;
+}
+
+message DeviceCategoryList {
+    repeated DeviceCategory category_list = 1;
+}
+
+message DeviceTypeList {
+    repeated DeviceType devicetype_list = 1;
+}
+
+message DeviceList {
+    repeated Device device_list = 1;
+}
+
+message SupportGroupList {
+    repeated SupportGroup supportgroup_list = 1;
+}
+
+message ComplexList {
+    repeated Complex complex_list = 1;
+}
+
+message NamePattern{
+    string patternstr = 1;
+}
+
+message PvNameBuilt {
+    optional int32 pvid = 1;
+    string pvname = 2;
+    string description = 3;
+    string userid = 4;
+}
+
+message PvNameBuiltList {
+    repeated PvNameBuilt pvnamebuilt_list = 1;
+    int32 rowcount = 2;
+}
