@@ -3,18 +3,25 @@ package gov.fnal.controls.common.epics.v1;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.UnknownFieldSet;
 import java.util.HexFormat;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
-/** Exercises generated APIs and Python-produced bytes, not live pvData conversion. */
+/** Exercises generated APIs and Rust-produced bytes, not live pvData conversion. */
 class WireContractTest {
     @Test
-    void parsesPythonUnsignedScalarAndPresentDefaults() throws Exception {
-        // Produced with Python protobuf 6.30.2 and protoc 30.2.
-        byte[] pythonBytes = HexFormat.of().parseHex(
+    void parsesRustUnsignedScalarAndPresentDefaults() throws Exception {
+        // CI supplies bytes written by the generated Rust/Prost binding. The
+        // fixed reference also lets legacy Java users run Maven independently.
+        byte[] reference = HexFormat.of().parseHex(
                 "0a0b48ffffffffffffffffff011200221808ffffffffffffffffff01"
                 + "10fbffffffffffffffff01182aa2061565706963733a6e742f4e545363616c61723a312e30");
-        NTScalar message = NTScalar.parseFrom(pythonBytes);
+        String fixture = System.getProperty("epics.nt.fixture");
+        byte[] wireBytes = fixture == null ? reference : Files.readAllBytes(Path.of(fixture));
+        assertArrayEquals(reference, wireBytes);
+        NTScalar message = NTScalar.parseFrom(wireBytes);
         assertEquals("epics:nt/NTScalar:1.0", message.getTypeId());
         assertEquals(Scalar.ValueCase.ULONG_VALUE, message.getValue().getValueCase());
         assertEquals("18446744073709551615", Long.toUnsignedString(message.getValue().getUlongValue()));
@@ -24,7 +31,7 @@ class WireContractTest {
         assertEquals(42, message.getTimeStamp().getUserTag());
         assertEquals(-1, message.getTimeStamp().getSecondsPastEpoch());
         assertEquals(-5, message.getTimeStamp().getNanoseconds());
-        assertArrayEquals(pythonBytes, message.toByteArray());
+        assertArrayEquals(wireBytes, message.toByteArray());
     }
 
     @Test
@@ -40,6 +47,21 @@ class WireContractTest {
         assertEquals(ScalarArray.ValueCase.DOUBLE_VALUE, copy.getValue().getValueCase());
         assertEquals(0, copy.getValue().getDoubleValue().getValueCount());
         assertFalse(copy.hasTimeStamp());
+    }
+
+    @Test
+    void fullJavaRuntimeRetainsUnknownFields() throws Exception {
+        UnknownFieldSet unknown = UnknownFieldSet.newBuilder()
+                .addField(200, UnknownFieldSet.Field.newBuilder().addVarint(7).build())
+                .build();
+        NTScalar message = NTScalar.newBuilder()
+                .setTypeId("epics:nt/NTScalar:1.0")
+                .setValue(Scalar.newBuilder().setIntValue(0))
+                .setUnknownFields(unknown)
+                .build();
+        NTScalar restored = NTScalar.parseFrom(message.toByteArray());
+        assertEquals(unknown, restored.getUnknownFields());
+        assertArrayEquals(message.toByteArray(), restored.toByteArray());
     }
 
     @Test

@@ -1,6 +1,6 @@
 // Canonical fields from the EPICS Normative Types Editors Draft, 16-Mar-2015.
 // https://docs.epics-controls.org/en/latest/pv-access/Normative-Types-Specification.html
-// Presence and range constraints are enforced by tools/epics_nt/validate.py.
+// Reference Rust validation: build/rust/epics-nt/src/validate.rs.
 syntax = "proto3";
 
 package common.epics.v1;

@@ -1,6 +1,6 @@
 // The 13 EPICS Normative Types in Appendix B of the 16-Mar-2015 Editors Draft.
 // https://docs.epics-controls.org/en/latest/pv-access/Normative-Types-Specification.html
-// See docs/epics-normative-types.md and tools/epics_nt/validate.py for constraints.
+// See docs/epics-normative-types.md and build/rust/epics-nt/src/validate.rs.
 // All NT messages require type_id="epics:nt/<message name>:1.0".
 // optional primitives preserve explicit defaults; required fields are validated
 // at the application boundary, not enforced by proto3. Extensions retain order.
@@ -204,9 +204,9 @@ message AttributeArray {
 }
 
 // One detector frame. Fields 1..8 required; metadata fields 9..12 optional.
-// compressed_size=stored count*stored scalar width. For raw data, stored count
-// >= product(dimension sizes); uncompressed_size=product*scalar width (0 if no
-// dimensions). With compression, decoded type/size validation is codec-specific.
+// compressed_size=stored count*stored scalar width. For raw data, the stored count
+// must cover the dimension product; uncompressed_size=product*scalar width (zero
+// if no dimensions). With compression, decoded type/size validation is codec-specific.
 message NTNDArray {
   NDArrayValue value = 1;
   Codec codec = 2;

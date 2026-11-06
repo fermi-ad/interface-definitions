@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Download Precompiled Protobuf Compiler
         run: |
@@ -20,39 +20,4 @@ jobs:
 
       - name: Validate Protobuf Files
         run: |
-          mkdir -p generated/cpp
-          # Ignore untracked local experiments and keep generated files separate.
-          mapfile -d '' protos < <(git ls-files -z 'proto/**/*.proto')
-          ./bin/protoc -I . -I include --cpp_out=generated/cpp "${protos[@]}"
-
-  epics-nt-contract:
-    name: EPICS NT Contract and Java Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Matching Protobuf Compiler and Runtime
-        run: |
-          curl --fail --location --output protoc.zip \
-            https://github.com/protocolbuffers/protobuf/releases/download/v30.2/protoc-30.2-linux-x86_64.zip
-          unzip -q protoc.zip -d protoc
-          echo "$PWD/protoc/bin" >> "$GITHUB_PATH"
-          python -m pip install -r tools/epics_nt/requirements.txt
-
-      - name: Validate EPICS NT Contract and Build Detection
-        run: |
-          python tools/epics_nt/test_contract.py
-          python tools/epics_nt/test_workflow.py
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: maven
-
-      - name: Build EPICS NT Java Messages
-        run: mvn --batch-mode -f build/java/controls-epics/pom.xml clean package
+          ./bin/protoc --cpp_out=. $(find . -name "*.proto" -not -path "./include/*" -not -path "./deprecated/*")

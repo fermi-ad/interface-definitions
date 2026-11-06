@@ -5,7 +5,9 @@
 `proto/controls/common/v1/epics/` provides the `common.epics.v1` protobuf package
 for the 13 types in Appendix B of the
 [EPICS Normative Types Editors Draft, 16 March 2015](https://docs.epics-controls.org/en/latest/pv-access/Normative-Types-Specification.html).
-The Java package is `gov.fnal.controls.common.epics.v1`.
+Rust is the primary implementation language for reference validation and tests.
+Legacy Java DPM is an expected consumer; the Java package is
+`gov.fnal.controls.common.epics.v1`. No Python runtime or scripts are required.
 
 This is a protobuf application-level mapping, not the pvAccess wire protocol.
 It does not change `common.device.Value`, DAQ, or existing alarm interfaces.
@@ -121,78 +123,96 @@ ordinary pvData fields. Protobuf binary field order is not pvData structure orde
 - Future identifiers are not accepted automatically. Unsupported data must fail
   with a reason, not be silently coerced into this version.
 
-## Generate and test
+## Rust generation, validation, and tests
 
-Commands run from the repository root. Use protoc 30.2 with Python protobuf 6.30.2
-(the matching versions pinned in CI), or set `PROTOC` to a compatible compiler.
-Use a virtual environment rather than modifying the system Python:
+Run from the repository root with Rust 1.85 or later:
 
 ```bash
-python3 -m venv /tmp/epics-nt-venv
-/tmp/epics-nt-venv/bin/python -m pip install -r tools/epics_nt/requirements.txt
-/tmp/epics-nt-venv/bin/python tools/epics_nt/test_contract.py
-/tmp/epics-nt-venv/bin/python tools/epics_nt/test_workflow.py
+cargo test --locked --manifest-path build/rust/epics-nt/Cargo.toml
+cargo fmt --manifest-path build/rust/epics-nt/Cargo.toml --check
+cargo clippy --locked --manifest-path build/rust/epics-nt/Cargo.toml --all-targets -- -D warnings
 ```
 
-The runner compiles only the three EPICS schemas, emits Python/Java/C++ source and
-a descriptor set in a temporary directory, runs contract tests, and removes the
-temporary output. It does not compile arbitrary untracked experiments in proto/.
-To generate code for an application, supply the repository root include path:
+The repository-local `epics-nt` crate uses Prost 0.14, the protobuf library family
+used by the Rust control services. Its build script compiles only the three EPICS
+schemas into Cargo's OUT_DIR and produces a descriptor set. A pinned vendored
+compiler supplies protoc; set `PROTOC` to select an installed compiler instead.
+The Cargo.lock file makes CI dependency resolution repeatable. Generated source
+and build outputs are not committed.
+
+The crate is not published. Services may generate the same `.proto` files through
+their existing `rust-grpc-lib`/Prost pipeline. The `proto` module contains the
+bindings; `Validate` is the reference validation trait implemented for all 13 NTs.
+Example, also exercised as a Rust documentation test:
+
+```rust
+use epics_nt::{Validate, proto::{NtScalar, Scalar, scalar}};
+use prost::Message;
+
+let value = NtScalar {
+    type_id: Some("epics:nt/NTScalar:1.0".into()),
+    value: Some(Scalar { value: Some(scalar::Value::UlongValue(u64::MAX)) }),
+    ..Default::default()
+};
+value.validate().unwrap();
+let restored = NtScalar::decode(value.encode_to_vec().as_slice()).unwrap();
+restored.validate().unwrap();
+assert_eq!(value, restored);
+```
+
+ValidationError exposes a protobuf field path and reason. Validation does not
+mutate or normalize the message. Bound untrusted payload byte size before decoding;
+`validate()` limits recursive depth to 64. `validate_with_limit()` accepts a positive
+explicit limit. A Java consumer must implement the same boundary invariants;
+Java code generation alone does not enforce them. No pvData adapter is supplied.
+
+Rust tests cover all NTs, scalar types and limits, optional presence, empty/null
+arrays, descriptor matching, unions, metadata, shape constraints, and the schema's
+stable field names and tags. Floating-point special values are not normalized.
+
+**Unknown protobuf fields:** Prost discards unknown fields when decoding and
+re-encoding. Java's full runtime retains them. This difference is tested and is
+not a universal unknown-field preservation guarantee. A transparent Rust proxy
+must retain original bytes or use an explicit unknown-field-preserving mechanism.
+The NT `extra_fields` representation is ordinary known schema data and is retained.
+
+## Java artifact and DPM compatibility
+
+Keep Java 21 and Maven support for legacy DPM consumers. To test Rust-to-Java binary
+interoperability using the actual Rust-generated message, run:
 
 ```bash
-mkdir -p /tmp/epics-nt-python
-"${PROTOC:-protoc}" -I . --python_out=/tmp/epics-nt-python \
-  proto/controls/common/v1/epics/types.proto \
-  proto/controls/common/v1/epics/pvdata.proto \
-  proto/controls/common/v1/epics/normative_types.proto
+cargo run --locked --manifest-path build/rust/epics-nt/Cargo.toml \
+  --bin write_wire_fixture -- /tmp/epics-nt-scalar.pb
+mvn -f build/java/controls-epics/pom.xml \
+  -Depics.nt.fixture=/tmp/epics-nt-scalar.pb clean package
 ```
 
-Validate generated messages with the reference Python validator:
-
-```bash
-PYTHONPATH=/tmp/epics-nt-python:tools/epics_nt /tmp/epics-nt-venv/bin/python - <<'PY'
-from proto.controls.common.v1.epics import normative_types_pb2 as nt
-from proto.controls.common.v1.epics import types_pb2 as types
-from validate import validate
-
-message = nt.NTScalar(type_id="epics:nt/NTScalar:1.0",
-                      value=types.Scalar(ulong_value=2**64 - 1))
-validate(message)
-restored = nt.NTScalar.FromString(message.SerializeToString())
-validate(restored)
-assert restored.value.ulong_value == 2**64 - 1
-PY
-```
-
-ValidationError reports a protobuf field path and reason. The validator does not
-mutate the message. Bound untrusted payload byte size before parsing; validation
-limits recursive depth to 64 by default. A service must port the same invariants
-if its implementation language is not Python. No validator is generated by protoc.
-
-## Java artifact and CI
-
-The message-only Maven module requires Java 21 and Maven:
-
-```bash
-mvn -f build/java/controls-epics/pom.xml clean package
-```
+Maven can also run independently without that property, using the same fixed
+reference bytes. CI always supplies the Rust-produced fixture.
 
 Coordinates: `gov.fnal.controls.common.proto:epics-nt-v1`. The local version is
-1.0.0-SNAPSHOT. The module pins protoc/protobuf-java 4.30.2, matching protoc 30.2
-and the existing DAQ/DPM runtime. A newer generated-code version can fail to load
-if Maven resolves an older runtime from a service artifact. Keep these versions
-aligned, or explicitly resolve a compatible newer runtime in the consuming application.
-Generated classes use `gov.fnal.controls.common.epics.v1`, with separate descriptor
-outer classes. Maven runs Java contract tests, including a Python-produced binary
-fixture with the full uint64 range, timestamp components, and present empty metadata.
-The module does not require a gRPC plugin or add a service API.
+1.0.0-SNAPSHOT. Java protoc/protobuf-java remain at 4.30.2, matching the existing
+DAQ/DPM runtime. Rust's generator is independent of Java's runtime requirement;
+both use the same protobuf wire contract. Keep Java generated-code/runtime versions
+aligned, or explicitly resolve a compatible newer runtime in a consuming application.
 
-The validation workflow compiles all tracked schemas, runs the EPICS contract
-suite and publishing-detector regression tests, and packages the Java module. The existing main-merge publishing workflow
-includes a separately validated EPICS job, producing versions
-`1.0.<GitHub run number>` in GitHub Packages, consistent with the current DAQ/DPM
-publisher. No artifact is published merely by adding this configuration or running
-package locally. Do not run deploy without delivery authorization.
+Generated Java classes use `gov.fnal.controls.common.epics.v1`, with separate
+descriptor outer classes. Java tests cover generated APIs, unknown-field retention, and Rust-produced
+bytes for the full uint64 range, timestamp components, and present empty metadata.
+The module contains messages, not a gRPC service or a DPM adapter. Existing DPM and
+DAQ artifacts are not changed or made to import these structures automatically.
+
+## CI and release boundary
+
+`.github/workflows/epics-nt-validation.yaml` runs Rust formatting, Clippy, contract
+tests, and the Rust-to-Java compatibility test/build. The existing generic schema
+validation workflow already compiles the new schemas and is unchanged.
+
+The shared DAQ/DPM publishing workflow is unchanged. This PR does not add automatic
+EPICS Java or Rust artifact publication, version bumping, or unrelated shared-workflow
+fixes. A distribution/release path for DPM is a separate, explicit decision before
+adoption. Do not run Maven deploy without release authorization.
 
 ## Adoption and compatibility
 
@@ -203,9 +223,9 @@ requires its own compatibility review, including how old consumers handle unknow
 cases. Do not cast repository alarms or device.Value messages into NT equivalents.
 
 Keep tags and names stable; reserve both on removal. Compatible additions remain
-within v1; breaking changes need a separate package/version. Binary protobuf
-unknown-field retention is tested, but field-by-field pvData converters need explicit
-extension preservation and must reject unsupported structures.
+within v1; breaking changes need a separate package/version. Unknown-field behavior
+depends on the binding runtime as described above. Field-by-field pvData converters
+need explicit extension preservation and must reject unsupported structures.
 
 Before introducing a production pvData adapter, test real pvData -> protobuf ->
 pvData round trips against a pinned EPICS implementation, comparing introspection,

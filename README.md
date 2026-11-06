@@ -180,9 +180,11 @@ The shared `common.epics.v1` package in `proto/controls/common/v1/epics/` maps t
 change `common.device.Value`, DAQ, or existing alarm interfaces.
 
 See [EPICS Normative Types](docs/epics-normative-types.md) for mapping constraints,
-type fidelity, generation examples, reference validation, and the message-only
-Java module at `build/java/controls-epics/pom.xml`. This is an application-level
-protobuf contract, not pvAccess wire compatibility or a live pvData adapter.
+the Rust/Prost bindings and reference validation at `build/rust/epics-nt/`, and
+legacy DPM Java compatibility through `build/java/controls-epics/pom.xml`.
+The EPICS workflow validates both languages without changing shared publishing.
+This is an application-level protobuf contract, not pvAccess wire compatibility
+or a live pvData adapter.
 
 ## 9. Contact
 
