@@ -173,6 +173,17 @@ TODO: I need help with this. These are generic instructions.
 - Use standard "Well-Known Types" like `google.protobuf.Timestamp` where appropriate.
 - Validate locally using `buf lint` before pushing changes.
 
+## EPICS Normative Types
+
+The shared `common.epics.v1` package in `proto/controls/common/v1/epics/` maps the
+13 Normative Types in the published EPICS draft. It is additive and does not
+change `common.device.Value`, DAQ, or existing alarm interfaces.
+
+See [EPICS Normative Types](docs/epics-normative-types.md) for mapping constraints,
+type fidelity, generation examples, reference validation, and the message-only
+Java module at `build/java/controls-epics/pom.xml`. This is an application-level
+protobuf contract, not pvAccess wire compatibility or a live pvData adapter.
+
 ## 9. Contact
 
 For questions or issues regarding this repository or the Protobuf workflow, please create and issue.
