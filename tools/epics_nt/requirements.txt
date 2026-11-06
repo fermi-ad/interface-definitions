@@ -1,0 +1,4 @@
+# Python runtime for the protoc 30.2 compiler pinned in CI.
+protobuf==6.30.2
+# Parse the real GitHub Actions workflow for its change-detector regression tests.
+PyYAML==6.0.3

@@ -1,0 +1,155 @@
+// Canonical fields from the EPICS Normative Types Editors Draft, 16-Mar-2015.
+// https://docs.epics-controls.org/en/latest/pv-access/Normative-Types-Specification.html
+// Presence and range constraints are enforced by tools/epics_nt/validate.py.
+syntax = "proto3";
+
+package common.epics.v1;
+
+option java_package = "gov.fnal.controls.common.epics.v1";
+option java_multiple_files = true;
+option java_outer_classname = "EpicsTypesProto";
+
+// A scalar's selected case preserves its pvData type, including integer width.
+// An unselected oneof is invalid. Selected zero, false, and empty string are valid.
+message Scalar {
+  oneof value {
+    bool boolean_value = 1;
+    sint32 byte_value = 2;       // Signed 8-bit: -128..127.
+    uint32 ubyte_value = 3;      // Unsigned 8-bit: 0..255.
+    sint32 short_value = 4;      // Signed 16-bit: -32768..32767.
+    uint32 ushort_value = 5;     // Unsigned 16-bit: 0..65535.
+    sint32 int_value = 6;
+    uint32 uint_value = 7;
+    sint64 long_value = 8;
+    uint64 ulong_value = 9;
+    float float_value = 10;
+    double double_value = 11;
+    string string_value = 12;   // UTF-8.
+  }
+}
+
+// Homogeneous scalar arrays. Wrappers allow oneof selection and distinguish a
+// present empty optional array from an absent optional field.
+message BooleanArray {
+  repeated bool value = 1;
+}
+
+message ByteArray {
+  repeated sint32 value = 1;    // Every element is signed 8-bit.
+}
+
+message UByteArray {
+  repeated uint32 value = 1;    // Every element is unsigned 8-bit.
+}
+
+message ShortArray {
+  repeated sint32 value = 1;    // Every element is signed 16-bit.
+}
+
+message UShortArray {
+  repeated uint32 value = 1;    // Every element is unsigned 16-bit.
+}
+
+message IntArray {
+  repeated sint32 value = 1;
+}
+
+message UIntArray {
+  repeated uint32 value = 1;
+}
+
+message LongArray {
+  repeated sint64 value = 1;
+}
+
+message ULongArray {
+  repeated uint64 value = 1;
+}
+
+message FloatArray {
+  repeated float value = 1;
+}
+
+message DoubleArray {
+  repeated double value = 1;
+}
+
+message StringArray {
+  repeated string value = 1;
+}
+
+// Select exactly one wrapper, even when it contains zero elements.
+message ScalarArray {
+  oneof value {
+    BooleanArray boolean_value = 1;
+    ByteArray byte_value = 2;
+    UByteArray ubyte_value = 3;
+    ShortArray short_value = 4;
+    UShortArray ushort_value = 5;
+    IntArray int_value = 6;
+    UIntArray uint_value = 7;
+    LongArray long_value = 8;
+    ULongArray ulong_value = 9;
+    FloatArray float_value = 10;
+    DoubleArray double_value = 11;
+    StringArray string_value = 12;
+  }
+}
+
+// enum_t: index and choices are required; 0 <= index < len(choices).
+// This is a runtime enumeration, not a fixed protobuf enum.
+message EnumValue {
+  optional int32 index = 1;
+  StringArray choices = 2;
+}
+
+// time_t: all components are required, including an explicitly present userTag.
+// Seconds are relative to 1970-01-01 UTC. Preserve the original signed components;
+// do not silently normalize nanoseconds or discard the application-defined tag.
+message Time {
+  optional int64 seconds_past_epoch = 1;  // pvData secondsPastEpoch.
+  optional int32 nanoseconds = 2;
+  optional int32 user_tag = 3;            // pvData userTag.
+}
+
+// alarm_t: all three fields are required. These codes are not common.alarm enums.
+// Severity: noAlarm=0, minorAlarm=1, majorAlarm=2, invalidAlarm=3, undefinedAlarm=4.
+// Status: noStatus=0, deviceStatus=1, driverStatus=2, recordStatus=3, dbStatus=4,
+// confStatus=5, undefinedStatus=6, clientStatus=7.
+message Alarm {
+  optional int32 severity = 1;
+  optional int32 status = 2;
+  optional string message = 3;
+}
+
+// alarmLimit_t, not the implementation-specific valueAlarm_t. All fields required.
+message AlarmLimit {
+  optional bool active = 1;
+  optional double low_alarm_limit = 2;
+  optional double low_warning_limit = 3;
+  optional double high_warning_limit = 4;
+  optional double high_alarm_limit = 5;
+  optional int32 low_alarm_severity = 6;
+  optional int32 low_warning_severity = 7;
+  optional int32 high_warning_severity = 8;
+  optional int32 high_alarm_severity = 9;
+  optional double hysteresis = 10;
+}
+
+// display_t: all fields required. form choices, in order, are Default, String,
+// Binary, Decimal, Hex, Exponential, Engineering. Metadata describes NT value.
+message Display {
+  optional double limit_low = 1;    // pvData limitLow.
+  optional double limit_high = 2;   // pvData limitHigh.
+  optional string description = 3;
+  optional string units = 4;
+  optional int32 precision = 5;
+  EnumValue form = 6;
+}
+
+// control_t: all fields required. Metadata describes the NT value's control range.
+message Control {
+  optional double limit_low = 1;    // pvData limitLow.
+  optional double limit_high = 2;   // pvData limitHigh.
+  optional double min_step = 3;     // pvData minStep.
+}
