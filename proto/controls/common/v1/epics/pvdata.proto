@@ -1,0 +1,137 @@
+// Descriptor-aware dynamic pvData fields for NT unions and extension fields.
+// This is an application-level representation, not the pvAccess wire protocol.
+// Strings here are unbounded UTF-8. Adapters must reject unsupported introspection
+// (including implementation-specific bounded strings), not erase its constraints.
+syntax = "proto3";
+
+package common.epics.v1;
+
+import "proto/controls/common/v1/epics/types.proto";
+
+option java_package = "gov.fnal.controls.common.epics.v1";
+option java_multiple_files = true;
+option java_outer_classname = "EpicsPVDataProto";
+
+// The pvData field kind. Unspecified is not a valid descriptor.
+enum PVFieldKind {
+  PV_FIELD_KIND_UNSPECIFIED = 0;
+  PV_FIELD_KIND_SCALAR = 1;
+  PV_FIELD_KIND_SCALAR_ARRAY = 2;
+  PV_FIELD_KIND_STRUCTURE = 3;
+  PV_FIELD_KIND_STRUCTURE_ARRAY = 4;
+  PV_FIELD_KIND_UNION = 5;
+  PV_FIELD_KIND_UNION_ARRAY = 6;
+}
+
+// Numeric values match Scalar/ScalarArray discriminator tags, not EPICS enums.
+enum PVScalarType {
+  PV_SCALAR_TYPE_UNSPECIFIED = 0;
+  PV_SCALAR_TYPE_BOOLEAN = 1;
+  PV_SCALAR_TYPE_BYTE = 2;
+  PV_SCALAR_TYPE_UBYTE = 3;
+  PV_SCALAR_TYPE_SHORT = 4;
+  PV_SCALAR_TYPE_USHORT = 5;
+  PV_SCALAR_TYPE_INT = 6;
+  PV_SCALAR_TYPE_UINT = 7;
+  PV_SCALAR_TYPE_LONG = 8;
+  PV_SCALAR_TYPE_ULONG = 9;
+  PV_SCALAR_TYPE_FLOAT = 10;
+  PV_SCALAR_TYPE_DOUBLE = 11;
+  PV_SCALAR_TYPE_STRING = 12;
+}
+
+// Size policy for scalar arrays. Structure/union arrays use VARIABLE only.
+enum PVArraySize {
+  PV_ARRAY_SIZE_UNSPECIFIED = 0;
+  PV_ARRAY_SIZE_VARIABLE = 1;
+  PV_ARRAY_SIZE_FIXED = 2;
+  PV_ARRAY_SIZE_BOUNDED = 3;
+}
+
+// Introspection descriptor, independent of the field's current value.
+// Scalars require scalar_type only. Scalar arrays also require array_size.
+// Structures/unions require type_id, even when empty. Array descriptors carry
+// their element's ID and declarations, plus array_size. Variable arrays have no
+// array_capacity; fixed/bounded scalar arrays require a capacity.
+message PVFieldType {
+  PVFieldKind kind = 1;
+  optional PVScalarType scalar_type = 2;
+  optional string type_id = 3;
+  repeated PVNamedType fields = 4;     // Ordered, uniquely named declarations.
+  optional bool variant = 5;         // Required for unions/union arrays only.
+  optional PVArraySize array_size = 6;
+  optional uint64 array_capacity = 7;
+}
+
+// A structure field or regular-union alternative. name and type are required.
+message PVNamedType {
+  optional string name = 1;
+  PVFieldType type = 2;
+}
+
+// Pair a supported descriptor with its matching value case. Both are required.
+message PVField {
+  PVFieldType type = 1;
+  oneof value {
+    Scalar scalar = 2;
+    ScalarArray scalar_array = 3;
+    PVStructureValue structure = 4;
+    PVStructureArrayValue structure_array = 5;
+    PVUnionValue union = 6;
+    PVUnionArrayValue union_array = 7;
+  }
+}
+
+// A named, ordered extension field. name and value are required.
+message PVNamedField {
+  optional string name = 1;
+  PVField value = 2;
+}
+
+// Values match the descriptor's field declarations by position and type.
+message PVStructureValue {
+  repeated PVField fields = 1;
+}
+
+// An absent value is a null structure array element, not an empty structure.
+message PVNullableStructureValue {
+  PVStructureValue value = 1;
+}
+
+// The element descriptor is retained in the enclosing PVFieldType even if empty.
+message PVStructureArrayValue {
+  repeated PVNullableStructureValue elements = 1;
+}
+
+// Both fields absent means an unselected union.
+// Variant union: selected_name absent; selected_value may be any PVField.
+// Regular union: both fields present, naming an alternative whose descriptor
+// exactly matches selected_value.type. The declarations survive no selection.
+message PVUnionValue {
+  optional string selected_name = 1;
+  PVField selected_value = 2;
+}
+
+// An absent value is null; a present empty value is an unselected union.
+message PVNullableUnionValue {
+  PVUnionValue value = 1;
+}
+
+// Every non-null element uses the same enclosing union descriptor.
+message PVUnionArrayValue {
+  repeated PVNullableUnionValue elements = 1;
+}
+
+// Typed NT fields use this for any or a regular union. type.kind must be UNION.
+// variant=true means no declarations; variant=false requires at least one.
+message PVUnion {
+  PVFieldType type = 1;
+  PVUnionValue value = 2;
+}
+
+// Typed NT fields use this for any[] or a regular union array.
+// type.kind must be UNION_ARRAY; preserve the descriptor when value is empty.
+message PVUnionArray {
+  PVFieldType type = 1;
+  PVUnionArrayValue value = 2;
+}
