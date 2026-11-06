@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - 'proto/controls/**/*.proto'
+      - 'build/java/controls-epics/**'
+      - 'tools/epics_nt/**'
+      - '.github/workflows/proto-packages.yaml'
 
 permissions:
   contents: read
@@ -18,6 +21,7 @@ jobs:
     outputs:
       daq_changed: ${{ steps.check.outputs.daq_changed }}
       dpm_changed: ${{ steps.check.outputs.dpm_changed }}
+      epics_changed: ${{ steps.check.outputs.epics_changed }}
 
     steps:
       - name: Checkout
@@ -29,24 +33,42 @@ jobs:
         id: check
         run: |
           echo "Detecting changes in proto files..."
-          git fetch --no-tags origin main  # make sure you have history
-          git diff --name-only HEAD^ > changed_files.txt        
-          
+          # Compare the complete push, not only its final commit. This also
+          # covers a schema change followed by a docs-only commit in one push.
+          if [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
+            git ls-files > changed_files.txt
+          elif git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+            git diff --name-only "$BEFORE_SHA" HEAD > changed_files.txt
+          else
+            # The old endpoint can be unavailable after a force push. Conservatively
+            # rebuild current contracts instead of silently missing an artifact.
+            echo "::warning::Prior push endpoint is unavailable; checking all tracked files"
+            git ls-files > changed_files.txt
+          fi
+
           echo "::group::Changed Files"
           cat changed_files.txt
           echo "::endgroup::"
           
           if grep -qE '^proto/controls/service/DAQ/v1|^proto/controls/common/v1' changed_files.txt; then
-            echo "daq_changed=true" >> $GITHUB_OUTPUT
+            echo "daq_changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "daq_changed=false" >> $GITHUB_OUTPUT
+            echo "daq_changed=false" >> "$GITHUB_OUTPUT"
           fi
           
           if grep -qE '^proto/controls/deprecated/' changed_files.txt; then
-            echo "dpm_changed=true" >> $GITHUB_OUTPUT
+            echo "dpm_changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "dpm_changed=false" >> $GITHUB_OUTPUT
+            echo "dpm_changed=false" >> "$GITHUB_OUTPUT"
           fi
+
+          if grep -qE '^proto/controls/common/v1/epics/|^build/java/controls-epics/|^tools/epics_nt/|^\.github/workflows/proto-packages\.yaml$' changed_files.txt; then
+            echo "epics_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "epics_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
 
   build-daq:
     name: Build & Deploy DAQ
@@ -69,7 +91,7 @@ jobs:
       - name: Set Dynamic Version
         run: |
           VERSION="1.0.${{ github.run_number }}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "Using version: $VERSION"
 
 
@@ -85,6 +107,48 @@ jobs:
           cd build/java/controls-daq
            mvn clean deploy -Pclient -DskipTests --settings ../../maven/settings.xml
            mvn clean deploy -Pserver -DskipTests --settings ../../maven/settings.xml
+        env:
+          GH_USERNAME: ${{ github.actor }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-epics:
+    name: Build & Deploy EPICS NT Messages
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.epics_changed == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate EPICS NT Contract Before Publishing
+        run: |
+          curl --fail --location --output protoc.zip \
+            https://github.com/protocolbuffers/protobuf/releases/download/v30.2/protoc-30.2-linux-x86_64.zip
+          unzip -q protoc.zip -d protoc
+          python -m pip install -r tools/epics_nt/requirements.txt
+          PROTOC="$PWD/protoc/bin/protoc" python tools/epics_nt/test_contract.py
+          python tools/epics_nt/test_workflow.py
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
+
+      - name: Set EPICS NT Artifact Version
+        run: |
+          mvn --batch-mode org.codehaus.mojo:versions-maven-plugin:2.16.0:set \
+            -DnewVersion="1.0.${{ github.run_number }}" \
+            -DgenerateBackupPoms=false \
+            -f build/java/controls-epics/pom.xml
+
+      - name: Build & Deploy EPICS NT Messages
+        run: |
+          mvn --batch-mode -f build/java/controls-epics/pom.xml clean deploy \
+            --settings build/maven/settings.xml
         env:
           GH_USERNAME: ${{ github.actor }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,7 +173,7 @@ jobs:
       - name: Set Dynamic Version
         run: |
           VERSION="1.0.${{ github.run_number }}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "Using version: $VERSION"
 
 
