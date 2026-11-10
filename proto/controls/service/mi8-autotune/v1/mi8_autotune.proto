@@ -29,9 +29,8 @@ service AutotuneService {
   // state or associated details change.
   rpc SubscribeEvents(google.protobuf.Empty) returns (stream SubscribeAutotuneEventResponse);
 
-  // Streams complete snapshots of configured BPM readings.
-  // Each BPM's quality is reported independently.
-  rpc SubscribeReadings(google.protobuf.Empty) returns (stream SubscribeReadingsResponse);
+  // Streams configured BPM readings, with one BPM reading per message.
+  rpc SubscribeReadings(google.protobuf.Empty) returns (stream BpmReading);
 }
 
 // Defines whether the service will make data acquisition.
@@ -126,9 +125,4 @@ message BpmReading {
     string bpm = 1;
     ReadingQuality quality = 2;
     optional double value = 3;
-}
-
-// A complete snapshot of configured BPM readings.
-message SubscribeReadingsResponse {
-    repeated BpmReading readings = 1;
 }
