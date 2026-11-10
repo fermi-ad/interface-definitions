@@ -88,8 +88,10 @@ enum ReadingQuality {
     READING_QUALITY_VALID = 1;
     // No usable reading is available for this BPM.
     READING_QUALITY_MISSING = 2;
-    // A reading was received but is not usable.
+    // A reading was received but is not usable for reasons other than age.
     READING_QUALITY_INVALID = 3;
+    // A reading is too old or arrived too late to be considered current.
+    READING_QUALITY_STALE = 4;
 }
 
 message SetArmedStateRequest {
