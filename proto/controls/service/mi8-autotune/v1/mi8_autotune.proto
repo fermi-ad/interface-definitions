@@ -28,6 +28,10 @@ service AutotuneService {
   // Immediately sends the current state, then sends updates whenever the reported
   // state or associated details change.
   rpc SubscribeEvents(google.protobuf.Empty) returns (stream SubscribeAutotuneEventResponse);
+
+  // Streams complete snapshots of configured BPM readings.
+  // Each BPM's quality is reported independently.
+  rpc SubscribeReadings(google.protobuf.Empty) returns (stream SubscribeReadingsResponse);
 }
 
 // Defines whether the service will make data acquisition.
@@ -76,6 +80,18 @@ enum AutotuneEvent {
     AUTOTUNE_EVENT_SETTING_ERROR = 12;
 }
 
+// Indicates whether an individual BPM reading is usable.
+enum ReadingQuality {
+    // Quality was not specified or is not recognized.
+    READING_QUALITY_UNKNOWN = 0;
+    // A usable scalar value is present.
+    READING_QUALITY_VALID = 1;
+    // No usable reading is available for this BPM.
+    READING_QUALITY_MISSING = 2;
+    // A reading was received but is not usable.
+    READING_QUALITY_INVALID = 3;
+}
+
 message SetArmedStateRequest {
     ArmedState armed_state = 1;
 }
@@ -99,4 +115,18 @@ message ListBpmsResponse {
 message SubscribeAutotuneEventResponse {
     AutotuneEvent autotune_event = 1;
     string error_message = 2;
+}
+
+// Quality and optional scalar value for one BPM. The value is present only
+// when quality is READING_QUALITY_VALID; missing and invalid readings do not
+// use a numeric placeholder. Timestamp metadata is intentionally omitted.
+message BpmReading {
+    string bpm = 1;
+    ReadingQuality quality = 2;
+    optional double value = 3;
+}
+
+// A complete snapshot of configured BPM readings.
+message SubscribeReadingsResponse {
+    repeated BpmReading readings = 1;
 }
