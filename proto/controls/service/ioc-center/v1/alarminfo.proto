@@ -1,0 +1,164 @@
+syntax = "proto3";
+
+package services.ioc_center.alarminfo;
+
+import "google/protobuf/empty.proto";
+
+service AlarmNotifyService{
+
+    rpc getAlarmTreeList(google.protobuf.Empty) returns (AlarmTreeList);
+    rpc getAlarmTreePvId(AlarmTreePv) returns (TreePvId);
+    rpc getPvAlarmConfig(TreePvId) returns (PvAlarmConfig);
+    rpc getNotifyInteraction(TreeElementId) returns (InteractionList);
+    rpc getAutoAction(TreeElementId) returns (AutoActionList);
+    rpc getAvailableCentralPvNames(TreeId) returns(stream TreePvId);
+    rpc getTreeElementConfigured(TreeId) returns(TreeElementList);
+    rpc getAlarmTreeNode(TreeElement) returns(AlarmTreeNode);
+
+    rpc getAlarmTreePvByTree(TreeId) returns (TreePvList);
+    rpc getAlarmTreeNodeByTree(TreeId) returns (TreeNodeList);
+    rpc getPvAlarmConfigByTree(TreeId) returns (PvAlarmConfigList);
+    rpc getNotifyInteractionByTree(TreeId) returns (InteractionList);
+    rpc getAutoActionByTree(TreeId) returns (AutoActionList);
+    rpc getPvHeaderByTree(TreeId) returns (PvRecordList);
+ 
+    rpc saveAlarmTree(AlarmTree) returns (AlarmTreeList);   
+    rpc saveAlarmTreePv(AlarmTreePv) returns (TreePvId);
+    rpc savePvAlarmConfig(PvAlarmConfig) returns (TransResponse);   
+    rpc saveNotifyInteraction(InteractionList) returns (TransResponse);
+    rpc saveAutoAction(AutoActionList) returns (TransResponse);
+    rpc saveAlarmTreeNode(AlarmTreeNode) returns (AlarmTreeNode);
+
+    rpc deleteAlarmTree(TreeId) returns (TransResponse);
+    rpc deletePvAlarmConfig(TreePvId) returns (TransResponse);
+    rpc deleteNotifyRecord(NotifyRecord) returns (TransResponse);
+    rpc deleteElementConfigs(TreeElement)returns (TransResponse); 
+
+    rpc updateTreeElements(TreeElementList) returns (TransResponse);
+} 
+
+message TransResponse{
+    int32 returncode = 1;
+    string message = 2;
+}
+
+message TreeId {    
+    int32 treeid = 1;
+    optional string patternstr = 2;
+}
+
+message AlarmTree {
+    int32 treeid = 1;
+    string treename = 2;
+    string description = 3;
+    string treepath = 4; 
+}
+
+message AlarmTreeList {
+    repeated AlarmTree alarmtree_list = 1;
+}
+
+message TreePvId {
+    int32 treepvid = 1;
+    int32 pvid = 2;
+    string pvname = 3;
+    string pvshortname = 4;
+}
+
+message TreePvList {
+    repeated TreePvId treepv_list = 1;
+}
+
+message TreeElementId {
+    int32 elementid = 1;
+    string elementtype = 2;
+}
+
+message AlarmTreePv {
+    int32 treeid = 1;
+    int32 pvid = 2;
+    string pvshortname = 3;
+}
+
+message AlarmTreeNode {
+    int32 treenodeid = 1;
+    int32 treeid = 2;
+    string treenodename =3;
+    string alarmpath = 4;
+}
+
+message TreeNodeList {
+    repeated AlarmTreeNode treenode_list = 1;
+}
+
+message PvAlarmConfig {
+    int32 treepvid = 1;
+    string alarmpath = 2;
+    string description = 3;
+    string behavior = 4;
+    int32 delays = 5;
+    int32 countindelay = 6;
+    string filter = 7;
+}
+
+message PvAlarmConfigList {
+    repeated PvAlarmConfig pvalarmconfig_list = 1;
+}
+
+message Interaction {
+    string title = 1;
+    string detail = 2;
+    string typeid = 3;
+    optional int32 treepvid = 4;
+    optional int32 treenodeid = 5;
+}
+
+message InteractionList {  
+    repeated Interaction interaction_list = 1;
+    string elementtype = 2;
+}
+
+message AutoAction {
+    string title = 1;
+    string optionid = 2; 
+    string info = 3; 
+    int32 delay = 4; 
+    optional int32 treepvid = 5; 
+    optional int32 treenodeid = 6;
+}
+
+message AutoActionList {
+    repeated AutoAction autoaction_list = 1;
+    string elementtype = 2;
+}
+
+message NotifyRecord {
+    int32 elementid = 1;
+    string title = 2;
+    string typeid = 3;
+    string elementtype = 4;
+}
+
+message TreeElement {
+    int32 treeid = 1;
+    string currentname = 2;
+    string newname = 3;
+    string elementtype = 4;
+}
+
+message TreeElementList {
+    repeated TreeElement treeelement_list = 1;
+}
+
+message PvRecord {
+    string pvname = 1;
+    string pvtype = 2;
+    string description = 3;
+    string iocname = 4;
+    string pvshortname = 5;
+    string iocstatus = 6;
+}
+
+message PvRecordList {
+    repeated PvRecord pvrecord_list = 1;
+}

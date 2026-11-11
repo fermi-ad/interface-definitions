@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package services.ioc_center.iocinfo;
+
+import "google/protobuf/empty.proto";
+
+service IocInfoService{
+    rpc getIocInstanceList(google.protobuf.Empty) returns (IocInstanceList);
+    rpc getIocRunStatusList(google.protobuf.Empty) returns (IocRunStatusList);
+    rpc getIocRunStatusInfo(google.protobuf.Empty) returns (IocRunStatusList);
+    rpc getIocDbFiles(IocInstance) returns (IocDbFiles);
+    rpc getIocDbLoadRecords(IocInstance) returns (IocDbFiles);
+    rpc getMultiExceptionDbFiles(google.protobuf.Empty) returns (MultiIocDbFiles);
+    rpc getFileImportTimeList(IocInstance) returns (FileImportTimeList);
+    rpc getIocServiceStatusList(google.protobuf.Empty) returns (IocServiceStatusList);
+    rpc getIocRunLogList(ObjectId) returns (IocRunLogList);
+
+    rpc executeIocAction(IocAction) returns (TransResponse);
+    rpc saveIocRunLog(IocRunLog) returns (TransResponse);
+    rpc importIocPvs(IocDbFiles) returns (TransResponse);
+    rpc manageIocService(TargetIocAction) returns (TransResponse);
+} 
+
+message TransResponse{
+    int32 returncode = 1;
+    string message = 2;
+}
+
+message IocInstance {
+    string instance = 1;
+    string path = 2;
+}
+
+message IocInstanceList {
+    repeated IocInstance iocinstance_list = 1;
+}
+
+message IocAction {
+    string iocname = 1;
+    string action = 2;
+}
+
+message TargetIocAction {
+    string iocname = 1;
+    string action = 2;
+    string hostname = 3;
+}
+
+message IocRunStatus {
+    int32 iocid = 1;
+    string iocname = 2;
+    string hostname = 3;
+    int32 port = 4;
+    string status = 5;
+    TransResponse runstatus = 6;
+}
+
+message IocRunStatusList {
+    repeated IocRunStatus iocrunstatus_list = 1;
+}
+
+message IocDbFiles {
+    string iocname = 1;
+    repeated string filenames = 2;
+}
+
+message MultiIocDbFiles {
+    repeated IocDbFiles multi_iocdbfiles = 1;
+}
+
+message FileImportTime {
+    string filename = 1;
+    optional string importtime = 2;
+    optional string exceptiontime = 3;
+}
+
+message FileImportTimeList {
+    repeated FileImportTime fileimporttime_list = 1;
+}
+
+message IocServiceStatus {
+    string iocname = 1;
+    string servicestatus = 2;
+}
+
+message IocServiceStatusList {
+    repeated IocServiceStatus iocservicestatus_list = 1;
+}
+
+message IocRunLog {
+    int32 iocid = 1;
+    int32 action = 2;
+    string result = 3;
+    string userid = 4;
+    optional string logtime = 5;
+}
+
+message IocRunLogList {
+    repeated IocRunLog iocrunlog_list = 1;
+}
+
+message ObjectId {
+    int32 objectid = 1;
+}

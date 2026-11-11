@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package services.ioc_center.nodeinfo;
+
+import "google/protobuf/empty.proto";
+
+service NodeInfoService{
+    rpc getOneNode(NodeName) returns (NodeDetail);
+    rpc getNodeNames(google.protobuf.Empty) returns (stream NodeName);
+    rpc getPvHeaders(IocId) returns (PvHeaderList);
+  
+    rpc addIoc(IocRegistry) returns (IocId);
+    rpc updateIoc(IocRegistry) returns (TransResponse); 
+  
+} 
+
+message TransResponse{
+    int32 returncode = 1;
+    string message = 2;
+}
+
+message NodeName {
+    string nodename = 1;
+    optional string source = 2;
+}
+
+message NodeDetail {
+    optional int32 trunkId = 1;
+    optional int32 acnetnodeId = 2;
+    optional int32 iocId = 3;
+    string nodename = 4;
+    string description = 5;
+    optional int32 hostId = 6;
+    string hostname = 7;
+    optional int32 port = 8;
+    string location = 9;
+    int32 systemId = 10;
+    string system = 11;
+    int32 areaId = 12;
+    string area = 13;
+    int32 keeperId = 14;
+    string keepername = 15;
+    string keeperemail = 16;
+    optional int32 bkeeperId = 17;
+    optional string bkeepername = 18;
+    optional string bkeeperemail = 19;
+    int32 statusId = 20;
+    string status = 21;
+    string source = 22;
+    optional string iocpath = 23;
+}
+
+message IocRegistry {
+    int32 iocId = 1;
+    string iocname = 2;
+    string description = 3;
+    int32 hostId = 4;
+    int32 port = 5;
+    string location = 6;
+    int32 systemId = 7;
+    int32 areaId = 8;
+    int32 keeperId = 9;
+    optional int32 bkeeperId = 10;
+    int32 statusId = 11;
+    optional string iocpath = 12;
+}
+
+message IocId {
+    int32 iocId = 1;
+}
+
+message PvHeader {
+    string pvname = 1;
+    string pvtype = 2;
+    string description = 3;
+}
+
+message PvHeaderList {
+    repeated PvHeader pvheader_list = 1;
+}

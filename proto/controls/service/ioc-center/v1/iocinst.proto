@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package services.ioc_center.iocinstance;
+
+import "google/protobuf/empty.proto";
+
+service IocInstanceService{
+   rpc getIocInstances(google.protobuf.Empty) returns (IocInstanceList);
+} 
+
+message IocInstance {
+    string instance = 1;
+    string path = 2;
+}
+
+message IocInstanceList {
+    repeated IocInstance iocinstance_list = 1;
+}
