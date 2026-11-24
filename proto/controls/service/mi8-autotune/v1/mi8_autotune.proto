@@ -19,6 +19,16 @@ service AutotuneService {
   // Updates the operating mode of the autotuner.
   rpc SetOperatingMode(SetOperatingModeRequest) returns (google.protobuf.Empty);
 
+  // Returns a snapshot of the active configuration and all selectable configurations.
+  rpc GetConfigurationState(google.protobuf.Empty) returns (ConfigurationState);
+
+  // Loads a preconfigured file by number without modifying the file.
+  // On success, returns a snapshot with the selected configuration active.
+  // Returns INVALID_ARGUMENT for a non-positive number (including omission), or
+  // NOT_FOUND for a positive number that does not identify a selectable file.
+  // If selection or loading fails, the active configuration is left unchanged.
+  rpc SelectConfiguration(SelectConfigurationRequest) returns (ConfigurationState);
+
   // Returns a stream of the latest operating mode.
   // Immediately sends the current state, then sends updates whenever the reported
   // state or associated details change.
@@ -111,6 +121,25 @@ message SubscribeOperatingModeResponse {
 
 message ListBpmsResponse {
     repeated string bpms = 1;
+}
+
+message SelectConfigurationRequest {
+    // Positive number identifying a preconfigured file. Zero is invalid.
+    int32 configuration_number = 1;
+}
+
+message ConfigurationFileMetadata {
+    // Positive number used to select this configuration.
+    int32 configuration_number = 1;
+    // File basename for display, not a server-local path.
+    string filename = 2;
+}
+
+message ConfigurationState {
+    // All selectable configurations, including the active one if still selectable.
+    repeated ConfigurationFileMetadata available_configurations = 1;
+    // Unset when no configuration is loaded.
+    ConfigurationFileMetadata active_configuration = 2;
 }
 
 message SubscribeAutotuneEventResponse {
