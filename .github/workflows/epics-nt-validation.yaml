@@ -1,0 +1,49 @@
+name: EPICS Normative Types Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  rust-and-java-contract:
+    name: Rust Contract and DPM Java Compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Check Rust Formatting
+        run: cargo fmt --manifest-path build/rust/epics-nt/Cargo.toml --check
+
+      - name: Check Rust Code
+        run: cargo clippy --locked --manifest-path build/rust/epics-nt/Cargo.toml --all-targets -- -D warnings
+
+      - name: Test Rust Bindings and Validation
+        run: cargo test --locked --manifest-path build/rust/epics-nt/Cargo.toml
+
+      - name: Write Rust Wire Fixture for Java
+        run: |
+          cargo run --locked --manifest-path build/rust/epics-nt/Cargo.toml \
+            --bin write_wire_fixture -- "$RUNNER_TEMP/epics-nt-scalar.pb"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Test and Package Java Messages for DPM
+        run: |
+          mvn --batch-mode -f build/java/controls-epics/pom.xml \
+            -Depics.nt.fixture="$RUNNER_TEMP/epics-nt-scalar.pb" clean package
+
+# No publishing job: DPM artifact distribution is a separate release decision.
+# Existing DAQ/DPM validation and publishing workflows remain unchanged.

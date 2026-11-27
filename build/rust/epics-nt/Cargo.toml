@@ -1,0 +1,19 @@
+[package]
+name = "epics-nt"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+publish = false
+# Repository-local bindings and validation. Consumers may generate these schemas
+# through their existing rust-grpc-lib/Prost build instead of publishing this crate.
+description = "Rust bindings and reference validation for EPICS Normative Types"
+
+[dependencies]
+prost = "0.14.4"
+
+[build-dependencies]
+prost-build = "0.14.4"
+protoc-bin-vendored = "=3.2.0"
+
+[dev-dependencies]
+prost-types = "0.14.4"

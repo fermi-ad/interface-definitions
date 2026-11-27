@@ -1,0 +1,279 @@
+// The 13 EPICS Normative Types in Appendix B of the 16-Mar-2015 Editors Draft.
+// https://docs.epics-controls.org/en/latest/pv-access/Normative-Types-Specification.html
+// See docs/epics-normative-types.md and build/rust/epics-nt/src/validate.rs.
+// All NT messages require type_id="epics:nt/<message name>:1.0".
+// optional primitives preserve explicit defaults; required fields are validated
+// at the application boundary, not enforced by proto3. Extensions retain order.
+// descriptor_text maps to pvData descriptor; the suffix avoids Java's reserved
+// protobuf getDescriptor() accessor. Keep this explicit name mapping in adapters.
+syntax = "proto3";
+
+package common.epics.v1;
+
+import "proto/controls/common/v1/epics/types.proto";
+import "proto/controls/common/v1/epics/pvdata.proto";
+
+option java_package = "gov.fnal.controls.common.epics.v1";
+option java_multiple_files = true;
+option java_outer_classname = "EpicsNormativeTypesProto";
+
+// One scalar value. value is required; other canonical fields are optional.
+message NTScalar {
+  Scalar value = 1;
+  optional string descriptor_text = 2;
+  Alarm alarm = 3;
+  Time time_stamp = 4;              // pvData timeStamp.
+  Display display = 5;
+  Control control = 6;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// One homogeneous scalar array, including an explicitly typed empty array.
+message NTScalarArray {
+  ScalarArray value = 1;
+  optional string descriptor_text = 2;
+  Alarm alarm = 3;
+  Time time_stamp = 4;
+  Display display = 5;
+  Control control = 6;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// Runtime enumeration. value is required.
+message NTEnum {
+  EnumValue value = 1;
+  optional string descriptor_text = 2;
+  Alarm alarm = 3;
+  Time time_stamp = 4;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// Required double[] value; absent dim means vector. Present dim has 1 or 2
+// positive elements whose product equals len(value). Matrices are row-major.
+message NTMatrix {
+  DoubleArray value = 1;
+  IntArray dim = 2;
+  optional string descriptor_text = 3;
+  Alarm alarm = 4;
+  Time time_stamp = 5;
+  Display display = 6;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// A required, uniquely named query argument selecting string, double, or int only.
+message URIQueryArgument {
+  optional string name = 1;
+  oneof value {
+    string string_value = 2;
+    double double_value = 3;
+    int32 int_value = 4;
+  }
+}
+
+// Ordered arguments. A present empty query differs from an absent query.
+message URIQuery {
+  repeated URIQueryArgument arguments = 1;
+}
+
+// scheme and path are required; scheme uses RFC 3986 syntax and cannot be empty.
+// Reconstruct authority between scheme and path;
+// query is optional. Other runtime payloads are represented by extra_fields.
+message NTURI {
+  optional string scheme = 1;
+  optional string authority = 2;
+  optional string path = 3;
+  URIQuery query = 4;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// Required name and value arrays of equal length. Association is positional.
+message NTNameValue {
+  StringArray name = 1;
+  ScalarArray value = 2;
+  optional string descriptor_text = 3;
+  Alarm alarm = 4;
+  Time time_stamp = 5;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// A required scalar-array column and its unique pvData field name, not its label.
+message TableColumn {
+  optional string name = 1;
+  ScalarArray value = 2;
+}
+
+// Ordered pvData value structure. All columns have the same row count.
+message TableValue {
+  repeated TableColumn columns = 1;
+}
+
+// labels and value required; len(labels)=len(columns). Labels may differ from
+// field names. A present zero-column table is valid. Do not use unordered maps.
+message NTTable {
+  StringArray labels = 1;
+  TableValue value = 2;
+  optional string descriptor_text = 3;
+  Alarm alarm = 4;
+  Time time_stamp = 5;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// name and variant-union value required. In an NTNDArray attribute array,
+// descriptor_text, source_type (0..3), and source are also required by that context.
+// source_type/source represent the published NTNDArray extension of NTAttribute.
+message NTAttribute {
+  optional string name = 1;
+  PVUnion value = 2;
+  StringArray tags = 3;
+  optional string descriptor_text = 4;
+  Alarm alarm = 5;
+  Time time_stamp = 6;
+  optional int32 source_type = 7;   // pvData sourceType: driver, param, PV, function.
+  optional string source = 8;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// Required values and channel names. Each present per-channel metadata array
+// must match their length. Alarm/timeStamp describe the aggregate, not a channel.
+message NTMultiChannel {
+  PVUnionArray value = 1;
+  StringArray channel_name = 2;     // pvData channelName.
+  optional string descriptor_text = 3;
+  Alarm alarm = 4;
+  Time time_stamp = 5;
+  IntArray severity = 6;
+  IntArray status = 7;
+  StringArray message = 8;
+  LongArray seconds_past_epoch = 9;
+  IntArray nanoseconds = 10;
+  IntArray user_tag = 11;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// value_t: the fixed regular union in NTNDArray, excluding string arrays.
+// Restore member names booleanValue, byteValue, shortValue, etc. on conversion.
+message NDArrayValue {
+  oneof value {
+    BooleanArray boolean_value = 1;
+    ByteArray byte_value = 2;
+    ShortArray short_value = 3;
+    IntArray int_value = 4;
+    LongArray long_value = 5;
+    UByteArray ubyte_value = 6;
+    UShortArray ushort_value = 7;
+    UIntArray uint_value = 8;
+    ULongArray ulong_value = 9;
+    FloatArray float_value = 10;
+    DoubleArray double_value = 11;
+  }
+}
+
+// codec_t: name and variant-union parameters required. Empty name means raw
+// row-major data. A nonempty name requires codec-specific decoding and validation.
+message Codec {
+  optional string name = 1;
+  PVUnion parameters = 2;
+}
+
+// dimension_t: every field required. size must be nonnegative in this mapping.
+message Dimension {
+  optional int32 size = 1;
+  optional int32 offset = 2;
+  optional int32 full_size = 3;     // pvData fullSize.
+  optional int32 binning = 4;
+  optional bool reverse = 5;
+}
+
+// A required but possibly empty structure array of dimensions.
+message DimensionArray {
+  repeated Dimension value = 1;
+}
+
+// A required but possibly empty array of extended NTAttributes.
+message AttributeArray {
+  repeated NTAttribute value = 1;
+}
+
+// One detector frame. Fields 1..8 required; metadata fields 9..12 optional.
+// compressed_size=stored count*stored scalar width. For raw data, the stored count
+// must cover the dimension product; uncompressed_size=product*scalar width (zero
+// if no dimensions). With compression, decoded type/size validation is codec-specific.
+message NTNDArray {
+  NDArrayValue value = 1;
+  Codec codec = 2;
+  optional int64 compressed_size = 3;    // pvData compressedSize, bytes.
+  optional int64 uncompressed_size = 4;  // pvData uncompressedSize, bytes.
+  DimensionArray dimension = 5;
+  optional int32 unique_id = 6;          // pvData uniqueId.
+  Time data_time_stamp = 7;              // pvData dataTimeStamp.
+  AttributeArray attribute = 8;
+  optional string descriptor_text = 9;
+  Alarm alarm = 10;
+  Time time_stamp = 11;
+  Display display = 12;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// Required base, point-interleaved values, and units. With a nonempty base:
+// len(value)/len(base) >= 1 and equals len(units)-1, without a remainder.
+// Empty-data mapping policy: both arrays empty and at least two units.
+message NTContinuum {
+  DoubleArray base = 1;
+  DoubleArray value = 2;
+  StringArray units = 3;
+  optional string descriptor_text = 4;
+  Alarm alarm = 5;
+  Time time_stamp = 6;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// Histogram counts retain their signed short/int/long discriminator.
+message HistogramValue {
+  oneof value {
+    ShortArray short_value = 1;
+    IntArray int_value = 2;
+    LongArray long_value = 3;
+  }
+}
+
+// ranges and value required; len(ranges)=len(counts)+1. All bins except the
+// last are right-half-open; the last includes both its endpoints.
+message NTHistogram {
+  DoubleArray ranges = 1;
+  HistogramValue value = 2;
+  optional string descriptor_text = 3;
+  Alarm alarm = 4;
+  Time time_stamp = 5;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
+
+// value and n (pvData uppercase N) required; n >= 0. Optional summary fields
+// remain independent. The descriptor should state the meaning of dispersion.
+message NTAggregate {
+  optional double value = 1;
+  optional int64 n = 2;
+  optional double dispersion = 3;
+  optional double first = 4;
+  Time first_time_stamp = 5;        // pvData firstTimeStamp.
+  optional double last = 6;
+  Time last_time_stamp = 7;         // pvData lastTimeStamp.
+  optional double max = 8;
+  optional double min = 9;
+  optional string descriptor_text = 10;
+  Alarm alarm = 11;
+  Time time_stamp = 12;
+  optional string type_id = 100;
+  repeated PVNamedField extra_fields = 101;
+}
